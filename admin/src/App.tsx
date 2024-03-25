@@ -5,7 +5,6 @@ import {
     ErrorComponent,
     AuthPage,
 } from "@pankod/refine-antd";
-import { GoogleOutlined, GithubOutlined } from "@ant-design/icons";
 
 import dataProvider from "@pankod/refine-simple-rest";
 import routerProvider from "@pankod/refine-react-router-v6";
@@ -15,61 +14,15 @@ import "@pankod/refine-antd/dist/reset.css";
 import { PostList, PostEdit, PostShow } from "pages/posts";
 import { DashboardPage } from "pages/dashboard";
 import {UserEdit, UserList, UserShow} from "./pages/users";
-
-const API_URL = "http://localhost:3001/api";
+import {API_URL} from "./constants";
+import {authProvider} from "./authUtils/authProvider";
+import {axiosInstance} from "./authUtils/axiosInstance";
 
 const App: React.FC = () => {
-    const authProvider: AuthProvider = {
-        login: async ({ email, providerName }) => {
-            if (email) {
-                localStorage.setItem("email", email);
-                return Promise.resolve();
-            }
-
-            return Promise.reject();
-        },
-        register: (params) => {
-            if (params.email && params.password) {
-                localStorage.setItem("email", params.email);
-                return Promise.resolve();
-            }
-            return Promise.reject();
-        },
-        updatePassword: (params) => {
-            if (params.newPassword) {
-                //we can update password here
-                return Promise.resolve();
-            }
-            return Promise.reject();
-        },
-        forgotPassword: (params) => {
-            if (params.email) {
-                //we can send email with forgot password link here
-                return Promise.resolve();
-            }
-            return Promise.reject();
-        },
-        logout: () => {
-            localStorage.removeItem("email");
-            return Promise.resolve();
-        },
-        checkError: () => Promise.resolve(),
-        checkAuth: () =>
-            localStorage.getItem("email")
-                ? Promise.resolve()
-                : Promise.reject(),
-        getPermissions: () => Promise.resolve(["admin"]),
-        getUserIdentity: () =>
-            Promise.resolve({
-                id: 1,
-                name: "Jane Doe",
-                avatar: "https://unsplash.com/photos/IWLOvomUmWU/download?force=true&w=640",
-            }),
-    };
 
     return (
         <Refine
-            authProvider={authProvider}
+            authProvider={ authProvider(axiosInstance) }
             dataProvider={dataProvider(API_URL)}
             routerProvider={{
                 ...routerProvider,
