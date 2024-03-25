@@ -1,6 +1,20 @@
-function ChatBoxData (token, brandId, userId, userDisplayName, chatName, channelId = null, channelName = null, roomId = null, roomName = null)  {
+function ChatBoxData(
+    token,
+    brandId,
+    timestamp,
+    xNonce,
+    userId,
+    userDisplayName,
+    chatName,
+    channelId = null,
+    channelName = null,
+    roomId = null,
+    roomName = null,
+) {
     this.token = token;
     this.brandId = brandId;
+    this.timestamp = timestamp;
+    this.xNonce = xNonce;
     this.userId = userId;
     this.userDisplayName = userDisplayName;
     this.chatName = chatName;
@@ -8,15 +22,20 @@ function ChatBoxData (token, brandId, userId, userDisplayName, chatName, channel
     this.channelName = channelName;
     this.roomId = roomId;
     this.roomName = roomName;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     var self = this;
 
     this.isValid = function () {
         var requiredFields = [
-            // @TODO: should require this field
-            //'token',
-            'brandId', 'userId', 'userDisplayName', 'chatName'
+            'token',
+            'timestamp',
+            'xNonce',
+            'brandId',
+            'userId',
+            'userDisplayName',
+            'chatName',
         ];
-        var result = {status: true, errors: {}};
+        var result = { status: true, errors: {} };
         requiredFields.map(function (field) {
             if (!self[field]) {
                 result.status = false;
@@ -25,33 +44,39 @@ function ChatBoxData (token, brandId, userId, userDisplayName, chatName, channel
                 }
                 result.errors[field].push('Field ' + field + ' Can not be empty');
             }
-        })
+        });
 
         return result;
-    }
+    };
 }
 
-function chatBoxesManagement () {
+function ChatBoxesManagement() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     var self = this;
 
     this.createErrorMessage = function (chatBoxElement, message) {
-        var errorElement = document.createElement('p')
+        var errorElement = document.createElement('p');
         errorElement.textContent = message;
         errorElement.style = {
             color: 'red',
-            fontWeight: 'bold'
-        }
+            fontWeight: 'bold',
+        };
 
         chatBoxElement.append(errorElement);
-    }
+    };
 
     this.handleSuccessRequestAccessToken = function (data, chatBoxElement) {
         var jsonData = null;
         try {
             jsonData = JSON.parse(data);
         } catch (e) {
-            this.createErrorMessage(chatBoxElement, "There is an error while initializing the chat box. Please try again later");
-            console.warn('There is an error while initializing the chat box. ' + e.message)
+            this.createErrorMessage(
+                chatBoxElement,
+                'There is an error while initializing the chat box. Please try again later',
+            );
+            console.warn(
+                'There is an error while initializing the chat box. ' + e.message,
+            );
             return;
         }
 
@@ -60,15 +85,14 @@ function chatBoxesManagement () {
             return;
         }
         var iframe = document.createElement('iframe');
-        iframe.src = this.getConversationIframeUrl(jsonData);
+        iframe.src = this.getConversationIframeUrl(jsonData.conversation_id);
         iframe.width = '600px';
         iframe.height = '600px';
         // A tips to transfer the data from parent to iframe
         // @todo: should consider to change the solution
         iframe.name = data;
         chatBoxElement.append(iframe);
-
-    }
+    };
 
     /**
      * @param selector
@@ -82,20 +106,22 @@ function chatBoxesManagement () {
 
             var chatBoxDataValidation = chatBoxData.isValid();
             if (chatBoxDataValidation.status) {
-                this.requestAccessToken(
-                    chatBoxData,
-                    elementNode
-                );
+                this.requestAccessToken(chatBoxData, elementNode);
             } else {
-                throw Error('The chat box data is invalid', chatBoxDataValidation.errors);
+                throw Error(
+                    'The chat box data is invalid' +
+                    JSON.stringify(chatBoxDataValidation.errors),
+                );
             }
         }
-    }
+    };
 
     this.createChatBoxDataFromHtmlElement = function (element) {
         return new ChatBoxData(
             element.dataset.token,
             element.dataset.brandId,
+            element.dataset.timestamp,
+            element.dataset.xNonce,
             element.dataset.userId,
             element.dataset.userDisplayName,
             element.dataset.chatName,
@@ -104,7 +130,7 @@ function chatBoxesManagement () {
             element.dataset.roomId ?? null,
             element.dataset.roomName ?? null,
         );
-    }
+    };
 
     /**
      * @param chatBoxData ChatBoxData
@@ -117,26 +143,34 @@ function chatBoxesManagement () {
             request.open('POST', self.getApiInitChatBoxEndpoint());
             request.addEventListener('load', function () {
                 self.handleSuccessRequestAccessToken(this.responseText, chatBoxElement);
-            })
-            request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
+            });
+            self._prepareRequestHeader(request, chatBoxData);
             request.send(JSON.stringify(chatBoxData));
         }, this.delayTime);
         this.delayTime += 100;
-    }
+    };
+
+    this._prepareRequestHeader = function (xmlRequest, chatBoxData) {
+        xmlRequest.setRequestHeader(
+            'Content-Type',
+            'application/json;charset=UTF-8',
+        );
+
+        xmlRequest.setRequestHeader('x-brand-id', chatBoxData.brandId);
+        xmlRequest.setRequestHeader('x-token', chatBoxData.token);
+        xmlRequest.setRequestHeader('x-timestamp', chatBoxData.timestamp);
+        xmlRequest.setRequestHeader('x-nonce', chatBoxData.xNonce);
+    };
 
     this.delayTime = 100;
 
-    //@TODO: should config
     this.getApiInitChatBoxEndpoint = function () {
-        return 'http://localhost:3001/api/brand-chat/init-chat';
-    }
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        return ChatBoxEndpointSettings.chatBoxInitEndpoint;
+    };
 
-    //@TODO: should config and do not send restrict data via URL
-    this.getConversationIframeUrl = function (jsonData) {
-        return 'http://localhost:3000/conversation/'
-            + jsonData.conversation_id + '?'
-            + 'access_token=' + jsonData.access_token + '&'
-            + 'refresh_token=' + jsonData.refresh_token
-            ;
-    }
+    this.getConversationIframeUrl = function (conversationId) {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        return ChatBoxEndpointSettings.chatBoxConversationEndpoint + conversationId;
+    };
 }

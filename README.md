@@ -180,13 +180,15 @@ requestToken 9c70078a4ffd9d2dc52d9cbd638f77bebd82ea8e
 | data-token             | Yes      | Request token                                                                                                                                                |
 
 - Bổ sung đoạn mã sau ở cuối body
+
 ```html
+
 <script>
-  var initChatboxes = function() {
-    var chatBoxObject = new chatBoxesManagement();
+  var initChatboxes = function () {
+    var chatBoxObject = new ChatBoxesManagement();
     chatBoxObject.initChatBoxFromSelector('.chatbox');
   }
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     initChatboxes();
   });
 </script>

@@ -50,7 +50,7 @@ function ChatBoxData(
   };
 }
 
-function chatBoxesManagement() {
+function ChatBoxesManagement() {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   var self = this;
 

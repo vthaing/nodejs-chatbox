@@ -19,7 +19,7 @@ export const ChatBox: React.FC<ChatBoxProps> = ({conversation}) => {
         // @ts-ignore
         if (typeof chatBoxesManagement !== 'undefined') {
             // @ts-ignore
-            const chatBoxesManager = new chatBoxesManagement();
+            const chatBoxesManager = new ChatBoxesManagement();
 
             setChatBoxIframeProps({
                 src: chatBoxesManager.getConversationIframeUrl(conversation.id),
