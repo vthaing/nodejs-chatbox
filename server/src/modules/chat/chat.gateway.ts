@@ -1,7 +1,7 @@
-import { MessageService } from './../message/message.service';
-import { UserService } from './../user/user.service';
+import { MessageService } from '../message/message.service';
+import { UserService } from '../user/user.service';
 import { WsAuthStrategy } from 'src/modules/auth/strategies/ws-auth.strategy';
-import { UserDocument } from './../user/entities/user.entity';
+import { UserDocument } from '../user/entities/user.entity';
 import { Logger } from '@nestjs/common';
 import {
   MessageBody,
@@ -93,9 +93,8 @@ export class ChatGateway {
         .emit('private-message', createMessage);
     } else {
       this.server.to(message.to).emit('private-message', createMessage);
+      this.server.to(message.from).emit('private-message', createMessage);
     }
-
-    this.server.to(message.from).emit('private-message', createMessage);
   }
 
   @SubscribeMessage('open-channel-chat')

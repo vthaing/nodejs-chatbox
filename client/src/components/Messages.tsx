@@ -70,7 +70,7 @@ export const Messages: React.FC = () => {
                 >
                     {
                         chatState.messages.map(
-                            (msg) => (msg.to !== auth.id)
+                            (msg) => (msg.from === auth.id)
                                 ? <OutgoingMessage key={msg.id} message={msg} />
                                 : <IncomingMessage key={msg.id} message={msg} />
                         )
