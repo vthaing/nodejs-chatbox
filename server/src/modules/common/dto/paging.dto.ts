@@ -1,10 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsOptional } from 'class-validator';
 
 const DEFAULT_PAGE_SIZE = 10;
 export class PagingDto {
   @ApiProperty({ required: false })
+  @IsOptional()
   _start: number;
   @ApiProperty({ required: false })
+  @IsOptional()
   _end: number;
 
   getPagingOptions(additionalParams?: any | null) {
