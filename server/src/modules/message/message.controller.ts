@@ -128,24 +128,34 @@ export class MessageController {
     @Param('conversationId') conversationId: string,
     @Query() query: MessagePagingDto,
   ) {
-    const params: any = {
-      conversation: conversationId,
-    };
+    const params = await this.prepareParamsForFindMessages(query);
+    params['conversation'] = conversationId;
     let limit = query.limit;
+    if (query.beforeMessageId && query.fromMessageId) {
+      limit = null;
+    }
 
+    return this.messageService.getMessagesForChatBoxClient(params, limit);
+  }
+
+  async prepareParamsForFindMessages(query: MessagePagingDto) {
+    const params: any = {};
     if (query.brandId) {
-      params.brandId = { $in: req.query.brandId };
+      params.brandId = { $in: query.brandId };
     }
     if (query.isPinnedMessage) {
-      params.isPinnedMessage = req.query.isPinnedMessage;
+      params.isPinnedMessage = query.isPinnedMessage;
     }
     if (query.beforeMessageId) {
       const beforeMessage = await this.messageService.findOne(
         query.beforeMessageId,
       );
       if (beforeMessage) {
-        params.createdAt = { $lt: beforeMessage.createdAt };
-        params._id = { $ne: beforeMessage.id };
+        params['$and'] = [];
+        params['$and'].push({
+          createdAt: { $lte: beforeMessage.createdAt },
+          _id: { $ne: beforeMessage.id },
+        });
       } else {
         throw new NotFoundException('Before message not found');
       }
@@ -155,16 +165,19 @@ export class MessageController {
       const fromMessage = await this.messageService.findOne(
         query.fromMessageId,
       );
+      if (!params.hasOwnProperty('$and')) {
+        params['$and'] = [];
+      }
       if (fromMessage) {
-        params.createdAt = { $gte: fromMessage.createdAt };
+        params['$and'].push({
+          createdAt: { $gte: fromMessage.createdAt },
+        });
       } else {
         throw new NotFoundException('From message not found');
       }
-      if (query.beforeMessageId) {
-        limit = null;
-      }
     }
-    return this.messageService.getMessagesForChatBoxClient(params, limit);
+
+    return params;
   }
 
   @UseGuards(RoleGuard(Role.Admin))
