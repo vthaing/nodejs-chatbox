@@ -15,7 +15,7 @@ export const IncomingMessage: React.FC<IncomingMessageProps> = ({ message }) => 
         <>
             <div className="incoming_msg">
                 <div className="incoming_msg_img">
-                    <img src="https://ptetutorials.com/images/user-profile.png" alt="sun" />
+                    <img src="/avatar/user-profile.png" alt="sun" />
                 </div>
                 <div className="received_msg">
                     <div className="received_withd_msg">

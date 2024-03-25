@@ -70,7 +70,7 @@ export class ChatGateway {
       this.server.emit('online-users', connectedUsers);
       logger.warn('Client disconnected: chat');
     } catch (error) {
-      logger.error('Disconection with errors');
+      logger.error('Disconnection with errors');
     }
   }
 

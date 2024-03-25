@@ -39,7 +39,6 @@ export const SendMessage: React.FC = () => {
         <form
             onSubmit={onSubmit}
         >
-            { /*      <!-- Enviar mensaje Inicio --> */}
             <div className="type_msg row">
                 <div className="input_msg_write col-sm-9">
                     <input
@@ -59,7 +58,6 @@ export const SendMessage: React.FC = () => {
                     </button>
                 </div>
             </div>
-            {/* <!-- Enviar mensaje Fin --> */}
         </form>
     )
 }

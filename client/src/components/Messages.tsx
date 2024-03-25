@@ -53,36 +53,23 @@ export const Messages: React.FC = () => {
 
     return (
         <>
-            {/* <!-- Chat inicio --> */}
             <div
                 className="mesgs"
             >
-
-                {/* <!-- Historia inicio --> */}
                 <div
                     id="messages"
                     className="msg_history"
                 >
-
                     {
-
                         chatState.messages.map(
                             (msg) => (msg.to !== auth.id)
                                 ? <OutgoingMessage key={msg.id} message={msg} />
                                 : <IncomingMessage key={msg.id} message={msg} />
-
                         )
-
                     }
-
-
                 </div>
-                {/* <!-- Historia Fin --> */}
-
                 <SendMessage />
-
             </div>
-            {/* <!-- Chat Fin --> */}
         </>
     )
 }

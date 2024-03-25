@@ -103,7 +103,7 @@ export class AuthService {
     } catch (e) {
       const logger = new Logger();
       if (e.name === 'TokenExpiredError') {
-        logger.error('Token expirado');
+        logger.error('Token expiration');
         throw new UnauthorizedException();
       }
       logger.error('Error on request');

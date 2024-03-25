@@ -9,7 +9,6 @@ export const SearchBox: React.FC = () => {
 
     return (
         <>
-            {/* <!-- Searchbox inicio --> */}
             <div className="headind_srch">
                 <div className="recent_heading mt-2">
                     <h4>{username}</h4>
@@ -25,7 +24,6 @@ export const SearchBox: React.FC = () => {
                     </div>
                 </div>
             </div>
-            {/* <!-- Searchbox Fin --> */}
         </>
     )
 }

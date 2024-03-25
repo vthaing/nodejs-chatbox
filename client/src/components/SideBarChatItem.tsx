@@ -50,14 +50,14 @@ export const SideBarChatItem: React.FC<SideBarChatItemProps> = ({ user }: SideBa
 
     return (
         <>
-            {/* <!-- conversación activa inicio --> */}
+            {/* <!-- start active conversation--> */}
             <div
                 className={`chat_list ${id === activeChat && 'active_chat'}`}
                 onClick={onClick}
             >
                 <div className="chat_people">
                     <div className="chat_img">
-                        <img src="http://cemokalab.com/wp-content/uploads/2015/07/avatar-369-456321.png" alt="Sun" />
+                        <img  src="/avatar/user-profile.png" alt="sun" />
                     </div>
                     <div className="chat_ib">
                         <h5>{username}</h5>
@@ -69,7 +69,7 @@ export const SideBarChatItem: React.FC<SideBarChatItemProps> = ({ user }: SideBa
                     </div>
                 </div>
             </div>
-            {/* <!-- conversación activa Fin --> */}
+            {/* <!-- end active conversation--> */}
 
         </>
     )

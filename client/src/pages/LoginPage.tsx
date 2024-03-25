@@ -91,7 +91,7 @@ export const LoginPage: React.FC = () => {
             onSubmit={onSubmit}
         >
             <span className="login100-form-title mb-3">
-                Chat - Ingreso
+                Chat - Login
             </span>
 
             <div className="wrap-input100 validate-input mb-3">
@@ -133,13 +133,13 @@ export const LoginPage: React.FC = () => {
                         onChange={onChange}
                     />
                     <label className="label-checkbox100">
-                        Recordarme
+                        Remember Me
                     </label>
                 </div>
 
                 <div className="col text-right">
                     <Link to="/auth/register" className="txt1">
-                        Nueva cuenta?
+                        Register new account?
                     </Link>
                 </div>
             </div>
@@ -150,7 +150,7 @@ export const LoginPage: React.FC = () => {
                     type="submit"
                     disabled={!isFormValid()}
                 >
-                    Ingresar
+                    Login
                 </button>
             </div>
 

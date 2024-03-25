@@ -12,9 +12,7 @@ export const SideBar: React.FC = () => {
 
     return (
         <>
-            {/* <!-- Sidebar inicio --> */}
             <div className="inbox_chat">
-
                 {
                     chatState
                         .users
@@ -31,12 +29,10 @@ export const SideBar: React.FC = () => {
                             ))
                 }
 
-                {/* <!-- Espacio extra para scroll --> */}
                 <div className="extra_space"></div>
 
-
             </div>
-            {/* <!-- Sidebar Fin --> */}
+            {/* <!-- End Sidebar --> */}
         </>
     )
 }

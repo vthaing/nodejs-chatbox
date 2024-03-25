@@ -10,7 +10,6 @@ export type OutgoingMessageProps = {
 export const OutgoingMessage: React.FC<OutgoingMessageProps> = ({ message }) => {
     return (
         <>
-            {/* <!-- Mensaje enviado inicio --> */}
             <div className="outgoing_msg">
                 <div className="sent_msg">
                     <p>{message.text}</p>
@@ -19,7 +18,6 @@ export const OutgoingMessage: React.FC<OutgoingMessageProps> = ({ message }) => 
                     </span>
                 </div>
             </div>
-            {/* <!-- Mensaje enviado inicio --> */}
         </>
     )
 }
