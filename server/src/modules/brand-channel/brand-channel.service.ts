@@ -29,16 +29,11 @@ export class BrandChannelService {
       .find({
         ...params,
       })
-      .populate('memberObjects')
       .exec();
   }
 
-  findUserBrandChannels(userId: string): Promise<BrandChannelDocument[]> {
-    return this.brandChannelModel.find({ members: { $all: [userId] } }).exec();
-  }
-
   findOne(id: string): Promise<BrandChannelDocument> {
-    return this.brandChannelModel.findById(id).populate('memberObjects').exec();
+    return this.brandChannelModel.findById(id).exec();
   }
 
   update(

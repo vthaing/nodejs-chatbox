@@ -18,6 +18,7 @@ import { IpFilterDenyExceptionFilter } from './exception/ipfilter-exception-filt
 import { UserBanRequestModule } from './modules/user-ban-request/user-ban-request.module';
 import { BrandModule } from './modules/brand/brand.module';
 import { BrandChannelModule } from './modules/brand-channel/brand-channel.module';
+import {BrandRoomModule} from "./modules/brand-room/brand-room.module";
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { BrandChannelModule } from './modules/brand-channel/brand-channel.module
     UserBanRequestModule,
     BrandModule,
     BrandChannelModule,
+    BrandRoomModule,
   ],
   controllers: [AppController],
   providers: [
