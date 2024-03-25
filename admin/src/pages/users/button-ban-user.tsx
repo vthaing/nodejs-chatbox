@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {IUser} from "../../interfaces";
-import {Button, Popconfirm} from "antd";
-import {CheckOutlined, StopOutlined} from "@ant-design/icons";
-import {useApiUrl, useCustom, useCustomMutation, useUpdate} from "@pankod/refine-core";
-import {Form, Input, InputNumber, Modal, useForm, useModal} from "@pankod/refine-antd";
+import {Button} from "antd";
+import {StopOutlined} from "@ant-design/icons";
+import {useApiUrl, useCustomMutation} from "@pankod/refine-core";
+import {Form, Input, InputNumber, Modal} from "@pankod/refine-antd";
 
 type ButtonBanUserProps = {
     record: IUser

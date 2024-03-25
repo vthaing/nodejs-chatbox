@@ -3,13 +3,11 @@ import {useShow, IResourceComponentsProps, useOne, useNavigation} from "@pankod/
 import {
     Show,
     Typography,
-    MarkdownField,
     TagField,
-    TextField,
     Col,
     List,
     Table,
-    getDefaultSortOrder, DateField, useTable, Row
+    DateField, useTable, Row
 } from "@pankod/refine-antd";
 import {IBrand, IUser, IUserBanRequest} from "../../interfaces";
 import dayjs from "dayjs";
