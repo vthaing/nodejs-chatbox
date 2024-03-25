@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
@@ -23,9 +23,8 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([
-
-  ]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [showAttachment, setShowAttachment] = useState(false);
 
   const handleCancel = () => setPreviewOpen(false);
 
@@ -39,6 +38,10 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
   };
 
+  useEffect(function () {
+      setShowAttachment(fileList.length > 0)
+  }, [fileList]);
+
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
       setFileList(newFileList);
       if (onAttachmentsChange) {
@@ -46,7 +49,7 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
       }
   }
 
-  const  beforeUpload = (file: any) => {
+  const  beforeUpload = (file: UploadFile) => {
       setFileList([...fileList, file]);
       if (onBeforeUpload) {
           onBeforeUpload(file, fileList)
@@ -62,7 +65,7 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
       </div>
   );
   return (
-      <>
+      <div hidden={!showAttachment}>
         <Upload
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             listType="picture-card"
@@ -76,6 +79,6 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
         <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />
         </Modal>
-      </>
+      </div>
   );
 };

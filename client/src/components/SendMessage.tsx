@@ -16,8 +16,6 @@ export const SendMessage: React.FC = () => {
     const { chatState } = useContext(ChatContext);
     const { socket } = useContext(SocketContext);
     const buttonUploadRef = useRef();
-    const [showAttachment, setShowAttachment] = useState(false);
-
 
 
     const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -59,23 +57,6 @@ export const SendMessage: React.FC = () => {
         buttonUploadRef.current.click()
     }
 
-    const onAttachmentsChange = (newFileList: []) => {
-        if (newFileList.length > 0) {
-            setShowAttachment(true);
-        } else {
-            setShowAttachment(false);
-        }
-    }
-
-    const handleBeforeUpload = (file: any, fileList: []) => {
-        if (fileList.length > 0) {
-            setShowAttachment(true);
-        }
-    }
-
-
-
-
     return (
         <form
             onSubmit={onSubmit}
@@ -108,14 +89,10 @@ export const SendMessage: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <div hidden={!showAttachment}>
                 <Attachments
-                    onAttachmentsChange={onAttachmentsChange}
                     refButtonUpload={buttonUploadRef}
-                    onBeforeUpload={handleBeforeUpload}
                     autoUpload={false}
                 />
-            </div>
         </form>
     )
 }
