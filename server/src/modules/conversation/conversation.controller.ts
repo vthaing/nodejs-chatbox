@@ -6,14 +6,15 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards, Req,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ConversationService } from './conversation.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import {Request} from "express";
+import { Request } from 'express';
 
 @ApiBearerAuth()
 @ApiTags('Conversation')
@@ -51,7 +52,10 @@ export class ConversationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateConversationDto: UpdateConversationDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateConversationDto: UpdateConversationDto,
+  ) {
     return this.conversationService.update(id, updateConversationDto);
   }
 

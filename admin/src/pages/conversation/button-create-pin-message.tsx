@@ -38,6 +38,8 @@ export const ButtonCreatePinMessage: React.FC<ButtonCreatePinMessageProps> = ({c
                     conversation: conversationId,
                     isPinnedMessage: true
                 },
+            }, {
+                onSuccess: () => window.location.reload()
             });
         },
         form,

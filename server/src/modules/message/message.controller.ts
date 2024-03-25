@@ -13,6 +13,7 @@ import {
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 
 @ApiBearerAuth()
 @ApiTags('Messages')
@@ -41,10 +42,20 @@ export class MessageController {
   }
 
   @Get('conversation/:conversationId')
-  findMessagesByConversation(@Param('conversationId') conversationId: string) {
-    return this.messageService.findAll({
+  findMessagesByConversation(
+    @Req() req: Request,
+    @Param('conversationId') conversationId: string,
+  ) {
+    const params: any = {
       conversation: conversationId,
-    });
+    };
+    if (req.query.brandId) {
+      params.brandId = { $in: req.query.brandId };
+    }
+    if (req.query.isPinnedMessage) {
+      params.isPinnedMessage = req.query.isPinnedMessage;
+    }
+    return this.messageService.findAll(params);
   }
 
   @Delete(':id')
