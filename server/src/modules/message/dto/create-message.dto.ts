@@ -1,4 +1,4 @@
-import { IsEmpty, IsNotEmpty } from 'class-validator';
+import {IsEmpty, IsNotEmpty, IsOptional} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateMessageDto {
@@ -7,6 +7,7 @@ export class CreateMessageDto {
   to: string;
 
   @ApiProperty()
+  @IsOptional()
   from: string;
 
   @ApiProperty()
@@ -17,5 +18,6 @@ export class CreateMessageDto {
   @IsNotEmpty()
   conversation: string;
   @ApiProperty()
+  @IsOptional()
   isPinnedMessage: boolean;
 }

@@ -60,7 +60,7 @@ const App: React.FC = () => {
                 },
                 {
                     name: "conversations",
-                    create: ConversationCreate,
+                    // create: ConversationCreate,
                     list: ConversationList,
                     edit: ConversationEdit,
                     show: ConversationShow,
