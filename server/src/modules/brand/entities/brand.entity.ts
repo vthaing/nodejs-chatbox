@@ -18,11 +18,6 @@ export type BrandDocument = Brand & Document;
 export class Brand {
   @Prop({ required: false, type: mongoose.Schema.Types.String })
   name?: string;
-  @Prop({
-    required: false,
-    type: mongoose.Schema.Types.String,
-  })
-  externalId: string;
 
   @Prop({
     required: false,

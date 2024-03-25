@@ -44,6 +44,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
     JwtAuthGuard,
     WsAuthGuard,
     WsAuthStrategy,
+    AuthService,
   ],
 })
 export class AuthModule {}

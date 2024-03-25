@@ -7,6 +7,13 @@ import {
   Conversation,
   ConversationDocument,
 } from './entities/conversation.entity';
+import { BrandDocument } from '../brand/entities/brand.entity';
+import {
+  BrandChannel,
+  BrandChannelDocument,
+} from '../brand-channel/entities/brand-channel.entity';
+import { BrandRoomDocument } from '../brand-room/entities/brand-room.entity';
+import {InitChatDto} from "../brand-chat/dto/init-chat.dto";
 
 @Injectable()
 export class ConversationService {
@@ -55,5 +62,31 @@ export class ConversationService {
 
   remove(id: string): Promise<ConversationDocument> {
     return this.conversationModel.findByIdAndDelete(id).exec();
+  }
+
+  async getOrCreateConversation(
+    initChatDto: InitChatDto,
+    brand: BrandDocument,
+    brandChannel?: BrandChannelDocument,
+    brandRoom?: BrandRoomDocument,
+  ): Promise<ConversationDocument> {
+    let conversation = await this.conversationModel.findOne({
+      brandId: brand.id,
+      brandChannelId: brandChannel?.id,
+      brandRoomId: brandRoom?.id,
+    });
+
+    if (!conversation) {
+      const conversationDto = new CreateConversationDto();
+
+      conversationDto.brandId = brand.id;
+      conversationDto.brandChannelId = brandChannel?.id;
+      conversationDto.brandRoomId = brandRoom?.id;
+      conversationDto.name = initChatDto.chatName;
+
+      conversation = await this.create(conversationDto);
+    }
+
+    return conversation;
   }
 }

@@ -26,6 +26,26 @@ export class Conversation {
   })
   owner: User | string;
 
+  @Prop({
+    required: false,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Brand',
+  })
+  brandId: string;
+
+  @Prop({
+    required: false,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'BrandChannel',
+  })
+  brandChannelId?: string | null;
+  @Prop({
+    required: false,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'BrandRoom',
+  })
+  brandRoomId?: string | null;
+
   @Prop({ ref: 'User', type: [SchemaTypes.ObjectId] })
   members: [ObjectId];
 }

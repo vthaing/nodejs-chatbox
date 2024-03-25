@@ -10,6 +10,7 @@ import {
   BrandChannelDocument,
 } from '../brand-channel/entities/brand-channel.entity';
 import { CreateBrandChannelDto } from '../brand-channel/dto/create-brand-channel.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class BrandChatService {
@@ -19,8 +20,20 @@ export class BrandChatService {
     private brandRoomService: BrandRoomService,
     private userService: UserService,
     private conversationService: ConversationService,
+    private authService: AuthService,
   ) {}
   async initChat(initChatDto: InitChatDto) {
+    const { conversation, user } = await this.getOrCreateBrandChatDependencies(
+      initChatDto,
+    );
+
+    return {
+      ...(await this.authService.login(user)),
+      conversation_id: conversation.id,
+    };
+  }
+
+  async getOrCreateBrandChatDependencies(initChatDto: InitChatDto) {
     const brand = await this.brandService.findOne(initChatDto.brandId);
     if (!brand) {
       throw new NotFoundException('Invalid brand id ' + initChatDto.brandId);
@@ -35,5 +48,27 @@ export class BrandChatService {
       initChatDto,
       brandChannel,
     );
+
+    const conversation = await this.conversationService.getOrCreateConversation(
+      initChatDto,
+      brand,
+      brandChannel,
+      brandRoom,
+    );
+
+    const user = await this.userService.getOrCreateUser(brand, initChatDto);
+
+    if (conversation.members.includes(user.id)) {
+      conversation.members.push(user.id);
+      await conversation.save();
+    }
+
+    return {
+      brand: brand,
+      brandChannel: brandChannel,
+      brandRoom: brandRoom,
+      conversation: conversation,
+      user: user,
+    };
   }
 }

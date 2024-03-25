@@ -10,4 +10,11 @@ export class CreateConversationDto {
   @IsNotEmpty()
   @IsArray()
   members: Array<string>;
+
+  @ApiProperty()
+  brandId: string;
+  @ApiProperty()
+  brandChannelId?: string;
+  @ApiProperty()
+  brandRoomId?: string;
 }

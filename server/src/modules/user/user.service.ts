@@ -5,6 +5,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
 import { UserBanRequestDocument } from '../user-ban-request/entities/user-ban-request.entity';
+import { Brand, BrandDocument } from '../brand/entities/brand.entity';
+import { InitChatDto } from '../brand-chat/dto/init-chat.dto';
+import { BrandChatUserDto } from './dto/brand-chat-user.dto';
 
 @Injectable()
 export class UserService {
@@ -69,5 +72,26 @@ export class UserService {
       user.bannedTo = banUtil;
       return user.save();
     });
+  }
+
+  async getOrCreateUser(
+    brand: BrandDocument,
+    initChatDto: InitChatDto,
+  ): Promise<UserDocument> {
+    let user = await this.userModel.findOne({
+      brandId: brand.id,
+      externalId: initChatDto.userId,
+    });
+
+    if (!user) {
+      const userDto = new BrandChatUserDto();
+      userDto.brandId = brand.id;
+      userDto.displayName = initChatDto.userDisplayName;
+      userDto.externalId = initChatDto.userId;
+
+      user = new this.userModel(userDto);
+      await user.save();
+    }
+    return user;
   }
 }

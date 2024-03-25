@@ -10,7 +10,7 @@ import { BrandChatService } from './brand-chat.service';
 
 @Module({
   imports: [
-    AuthModule,
+    forwardRef(() => AuthModule),
     forwardRef(() => UserModule),
     forwardRef(() => BrandModule),
     forwardRef(() => BrandChannelModule),
