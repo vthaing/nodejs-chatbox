@@ -2,12 +2,14 @@ import { Controller, Get, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import {ConfigService} from "@nestjs/config";
-import process from "process";
+import { ConfigService } from '@nestjs/config';
 
 @Controller('client-scripts')
 export class ClientScriptController {
-  constructor(private readonly httpService: HttpService, private configuration: ConfigService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private configuration: ConfigService,
+  ) {}
   @Get('chat-box.js')
   async getChatBoxScript(@Req() req: Request, @Res() res: Response) {
     const publicChatboxUrl = this.getPublicChatBoxScriptUrl(req);

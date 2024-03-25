@@ -39,7 +39,7 @@ export class AuthService {
       return {
         online: user.online,
         id: user.id,
-        displayName: user.displayName,
+        displayName: user.displayName ?? user.username,
         roles: user.roles,
       } as UserAuthInterface;
     }
@@ -61,8 +61,8 @@ export class AuthService {
   ): Promise<UserAuthInterface | null> {
     const user = await this.userService.findOne({ username });
     if (user && !user.isBanned && user.brandStatus) {
-      const { online, displayName, id, roles } = user;
-      return { online, displayName, id, roles };
+      const { online, displayName, username, id, roles } = user;
+      return { online, displayName: displayName ?? username, id, roles };
     }
     return null;
   }
@@ -70,8 +70,8 @@ export class AuthService {
   async validateByUserId(id: string): Promise<UserAuthInterface | null> {
     const user = await this.userService.findById(id);
     if (user && !user.isBanned && user.brandStatus) {
-      const { online, displayName, id, roles } = user;
-      return { online, displayName, id, roles };
+      const { online, displayName, username, id, roles } = user;
+      return { online, displayName: displayName ?? username, id, roles };
     }
     return null;
   }

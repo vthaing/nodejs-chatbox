@@ -85,7 +85,7 @@ function chatBoxesManagement() {
       return;
     }
     var iframe = document.createElement('iframe');
-    iframe.src = this.getConversationIframeUrl(jsonData);
+    iframe.src = this.getConversationIframeUrl(jsonData.conversation_id);
     iframe.width = '600px';
     iframe.height = '600px';
     // A tips to transfer the data from parent to iframe
@@ -168,10 +168,7 @@ function chatBoxesManagement() {
     return ChatBoxEndpointSettings.chatBoxInitEndpoint;
   };
 
-  this.getConversationIframeUrl = function (jsonData) {
-    return (
-      ChatBoxEndpointSettings.chatBoxConversationEndpoint +
-      jsonData.conversation_id
-    );
+  this.getConversationIframeUrl = function (conversationId) {
+    return ChatBoxEndpointSettings.chatBoxConversationEndpoint + conversationId;
   };
 }
