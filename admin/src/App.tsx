@@ -17,7 +17,6 @@ import {API_URL} from "./constants";
 import {authProvider} from "./authUtils/authProvider";
 import {axiosInstance} from "./authUtils/axiosInstance";
 import {ConversationEdit, ConversationList, ConversationShow} from "./pages/conversation";
-import {ConversationCreate} from "./pages/conversation/create";
 import {BadWordCreate} from "./pages/bad-word/create";
 import {BadWordEdit, BadWordList} from "./pages/bad-word";
 import {RestrictedIpCreate} from "./pages/restricted-ip/create";

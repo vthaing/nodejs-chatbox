@@ -48,6 +48,24 @@ export class MessageController {
     return this.messageService.update(id, updateMessageDto);
   }
 
+  @UseGuards(RoleGuard(Role.Admin))
+  @Patch(':id/pin')
+  pin(@Param('id') id: string) {
+    return this.messageService.findOne(id).then((message) => {
+      message.isPinnedMessage = true;
+      return message.save();
+    });
+  }
+
+  @UseGuards(RoleGuard(Role.Admin))
+  @Patch(':id/unpin')
+  unpin(@Param('id') id: string) {
+    return this.messageService.findOne(id).then((message) => {
+      message.isPinnedMessage = false;
+      return message.save();
+    });
+  }
+
   @Get('history/:targetUser')
   findMessages(
     @Req() { user }: { user: UserDocument },

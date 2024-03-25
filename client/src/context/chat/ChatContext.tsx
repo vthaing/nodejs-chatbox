@@ -50,6 +50,18 @@ export interface IActiveChatPayload {
     conversation?: IConversation | null
 }
 
+export enum ChangePinMessageStatusType {
+    pin = 'PIN',
+    unpin = 'UNPIN'
+}
+
+export interface ChangePinMessageStatusPayload {
+    type: ChangePinMessageStatusType,
+    message: IMessage
+}
+
+
+
 export interface IChatContext {
     chatState: ChatState;
     dispatch: React.Dispatch<ChatAction>;

@@ -1,6 +1,13 @@
 import {IUser} from '../../auth/AuthContext';
 import {ChatTypes} from '../../types/chat.types';
-import {IActiveChatPayload, IConversation, IMediaItem, IMessage} from './ChatContext';
+import {
+    ChangePinMessageStatusPayload,
+    ChangePinMessageStatusType,
+    IActiveChatPayload,
+    IConversation,
+    IMediaItem,
+    IMessage
+} from './ChatContext';
 import {UploadFile} from "antd/es/upload/interface";
 
 export type ChatState = {
@@ -24,6 +31,13 @@ export interface ListUsers extends ChatAction {
     payload: IUser[];
 }
 
+
+
+export interface ChangePinMessageStatus extends ChatAction {
+    type: ChatTypes.changePinMessageStatus
+    payload: ChangePinMessageStatusPayload
+}
+
 export interface ListConversations extends ChatAction {
     type: ChatTypes.listConversations;
     payload: IConversation[];
@@ -32,6 +46,11 @@ export interface ListConversations extends ChatAction {
 export interface ActiveChat extends ChatAction {
     type: ChatTypes.activeChat;
     payload: IActiveChatPayload;
+}
+
+export interface DeleteMessage extends ChatAction {
+    type: ChatTypes.deleteMessage;
+    payload: IMessage;
 }
 
 export interface NewMessage extends ChatAction {
@@ -69,6 +88,41 @@ export const initialChatState = {
     pinnedMessages: [],
     uploadingAttachments: []
 } as ChatState;
+
+const handlePinMessageChange = (state: ChatState, action: ChangePinMessageStatus) => {
+    const updatedMessage = action.payload.message;
+    updatedMessage.isPinnedMessage = action.payload.type === ChangePinMessageStatusType.pin;
+
+    const messages = state.messages;
+    for (const i in messages) {
+        if (messages[i].id === updatedMessage.id) {
+            messages[i] = updatedMessage;
+            break;
+        }
+    }
+
+    const pinningMessages = state.pinnedMessages;
+    for (const i in pinningMessages) {
+        if (pinningMessages[i].id === updatedMessage.id) {
+            pinningMessages[i] = updatedMessage;
+            break;
+        }
+    }
+
+    return {
+        ...state,
+        messages: messages,
+        pinnedMessages: pinningMessages
+    }
+}
+
+const handleDeleteMessage = (state: ChatState, action: DeleteMessage) => {
+    return {
+        ...state,
+        messages: state.messages.filter(message => message.id === action.payload.id),
+        pinnedMessages: state.pinnedMessages.filter(message => message.id === action.payload.id)
+    }
+}
 
 
 
@@ -132,7 +186,12 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
                 } else {
                     return state;
                 }
-        
+
+        case ChatTypes.changePinMessageStatus:
+            return handlePinMessageChange(state, action as ChangePinMessageStatus);
+        case ChatTypes.deleteMessage:
+            return handleDeleteMessage(state, action as DeleteMessage);
+
         case ChatTypes.loadMessages:
             const loadMessagesAction = (action as LoadMessages);
             const pinnedMessages = loadMessagesAction.payload.filter((loadedMessage) => loadedMessage.isPinnedMessage)
@@ -180,5 +239,4 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
             };
 
     }
-
 };

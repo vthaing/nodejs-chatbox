@@ -5,6 +5,7 @@ import {Element as ScrollElement} from 'react-scroll';
 import {UploadFile} from "antd/es/upload/interface";
 import {UploadingAttachments} from "./UploadingAttachment";
 import {MessageMediaItems} from "./MessageMediaItems";
+import {AdditionalButtons} from "./AdditionalButtons";
 
 export type OutgoingMessageProps = {
     message: IMessage;
@@ -45,6 +46,7 @@ export const OutgoingMessage: React.FC<OutgoingMessageProps> = ({ message }) => 
                     </p>
                     <span className="time_date">
                         {horaMes(message.createdAt as string)}
+                        <AdditionalButtons message={message}/>
                     </span>
                     {
                         (uploadingAttachments.length > 0) &&
