@@ -17,6 +17,7 @@ import {UserEdit, UserList, UserShow} from "./pages/users";
 import {API_URL} from "./constants";
 import {authProvider} from "./authUtils/authProvider";
 import {axiosInstance} from "./authUtils/axiosInstance";
+import {ChannelEdit, ChannelList, ChannelShow} from "./pages/channel";
 
 const App: React.FC = () => {
 
@@ -50,6 +51,13 @@ const App: React.FC = () => {
                     list: UserList,
                     // edit: UserEdit,
                     show: UserShow,
+                    canDelete: true
+                },
+                {
+                    name: "channels",
+                    list: ChannelList,
+                    edit: ChannelEdit,
+                    show: ChannelShow,
                     canDelete: true
                 },
             ]}

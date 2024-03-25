@@ -16,6 +16,12 @@ export interface IUser {
     online: boolean;
     username: string;
     email: string;
-
     createdAt: string
+}
+
+export interface IChannel {
+    id: string;
+    name?: string;
+    members: [string];
+    owner?: string
 }
