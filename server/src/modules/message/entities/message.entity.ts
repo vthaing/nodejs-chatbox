@@ -121,6 +121,7 @@ MessageSchema.methods.transformToChatBoxData = function (): ChatMessage {
     isPinnedMessage: this.isPinnedMessage,
     attachments: this.attachments,
     mediaItems: this.mediaItems,
+    createdAt: this.createdAt,
   };
 };
 

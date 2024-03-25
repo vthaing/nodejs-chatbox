@@ -7,7 +7,6 @@ import {
     IMessage
 } from './ChatContext';
 import {UploadFile} from "antd/es/upload/interface";
-import {message} from "antd";
 
 export type ChatState = {
     id: string;
@@ -192,12 +191,14 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
 
         case ChatTypes.loadMessages:
             const loadMessagesAction = (action as LoadMessages);
+            const currentMessages = state.messages ?? []
             const pinnedMessages = loadMessagesAction.payload.filter((loadedMessage) => loadedMessage.isPinnedMessage)
 
             return {
                 ...state,
                 messages: [
                     ...loadMessagesAction.payload,
+                    ...currentMessages
                 ],
                 pinnedMessages: pinnedMessages
             };

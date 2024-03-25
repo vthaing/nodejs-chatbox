@@ -40,11 +40,23 @@ export class MessageService {
   ) {
     return this.messageModel
       .find(params)
+      .sort({ _id: -1 })
       .limit(limit)
       .populate(this.getRequiredRelationProperties())
       .then((messages) => {
         return messages.map((message) => message.transformToChatBoxData());
-      });
+      })
+      .then((messages) =>
+        messages.sort((a, b) => {
+          if (a.createdAt > b.createdAt) {
+            return 1;
+          }
+          if (a.createdAt < b.createdAt) {
+            return -1;
+          }
+          return 0;
+        }),
+      );
   }
 
   getRequiredRelationProperties() {
