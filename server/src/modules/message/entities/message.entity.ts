@@ -5,6 +5,7 @@ import { User, UserDocument } from '../../user/entities/user.entity';
 import { Conversation } from '../../conversation/entities/conversation.entity';
 import { UserBanRequest } from '../../user-ban-request/entities/user-ban-request.entity';
 import { MediaItem } from '../../media-item/entities/media-item.entity';
+import { ChatMessage } from '../dto/chat-message';
 
 export type MessageDocument = Message & Document;
 
@@ -62,6 +63,7 @@ export class Message {
   mediaItems?: [MediaItem];
 
   bannedReasons?: [string | ObjectId];
+  transformToChatBoxData: () => ChatMessage;
 }
 const MessageSchema = SchemaFactory.createForClass(Message);
 MessageSchema.virtual('senderInfo', {
@@ -99,4 +101,19 @@ MessageSchema.virtual('bannedReasons').get(function () {
     return userBanRequest.reason;
   });
 });
+
+MessageSchema.methods.transformToChatBoxData = function (): ChatMessage {
+  return {
+    id: this.id,
+    to: this.to,
+    conversation: this.conversation,
+    senderInfo: this.senderInfo,
+    messageContent: this.messageContent,
+    from: this.from,
+    isPinnedMessage: this.isPinnedMessage,
+    attachments: this.attachments,
+    mediaItems: this.mediaItems,
+  };
+};
+
 export { MessageSchema };

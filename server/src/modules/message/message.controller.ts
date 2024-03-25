@@ -16,7 +16,14 @@ import {
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request } from 'express';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import RoleGuard from '../auth/guards/roles.guard';
@@ -25,6 +32,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { MessageAttachmentDto } from './dto/message-attachment.dto';
 import RequestWithUserInterface from '../auth/request-with-user.interface';
 import { ChatGateway } from '../chat/chat.gateway';
+import { ChatMessage } from './dto/chat-message';
 
 @ApiBearerAuth()
 @ApiTags('Messages')
@@ -72,6 +80,10 @@ export class MessageController {
       .then((message) => this.chatGateway.emitPinMessageChanged(message));
   }
 
+  @ApiOkResponse({
+    type: [ChatMessage],
+    description: 'Get messages of current user with a specific user',
+  })
   @Get('history/:targetUser')
   findMessages(
     @Req() { user }: { user: UserDocument },
@@ -86,6 +98,10 @@ export class MessageController {
   }
 
   @Get('conversation/:conversationId')
+  @ApiOkResponse({
+    type: [ChatMessage],
+    description: 'Get messages of a conversation',
+  })
   findMessagesByConversation(
     @Req() req: Request,
     @Param('conversationId') conversationId: string,
@@ -99,7 +115,7 @@ export class MessageController {
     if (req.query.isPinnedMessage) {
       params.isPinnedMessage = req.query.isPinnedMessage;
     }
-    return this.messageService.findAll(params);
+    return this.messageService.getMessagesForChatBoxClient(params);
   }
 
   @UseGuards(RoleGuard(Role.Admin))

@@ -31,6 +31,12 @@ export class MessageService {
       .exec();
   }
 
+  getMessagesForChatBoxClient(params: FilterQuery<MessageDocument> = {}) {
+    return this.findAll(params).then((messages) => {
+      return messages.map((message) => message.transformToChatBoxData());
+    });
+  }
+
   getRequiredRelationProperties() {
     return ['senderInfo', 'mediaItems'];
   }
