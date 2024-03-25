@@ -144,7 +144,7 @@ function chatBoxesManagement() {
       request.addEventListener('load', function () {
         self.handleSuccessRequestAccessToken(this.responseText, chatBoxElement);
       });
-      this._prepareRequestHeader(request, chatBoxData);
+      self._prepareRequestHeader(request, chatBoxData);
       request.send(JSON.stringify(chatBoxData));
     }, this.delayTime);
     this.delayTime += 100;
