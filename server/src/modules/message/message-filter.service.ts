@@ -12,16 +12,16 @@ export class MessageFilterService {
   }
 
   filterAndHandleViolateMessage(message: MessageDocument): Promise<Message> {
-    return this.filterViolateMessage(message);
+    return this.filterBadWords(message);
   }
 
-  filterViolateMessage(message: MessageDocument): Promise<Message> {
+  filterBadWords(message: MessageDocument): Promise<Message> {
     return this.getProfaneWords(message).then((badWords) => {
       if (badWords.length === 0) {
         return message;
       }
 
-      message.maskedText = this.clean(message.text, badWords);
+      message.maskedText = this.cleanBadWords(message.text, badWords);
       return message.save();
     });
   }
@@ -39,7 +39,7 @@ export class MessageFilterService {
   /**
    * Evaluate a string for profanity and return an edited version.
    */
-  clean(text: string, badWords: BadWord[]): string {
+  cleanBadWords(text: string, badWords: BadWord[]): string {
     let keyReplacement, lowerText;
 
     lowerText = text.toLowerCase();
