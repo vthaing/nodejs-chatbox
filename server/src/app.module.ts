@@ -20,6 +20,7 @@ import { BrandModule } from './modules/brand/brand.module';
 import { BrandChannelModule } from './modules/brand-channel/brand-channel.module';
 import {BrandRoomModule} from "./modules/brand-room/brand-room.module";
 import {BrandChatModule} from "./modules/brand-chat/brand-chat.module";
+import {ClientScriptModule} from "./modules/client-script/client-script.module";
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import {BrandChatModule} from "./modules/brand-chat/brand-chat.module";
     BrandChannelModule,
     BrandRoomModule,
     BrandChatModule,
+    ClientScriptModule,
   ],
   controllers: [AppController],
   providers: [

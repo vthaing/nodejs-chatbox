@@ -6,4 +6,6 @@ export default () => ({
   redisHost: process.env.REDIS_HOST,
   redisPort: process.env.REDIS_PORT,
   redisPassword: process.env.REDIS_PASSWORD,
+  chatBoxInitEndpoint: process.env.CHAT_BOX_INIT_ENDPOINT,
+  chatBoxConversationEndpoint: process.env.CHAT_BOX_CONVERSATION_ENDPOINT,
 });
