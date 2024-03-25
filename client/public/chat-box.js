@@ -99,7 +99,7 @@ function chatBoxesManagement () {
         return 'http://localhost:3001/api/brand-chat/init-chat';
     }
 
-    //@TODO: should config
+    //@TODO: should config and do not send restrict data via URL
     this.getConversationIframeUrl = function (jsonData) {
         return 'http://localhost:3000/conversation/'
             + jsonData.conversation_id + '?'
