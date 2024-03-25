@@ -3,10 +3,10 @@ import { MessageModule } from './../message/message.module';
 import { UserModule } from './../user/user.module';
 import { AuthModule } from './../auth/auth.module';
 import { ChatGateway } from './chat.gateway';
-import { ChannelModule } from '../channels/channel.module';
+import { ConversationModule } from '../conversations/conversation.module';
 
 @Module({
   providers: [ChatGateway],
-  imports: [AuthModule, UserModule, MessageModule, ChannelModule],
+  imports: [AuthModule, UserModule, MessageModule, ConversationModule],
 })
 export class ChatModule {}

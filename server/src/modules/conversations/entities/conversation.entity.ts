@@ -3,20 +3,20 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import { User } from '../../user/entities/user.entity';
 
-export type ChannelDocument = Channel & Document;
+export type ConversationDocument = Conversation & Document;
 @Schema({
   timestamps: true,
   toJSON: {
     virtuals: true,
     getters: true,
-    transform: (doc: ChannelDocument, ret) => {
+    transform: (doc: ConversationDocument, ret) => {
       delete ret.__v;
       ret.id = ret._id;
       delete ret._id;
     },
   },
 })
-export class Channel {
+export class Conversation {
   @Prop({ required: false, type: mongoose.Schema.Types.String })
   name?: string;
   @Prop({
@@ -30,12 +30,12 @@ export class Channel {
   members: [ObjectId];
 }
 
-const ChannelSchema = SchemaFactory.createForClass(Channel);
+const ConversationSchema = SchemaFactory.createForClass(Conversation);
 
-ChannelSchema.virtual('memberObjects', {
+ConversationSchema.virtual('memberObjects', {
   ref: 'User',
   localField: 'members',
   foreignField: '_id',
 });
 
-export { ChannelSchema };
+export { ConversationSchema };

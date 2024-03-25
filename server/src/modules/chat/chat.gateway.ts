@@ -12,7 +12,7 @@ import {
 import { getUserFromWSToken } from '../auth/utils/validate-user-ws';
 import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
-import { ChannelService } from '../channels/channel.service';
+import { ConversationService } from '../conversations/conversation.service';
 import { MessageFilterService } from '../message/message-filter.service';
 
 interface SocketWithUserData extends Socket {
@@ -28,7 +28,7 @@ export class ChatGateway {
     private readonly wsAuthStrategy: WsAuthStrategy,
     private readonly userService: UserService,
     private readonly messageService: MessageService,
-    private readonly channelService: ChannelService,
+    private readonly conversationService: ConversationService,
     private readonly messageFilterService: MessageFilterService,
   ) {}
 
@@ -48,7 +48,7 @@ export class ChatGateway {
       logger.verbose('Client connected to chat');
       // retrieve connected users
       const connectedUsers = await this.userService.findAll();
-      const userChannels = await this.channelService.findUserChannels(
+      const userConversations = await this.conversationService.findUserConversations(
         userFromSocket.id,
       );
       // join user to a chat room (private)
@@ -56,7 +56,7 @@ export class ChatGateway {
 
       console.log(userFromSocket.id);
       this.server.emit('online-users', connectedUsers);
-      this.server.emit('user-channels', userChannels);
+      this.server.emit('user-conversations', userConversations);
     } catch (e) {
       logger.error(
         'Socket disconnected within handleConnection() in AppGateway:',
@@ -94,9 +94,9 @@ export class ChatGateway {
         this.messageFilterService.filterAndHandleViolateMessage(createdMessage),
       );
 
-    if (createMessage.channel) {
+    if (createMessage.conversation) {
       this.server
-        .to(createMessage.channel.toString())
+        .to(createMessage.conversation.toString())
         .emit('private-message', createMessage);
     } else {
       this.server.to(message.to).emit('private-message', createMessage);
@@ -114,8 +114,8 @@ export class ChatGateway {
     }
   }
 
-  @SubscribeMessage('open-channel-chat')
-  async openChannelChat(@MessageBody() messageBody: any): Promise<void> {
-    this.server.socketsJoin(messageBody.channel);
+  @SubscribeMessage('open-conversation-chat')
+  async openConversationChat(@MessageBody() messageBody: any): Promise<void> {
+    this.server.socketsJoin(messageBody.conversation);
   }
 }

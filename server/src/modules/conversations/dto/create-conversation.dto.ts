@@ -1,6 +1,6 @@
 import { IsArray, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-export class CreateChannelDto {
+export class CreateConversationDto {
   @ApiProperty({ required: false })
   name?: string;
   @ApiProperty({ required: false })

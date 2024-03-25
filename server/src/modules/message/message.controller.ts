@@ -40,10 +40,10 @@ export class MessageController {
     });
   }
 
-  @Get('channel/:channelId')
-  findMessagesByChannel(@Param('channelId') channelId: string) {
+  @Get('conversation/:conversationId')
+  findMessagesByConversation(@Param('conversationId') conversationId: string) {
     return this.messageService.findAll({
-      channel: channelId,
+      conversation: conversationId,
     });
   }
 
