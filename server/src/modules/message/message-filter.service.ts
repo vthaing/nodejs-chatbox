@@ -12,13 +12,16 @@ export class MessageFilterService {
   }
 
   filterAndHandleViolateMessage(message: Message): Promise<Message> {
+    return this.filterViolateMessage(message);
+  }
+
+  filterViolateMessage(message: Message): Promise<Message> {
     return this.getProfaneWords(message).then((badWords) => {
       if (!badWords) {
         return message;
       }
 
       message.text = this.clean(message.text, badWords);
-      console.log(message.text, 'after cleaning');
       return message;
     });
   }
