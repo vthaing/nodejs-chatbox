@@ -7,7 +7,7 @@ import {
   Req,
   Param,
 } from '@nestjs/common';
-import { ApiHeaders, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiHeaders, ApiTags } from '@nestjs/swagger';
 import { InitChatDto } from './dto/init-chat.dto';
 import { BrandChatService } from './brand-chat.service';
 import { BrandAuthGuard } from '../auth/guards/brand-auth.guard';

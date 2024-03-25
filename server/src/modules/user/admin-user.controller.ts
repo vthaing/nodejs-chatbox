@@ -9,7 +9,7 @@ import {
   UseGuards,
   NotFoundException,
   Req,
-  Res, UnauthorizedException,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,11 +24,11 @@ import RoleGuard from '../auth/guards/roles.guard';
 import Role from './role.enum';
 import { CreateAdminUserPipe } from './pipes/create-admin-user.pipe';
 import { UpdateAdminUserPipe } from './pipes/update-admin-user.pipe';
-import {UpdatePasswordDto} from "./dto/update-password.dto";
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @ApiBearerAuth()
 @ApiTags('Admin User')
-@UseGuards(RoleGuard(Role.Admin))
+@UseGuards(RoleGuard(Role.SuperAdmin))
 @UseGuards(JwtAuthGuard)
 @Controller('admin-user')
 export class AdminUserController {
