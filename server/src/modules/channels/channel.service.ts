@@ -24,6 +24,7 @@ export class ChannelService {
       .find({
         ...params,
       })
+      .populate('memberObjects')
       .exec();
   }
 
@@ -32,7 +33,7 @@ export class ChannelService {
   }
 
   findOne(id: string): Promise<ChannelDocument> {
-    return this.channelModel.findById(id).exec();
+    return this.channelModel.findById(id).populate('memberObjects').exec();
   }
 
   update(

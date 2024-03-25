@@ -24,4 +24,6 @@ export interface IChannel {
     name?: string;
     members: [string];
     owner?: string
+    memberObjects: [IUser],
+    createdAt: string
 }

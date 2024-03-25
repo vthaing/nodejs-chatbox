@@ -7,47 +7,37 @@ import {
     useTable,
     Space,
     EditButton,
-    ShowButton,
+    ShowButton, TagField,
 } from "@pankod/refine-antd";
 
-import { IChannel, ICategory } from "interfaces";
+import {IChannel, ICategory, IUser} from "interfaces";
+import dayjs from "dayjs";
 
 export const ChannelList: React.FC<IResourceComponentsProps> = () => {
     const { tableProps } = useTable<IChannel>();
-
-    // const categoryIds =
-    //     tableProps?.dataSource?.map((item) => item.category.id) ?? [];
-    // const { data, isLoading } = useMany<ICategory>({
-    //     resource: "categories",
-    //     ids: categoryIds,
-    //     queryOptions: {
-    //         enabled: categoryIds.length > 0,
-    //     },
-    // });
 
     return (
         <List>
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title="ID" />
                 <Table.Column dataIndex="name" title="Name" />
-                {/*<Table.Column*/}
-                {/*    dataIndex={["category", "id"]}*/}
-                {/*    title="Category"*/}
-                {/*    render={(value) => {*/}
-                {/*        if (isLoading) {*/}
-                {/*            return <TextField value="Loading..." />;*/}
-                {/*        }*/}
-
-                {/*        return (*/}
-                {/*            <TextField*/}
-                {/*                value={*/}
-                {/*                    data?.data.find((item) => item.id === value)*/}
-                {/*                        ?.title*/}
-                {/*                }*/}
-                {/*            />*/}
-                {/*        );*/}
-                {/*    }}*/}
-                {/*/>*/}
+                <Table.Column
+                    dataIndex={"memberObjects"}
+                    title="Members"
+                    render={(value) => {
+                        return value.map((item: IUser) => {
+                            return (
+                                <TagField
+                                    key={item.id}
+                                    color="blue"
+                                    value={item.username}
+                                />
+                            );
+                        });
+                    }}
+                />
+                <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IChannel) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
+                />
                 <Table.Column<IChannel>
                     title="Actions"
                     dataIndex="actions"
@@ -58,11 +48,11 @@ export const ChannelList: React.FC<IResourceComponentsProps> = () => {
                                 size="small"
                                 recordItemId={record.id}
                             />
-                            <ShowButton
-                                hideText
-                                size="small"
-                                recordItemId={record.id}
-                            />
+                            {/*<ShowButton*/}
+                            {/*    hideText*/}
+                            {/*    size="small"*/}
+                            {/*    recordItemId={record.id}*/}
+                            {/*/>*/}
                         </Space>
                     )}
                 />
