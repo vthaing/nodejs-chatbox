@@ -6,7 +6,6 @@ import { BadWord, BadWordDocument } from './entities/bad-word.entity';
 import { FilterQuery, Model } from 'mongoose';
 
 @Injectable()
-@Injectable()
 export class BadWordService {
   constructor(
     @InjectModel(BadWord.name)
