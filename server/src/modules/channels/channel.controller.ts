@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ChannelsService } from './channels.service';
+import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -18,8 +18,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 @ApiTags('Channel')
 @UseGuards(JwtAuthGuard)
 @Controller('channels')
-export class ChannelsController {
-  constructor(private readonly channelsService: ChannelsService) {}
+export class ChannelController {
+  constructor(private readonly channelsService: ChannelService) {}
 
   @Post()
   create(@Body() createChannelDto: CreateChannelDto) {

@@ -6,7 +6,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { Channel, ChannelDocument } from './entities/channel.entity';
 
 @Injectable()
-export class ChannelsService {
+export class ChannelService {
   constructor(
     @InjectModel(Channel.name)
     private readonly channelModel: Model<ChannelDocument>,

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ChannelsService } from './channels.service';
-import { ChannelsController } from './channels.controller';
+import { ChannelService } from './channel.service';
+import { ChannelController } from './channel.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   Channel,
@@ -18,8 +18,8 @@ import { AuthModule } from '../auth/auth.module';
     ]),
     AuthModule,
   ],
-  controllers: [ChannelsController],
-  providers: [ChannelsService],
-  exports: [ChannelsService],
+  controllers: [ChannelController],
+  providers: [ChannelService],
+  exports: [ChannelService],
 })
 export class ChannelModule {}
