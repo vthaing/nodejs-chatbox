@@ -1,7 +1,5 @@
 import React, {useContext} from 'react'
 import {
-    ChangePinMessageStatusPayload,
-    ChangePinMessageStatusType,
     ChatContext,
     IMessage
 } from '../context/chat/ChatContext';
@@ -9,6 +7,7 @@ import {DeleteOutlined, MoreOutlined, PushpinOutlined} from "@ant-design/icons";
 import {Button, Dropdown, MenuProps} from "antd";
 import {customFetch} from "../helpers/fetch";
 import {ChatTypes} from "../types/chat.types";
+import {AuthContext} from "../auth/AuthContext";
 
 export type AdditionalButtonsProps = {
     message: IMessage;
@@ -18,6 +17,7 @@ export type AdditionalButtonsProps = {
 export const AdditionalButtons: React.FC<AdditionalButtonsProps> = ({ message }) => {
 
     const { dispatch } = useContext(ChatContext);
+    const { isCurrentAdmin } = useContext(AuthContext)
 
     const pinButton = message.isPinnedMessage ?
         {
@@ -50,15 +50,6 @@ export const AdditionalButtons: React.FC<AdditionalButtonsProps> = ({ message })
             method: 'PATCH',
             token: localStorage.getItem('accessToken') ?? ''
         });
-
-        dispatch({
-            type: ChatTypes.changePinMessageStatus,
-            payload: {
-                type: ChangePinMessageStatusType.pin,
-                message: message
-            } as ChangePinMessageStatusPayload
-        });
-
     };
 
     const handleUnpin = async () => {
@@ -66,14 +57,6 @@ export const AdditionalButtons: React.FC<AdditionalButtonsProps> = ({ message })
             endpoint: `message/${message.id}/unpin`,
             method: 'PATCH',
             token: localStorage.getItem('accessToken') ?? ''
-        });
-
-        dispatch({
-            type: ChatTypes.changePinMessageStatus,
-            payload: {
-                type: ChangePinMessageStatusType.unpin,
-                message: message
-            } as ChangePinMessageStatusPayload
         });
     };
 
@@ -103,9 +86,12 @@ export const AdditionalButtons: React.FC<AdditionalButtonsProps> = ({ message })
 
     return (
         <>
-            <Dropdown  menu={{items, onClick}}>
-                <Button title={'More Actions'} icon={<MoreOutlined />}/>
-            </Dropdown>
+            {
+                isCurrentAdmin() &&
+                <Dropdown  menu={{items, onClick}}>
+                    <Button title={'More Actions'} icon={<MoreOutlined />}/>
+                </Dropdown>
+            }
         </>
     )
 }

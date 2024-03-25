@@ -5,6 +5,7 @@ import { ChatTypes } from '../types/chat.types';
 
 export type AuthContextProps = {
     auth: IAuthState,
+    isCurrentAdmin: () => boolean;
     login(email: string, password: string): Promise<boolean>;
     register(name: string, email: string, password: string): Promise<boolean>;
     verifyToken(): Promise<boolean>;
@@ -23,6 +24,7 @@ export interface IAuthState {
     checking: boolean;
     logged: boolean;
     displayName: string | null;
+    roles: string[]
 }
 
 
@@ -31,12 +33,14 @@ const initialAuthState = {
     checking: true,
     logged: false,
     displayName: null,
+    roles: []
 } as IAuthState;
 
 export interface IUser {
     id: string;
     online: boolean;
     displayName: string;
+    roles: string[]
 }
 
 
@@ -85,7 +89,8 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
                     checking: false,
                     id,
                     logged: true,
-                    displayName
+                    displayName,
+                    roles: user.roles
                 }
             );
         }
@@ -141,6 +146,7 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
                         id,
                         displayName,
                         logged: true,
+                        roles: user.roles
                     }
                 );
             } else {
@@ -154,6 +160,10 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
             }
 
         }, []);
+
+    const isCurrentAdmin = () => {
+        return auth.roles.includes('Admin');
+    }
 
     const logout = () => {
         localStorage.removeItem('accessToken');
@@ -194,6 +204,7 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
                     id,
                     displayName,
                     logged: true,
+                    roles: iframeJsonToken.roles
                 }
             );
         }
@@ -201,6 +212,7 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
 
     const context = {
         auth,
+        isCurrentAdmin,
         login,
         register,
         verifyToken,

@@ -101,26 +101,25 @@ const handlePinMessageChange = (state: ChatState, action: ChangePinMessageStatus
         }
     }
 
-    const pinningMessages = state.pinnedMessages;
-    for (const i in pinningMessages) {
-        if (pinningMessages[i].id === updatedMessage.id) {
-            pinningMessages[i] = updatedMessage;
-            break;
-        }
+    let pinnedMessages = state.pinnedMessages;
+    if (action.payload.type === ChangePinMessageStatusType.pin) {
+        pinnedMessages.push(updatedMessage);
+    } else {
+        pinnedMessages = pinnedMessages.filter(message => message.id !== updatedMessage.id);
     }
 
     return {
         ...state,
         messages: messages,
-        pinnedMessages: pinningMessages
+        pinnedMessages: pinnedMessages
     }
 }
 
 const handleDeleteMessage = (state: ChatState, action: DeleteMessage) => {
     return {
         ...state,
-        messages: state.messages.filter(message => message.id === action.payload.id),
-        pinnedMessages: state.pinnedMessages.filter(message => message.id === action.payload.id)
+        messages: state.messages.filter(message => message.id !== action.payload.id),
+        pinnedMessages: state.pinnedMessages.filter(message => message.id !== action.payload.id)
     }
 }
 
@@ -152,7 +151,7 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
                 return {
                     ...state,
                 }
-            }; 
+            }
 
             return {
                 ...state,

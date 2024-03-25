@@ -3,6 +3,7 @@ import { IMessage } from '../context/chat/ChatContext'
 import { horaMes } from '../helpers/horaMes'
 import {Element as ScrollElement} from "react-scroll/modules";
 import {MessageMediaItems} from "./MessageMediaItems";
+import {AdditionalButtons} from "./AdditionalButtons";
 
 export type IncomingMessageProps = {
     message: IMessage;
@@ -23,7 +24,10 @@ export const IncomingMessage: React.FC<IncomingMessageProps> = ({ message }) => 
                         <p>
                             <strong>{message.senderInfo ? message.senderInfo.displayName : 'Unknown User'}</strong>: {message.messageContent}
                         </p>
-                        <span className="time_date">{horaMes(message.createdAt as string)}</span>
+                        <span className="time_date">
+                            {horaMes(message.createdAt as string)}
+                            <AdditionalButtons message={message}/>
+                        </span>
                         {
                             message.mediaItems && message.mediaItems.length > 0 &&
                             <MessageMediaItems mediaItems={message.mediaItems}/>
