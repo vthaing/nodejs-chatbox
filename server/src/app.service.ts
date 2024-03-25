@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { IPFILTER_TOKEN, IpFilterService } from 'nestjs-ip-filter';
 import { RestrictedIpService } from './modules/restricted-ip/restricted-ip.service';
+import { IPFILTER_TOKEN } from './modules/ip-filter/ipfilter.constants';
+import { IpFilterService } from './modules/ip-filter/ipfilter.service';
 
 @Injectable()
 export class AppService {

@@ -11,7 +11,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BadWordModule } from './modules/bad-word/bad-word.module';
 import { RestrictedIpModule } from './modules/restricted-ip/restricted-ip.module';
 import configuration from './config/configuration';
-import { IpFilter } from 'nestjs-ip-filter';
 import { RestrictedIpService } from './modules/restricted-ip/restricted-ip.service';
 import { APP_FILTER } from '@nestjs/core';
 import { IpFilterDenyExceptionFilter } from './exception/ipfilter-exception-filter.exception';
@@ -24,6 +23,7 @@ import { ClientScriptModule } from './modules/client-script/client-script.module
 import { MediaModule } from './modules/media-item/media.module';
 import { DriverType, StorageModule } from '@codebrew/nestjs-storage';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import {IpFilter} from "./modules/ip-filter/ipfilter.module";
 
 @Module({
   imports: [

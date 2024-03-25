@@ -5,7 +5,7 @@ import {
   ExceptionFilter,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { IpFilterDenyException } from 'nestjs-ip-filter';
+import { IpFilterDenyException } from '../modules/ip-filter/ipfilter-deny.exception';
 
 @Catch(IpFilterDenyException)
 export class IpFilterDenyExceptionFilter implements ExceptionFilter {
