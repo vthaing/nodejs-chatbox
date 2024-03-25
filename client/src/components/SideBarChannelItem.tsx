@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
-import {IChannel, IUser} from '../auth/AuthContext';
-import { ChatContext } from '../context/chat/ChatContext';
+import {ChatContext, IChannel} from '../context/chat/ChatContext';
 import { ActiveChat } from '../context/chat/chatReducer';
 import { ChatTypes } from '../types/chat.types';
 

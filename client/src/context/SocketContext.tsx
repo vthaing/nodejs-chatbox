@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect } from 'react';
 
 import { Socket } from 'socket.io-client';
-import {AuthContext, IChannel, IUser} from '../auth/AuthContext';
+import {AuthContext, IUser} from '../auth/AuthContext';
 import { scrollToBottomAnimated } from '../helpers/scrollToBottom';
 
 import { useSocket } from '../hooks/useSocket';
 import { ChatTypes } from '../types/chat.types';
-import { ChatContext, IMessage } from './chat/ChatContext';
+import {ChatContext, IChannel, IMessage} from './chat/ChatContext';
 import { ListChannels, ListUsers, NewMessage } from './chat/chatReducer';
 
 

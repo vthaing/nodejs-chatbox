@@ -10,6 +10,13 @@ export interface IMessage {
     createdAt?: string;
 }
 
+export interface IChannel {
+    id: string;
+    name?: string;
+    members: [string];
+    owner?: string
+}
+
 export interface IChatContext {
     chatState: ChatState;
     dispatch: React.Dispatch<ChatAction>;

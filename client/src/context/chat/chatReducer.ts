@@ -1,10 +1,11 @@
-import {IChannel, IUser} from '../../auth/AuthContext';
+import {IUser} from '../../auth/AuthContext';
 import {ChatTypes} from '../../types/chat.types';
-import {IMessage} from './ChatContext';
+import {IChannel, IMessage} from './ChatContext';
 
 export type ChatState = {
     id: string;
     activeChat: string;
+    activeChatType?: string;
     users: IUser[];
     channels: IChannel[];
     messages: IMessage[];

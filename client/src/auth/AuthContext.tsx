@@ -42,12 +42,7 @@ export interface IUser {
     email: string;
 }
 
-export interface IChannel {
-    id: string;
-    name?: string;
-    members: [string];
-    owner?: string
-}
+
 
 
 export type LoginResponse = {
