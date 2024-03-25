@@ -36,6 +36,7 @@ export interface IConversation {
     name?: string;
     members: [string];
     owner?: string
+    showUploadAttachmentInChat: boolean | null
 }
 
 export enum ActiveChatTypesEnum  {
@@ -45,7 +46,8 @@ export enum ActiveChatTypesEnum  {
 
 export interface IActiveChatPayload {
     type?: ActiveChatTypesEnum;
-    activeChatId?: string
+    activeChatId?: string,
+    conversation?: IConversation | null
 }
 
 export interface IChatContext {

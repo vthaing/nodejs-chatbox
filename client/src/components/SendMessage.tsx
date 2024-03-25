@@ -28,6 +28,7 @@ export const SendMessage: React.FC = () => {
     const [attachmentInputKey, setAttachmentInputKey] = useState(Math.random());
 
     const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        console.log(chatState);
         setMessage(target.value);
     }
 
@@ -94,9 +95,12 @@ export const SendMessage: React.FC = () => {
             onSubmit={onSubmit}
         >
             <div className="type_msg row">
-                <div className="col-sm-2">
-                   <button type={"button"} className="mt-3" onClick={handleAttachmentClick}><PaperClipOutlined /></button>
-                </div>
+                {
+                    chatState.activeChat.conversation?.showUploadAttachmentInChat &&
+                    <div className="col-sm-2">
+                        <button type={"button"} className="mt-3" onClick={handleAttachmentClick}><PaperClipOutlined /></button>
+                    </div>
+                }
                 <div className="input_msg_write col-sm-8">
                     <input
                         type="text"
@@ -121,6 +125,8 @@ export const SendMessage: React.FC = () => {
                     </button>
                 </div>
             </div>
+            {
+                chatState.activeChat.conversation?.showUploadAttachmentInChat &&
                 <Attachments
                     refButtonUpload={buttonUploadRef}
                     autoUpload={false}
@@ -128,6 +134,8 @@ export const SendMessage: React.FC = () => {
                     attachments={attachments}
                     key={attachmentInputKey}
                 />
+            }
+
         </form>
     )
 }

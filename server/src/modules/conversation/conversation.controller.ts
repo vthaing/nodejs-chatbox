@@ -7,7 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req, Res,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { ConversationService } from './conversation.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
@@ -21,7 +22,6 @@ import { PagingService } from '../common/service/paging.service';
 
 @ApiBearerAuth()
 @ApiTags('Conversation')
-@UseGuards(RoleGuard(Role.Admin))
 @UseGuards(JwtAuthGuard)
 @Controller('conversations')
 export class ConversationController {
@@ -30,12 +30,14 @@ export class ConversationController {
     private readonly pagingService: PagingService,
   ) {}
 
+  @UseGuards(RoleGuard(Role.Admin))
   @Post()
   create(@Body() createConversationDto: CreateConversationDto) {
     return this.conversationService.create(createConversationDto);
   }
 
   @Get()
+  @UseGuards(RoleGuard(Role.Admin))
   async findAll(@Req() req: Request, @Res() res) {
     const pagingOptions = this.pagingService.getPagingOptionsFromRequest(req);
     pagingOptions['populate'] = ['memberObjects'];
@@ -49,6 +51,7 @@ export class ConversationController {
 
   //@TODO: should move this route to the user module. The URL should be: user/:userId/conversation
   @Get('user-conversation/:userId')
+  @UseGuards(RoleGuard(Role.Admin))
   findAllUserConversations(@Param('userId') userId: string) {
     return this.conversationService.findAll({ members: { $all: [userId] } });
   }

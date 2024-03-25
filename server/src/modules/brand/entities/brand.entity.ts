@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document, ObjectId, SchemaTypes } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export type BrandDocument = Brand & Document;
 
@@ -29,6 +29,13 @@ export class Brand {
     type: mongoose.Schema.Types.Boolean,
   })
   enabled: boolean;
+
+  @Prop({
+    required: false,
+    type: mongoose.Schema.Types.Boolean,
+    default: false,
+  })
+  canUploadAttachment: boolean;
 }
 
 export const BrandSchema = SchemaFactory.createForClass(Brand);
