@@ -1,6 +1,8 @@
 function ChatBoxData(
   token,
   brandId,
+  timestampUTC,
+  xNonce,
   userId,
   userDisplayName,
   chatName,
@@ -11,6 +13,8 @@ function ChatBoxData(
 ) {
   this.token = token;
   this.brandId = brandId;
+  this.timestampUTC = timestampUTC;
+  this.xNonce = xNonce;
   this.userId = userId;
   this.userDisplayName = userDisplayName;
   this.chatName = chatName;
@@ -23,8 +27,9 @@ function ChatBoxData(
 
   this.isValid = function () {
     var requiredFields = [
-      // @TODO: should require this field
-      //'token',
+      'token',
+      'timestampUTC',
+      'xNonce',
       'brandId',
       'userId',
       'userDisplayName',
@@ -104,8 +109,8 @@ function chatBoxesManagement() {
         this.requestAccessToken(chatBoxData, elementNode);
       } else {
         throw Error(
-          'The chat box data is invalid',
-          chatBoxDataValidation.errors,
+          'The chat box data is invalid' +
+            JSON.stringify(chatBoxDataValidation.errors),
         );
       }
     }
@@ -115,6 +120,8 @@ function chatBoxesManagement() {
     return new ChatBoxData(
       element.dataset.token,
       element.dataset.brandId,
+      element.dataset.timeStampUTC,
+      element.dataset.xNonce,
       element.dataset.userId,
       element.dataset.userDisplayName,
       element.dataset.chatName,
@@ -137,13 +144,22 @@ function chatBoxesManagement() {
       request.addEventListener('load', function () {
         self.handleSuccessRequestAccessToken(this.responseText, chatBoxElement);
       });
-      request.setRequestHeader(
-        'Content-Type',
-        'application/json;charset=UTF-8',
-      );
+      this._prepareRequestHeader(request, chatBoxData);
       request.send(JSON.stringify(chatBoxData));
     }, this.delayTime);
     this.delayTime += 100;
+  };
+
+  this._prepareRequestHeader = function (xmlRequest, chatBoxData) {
+    xmlRequest.setRequestHeader(
+      'Content-Type',
+      'application/json;charset=UTF-8',
+    );
+
+    xmlRequest.setRequestHeader('X-Brand-Id', chatBoxData.brandId);
+    xmlRequest.setRequestHeader('X-Token', chatBoxData.token);
+    xmlRequest.setRequestHeader('X-Timestamp', chatBoxData.timestampUTC);
+    xmlRequest.setRequestHeader('X-Nonce', chatBoxData.xNonce);
   };
 
   this.delayTime = 100;
