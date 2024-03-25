@@ -14,6 +14,9 @@ import { UserModule } from './../user/user.module';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import {BrandAuthStrategy} from "./strategies/brand-auth.strategy";
+import {BrandAuthGuard} from "./guards/brand-auth.guard";
+import {BrandAuthService} from "./brand-auth.service";
 
 @Module({
   controllers: [AuthController],
@@ -26,8 +29,11 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
     JwtAuthGuard,
     JwtRefreshGuard,
     RegisterUserValidationPipe,
+    BrandAuthService,
     WsAuthStrategy,
     WsAuthGuard,
+    BrandAuthStrategy,
+    BrandAuthGuard,
   ],
   imports: [
     forwardRef(() => UserModule),
@@ -44,6 +50,8 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
     JwtAuthGuard,
     WsAuthGuard,
     WsAuthStrategy,
+    BrandAuthGuard,
+    BrandAuthStrategy,
     AuthService,
   ],
 })
