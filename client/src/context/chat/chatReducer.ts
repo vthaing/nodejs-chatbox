@@ -149,13 +149,6 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
 
             const updatedMessages = state.messages.map((message) => {
                 if (message.id === mediaItem.messageId) {
-                    if (state.uploadingAttachments.length > 0) {
-                        const existedInUploading = state.uploadingAttachments.find((uploadingAttachment: IAttachmentInfo) => uploadingAttachment.uid === mediaItem.params['uid'])
-                        // No need to add the uploaded media item because it has been already existed in the uploading list
-                        if (existedInUploading) {
-                            return message;
-                        }
-                    }
                     if (!message.mediaItems || !message.mediaItems.length) {
                         message.mediaItems = [];
                     }

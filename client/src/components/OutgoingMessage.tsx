@@ -51,6 +51,7 @@ export const OutgoingMessage: React.FC<OutgoingMessageProps> = ({ message }) => 
                         <UploadingAttachments message={message} attachments={uploadingAttachments}/>
                     }
                     {
+                        uploadingAttachments.length === 0 &&
                         message.mediaItems && message.mediaItems.length > 0 &&
                         <MessageMediaItems mediaItems={message.mediaItems}/>
                     }
