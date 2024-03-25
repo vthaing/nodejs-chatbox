@@ -76,7 +76,6 @@ export class BadWordMessageFilterFactor
         lowerText = text.toLowerCase();
         index = lowerText.indexOf(badWords[badWordIndex].term);
       }
-      return text;
     }
 
     return text;

@@ -53,7 +53,6 @@ export class PhoneNumberMessageFilterFactor
           text.substring(index + phoneNumbers[phoneNumberIndex].length);
         index = text.indexOf(phoneNumbers[phoneNumberIndex]);
       }
-      return text;
     }
 
     return text;
