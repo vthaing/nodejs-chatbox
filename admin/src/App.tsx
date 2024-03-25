@@ -28,20 +28,20 @@ const App: React.FC = () => {
             routerProvider={{
                 ...routerProvider,
                 routes: [
-                    {
-                        path: "/register",
-                        element: (
-                            <AuthPage type="register"/>
-                        ),
-                    },
-                    {
-                        path: "/forgot-password",
-                        element: <AuthPage type="forgotPassword" />,
-                    },
-                    {
-                        path: "/update-password",
-                        element: <AuthPage type="updatePassword" />,
-                    },
+                    // {
+                    //     path: "/register",
+                    //     element: (
+                    //         <AuthPage type="register"/>
+                    //     ),
+                    // },
+                    // {
+                    //     path: "/forgot-password",
+                    //     element: <AuthPage type="forgotPassword" />,
+                    // },
+                    // {
+                    //     path: "/update-password",
+                    //     element: <AuthPage type="updatePassword" />,
+                    // },
                 ],
             }}
             DashboardPage={DashboardPage}
@@ -63,7 +63,7 @@ const App: React.FC = () => {
             ]}
             notificationProvider={notificationProvider}
             LoginPage={() => (
-                <AuthPage/>
+                <AuthPage registerLink={false} rememberMe={false} forgotPasswordLink={false}/>
             )}
             Layout={Layout}
             catchAll={<ErrorComponent />}

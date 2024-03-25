@@ -42,27 +42,27 @@ export const authProvider = (axiosInstance: AxiosInstance): AuthProvider => {
         },
 
 
-        register: (params) => {
-            if (params.email && params.password) {
-                localStorage.setItem("email", params.email);
-                return Promise.resolve();
-            }
-            return Promise.reject();
-        },
-        updatePassword: (params) => {
-            if (params.newPassword) {
-                //we can update password here
-                return Promise.resolve();
-            }
-            return Promise.reject();
-        },
-        forgotPassword: (params) => {
-            if (params.email) {
-                //we can send email with forgot password link here
-                return Promise.resolve();
-            }
-            return Promise.reject();
-        },
+        // register: (params) => {
+        //     if (params.email && params.password) {
+        //         localStorage.setItem("email", params.email);
+        //         return Promise.resolve();
+        //     }
+        //     return Promise.reject();
+        // },
+        // updatePassword: (params) => {
+        //     if (params.newPassword) {
+        //         //we can update password here
+        //         return Promise.resolve();
+        //     }
+        //     return Promise.reject();
+        // },
+        // forgotPassword: (params) => {
+        //     if (params.email) {
+        //         //we can send email with forgot password link here
+        //         return Promise.resolve();
+        //     }
+        //     return Promise.reject();
+        // },
 
     } as AuthProvider;
 };
