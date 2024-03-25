@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../../user/entities/user.entity';
+import { Conversation } from '../../conversations/entities/conversation.entity';
 
 export type MessageDocument = Message & Document;
 
@@ -24,11 +25,18 @@ export class Message {
   from: User | string;
 
   @Prop({
-    required: true,
+    required: false,
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   })
   to: User | string;
+
+  @Prop({
+    required: false,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Conversation',
+  })
+  conversation: Conversation | string;
 
   @Prop({ required: true, type: mongoose.Schema.Types.String })
   text: string;

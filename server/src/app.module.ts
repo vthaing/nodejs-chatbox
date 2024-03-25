@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { MessageModule } from './modules/message/message.module';
 import { UserModule } from './modules/user/user.module';
 import { ChatModule } from './modules/chat/chat.module';
+import { ConversationsModule } from './modules/conversations/conversations.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ChatModule } from './modules/chat/chat.module';
     MessageModule,
     AuthModule,
     ChatModule,
+    ConversationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
