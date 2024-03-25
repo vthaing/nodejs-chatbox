@@ -82,17 +82,27 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                       <FilterDropdown
                           {...props}
                       >
-                          <Input placeholder="enter the user external id"></Input>
+                          <Input placeholder="enter the user external id"/>
                       </FilterDropdown>
                     )}
+                      defaultFilteredValue={getDefaultFilter(
+                          "externalId",
+                          filters,
+                          "eq",
+                      )}
                 />
                 <Table.Column dataIndex="displayName" title="Display Name"
                     filterDropdown={(props: FilterDropdownProps) => (
                       <FilterDropdown
                           {...props}
                       >
-                          <Input placeholder="enter the user display name"></Input>
+                          <Input placeholder="enter the user display name"/>
                       </FilterDropdown>
+                    )}
+                    defaultFilteredValue={getDefaultFilter(
+                      "displayName",
+                      filters,
+                      "eq",
                     )}
                 />
                 <Table.Column dataIndex="online" title="Is Online"
@@ -105,7 +115,7 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                       defaultFilteredValue={getDefaultFilter(
                           "online",
                           filters,
-                          "eq",
+                          "in",
                       )}
                 />
                 <Table.Column
