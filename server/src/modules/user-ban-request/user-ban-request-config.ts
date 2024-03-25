@@ -4,7 +4,7 @@ export class UserBanRequestConfig {
   static getBanDurations() {
     const config = {};
     config[UserBanRequestTypeEnum.MESSAGE_CONTAINS_PHONE_NUMBER] = 3;
-    config[UserBanRequestTypeEnum.MESSAGE_CONTAINS_PHONE_NUMBER] = 3;
+    config[UserBanRequestTypeEnum.MESSAGE_CONTAINS_BAD_WORDS] = 3;
     return config;
   }
 

@@ -32,11 +32,6 @@ export class User {
   bannedFrom?: Date | null;
   @Prop({ type: mongoose.Schema.Types.Date })
   bannedTo?: Date | null;
-
-  ban(startDate = new Date(), endDate?: Date): void {
-    this.bannedFrom = startDate;
-    this.bannedTo = endDate;
-  }
 }
 
 const UserSchema = SchemaFactory.createForClass(User);

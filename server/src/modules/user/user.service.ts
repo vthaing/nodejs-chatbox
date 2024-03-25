@@ -52,7 +52,8 @@ export class UserService {
         if (duration < userBanRequest.duration) {
           duration = userBanRequest.duration;
         }
-        if (userBanRequest.isBannedForever()) {
+
+        if (userBanRequest.isBannedForever) {
           duration = null;
           return;
         }
@@ -64,7 +65,9 @@ export class UserService {
         banUtil.setDate(banUtil.getDate() + duration);
       }
 
-      user.ban(new Date(), banUtil);
+
+      user.bannedFrom = new Date();
+      user.bannedTo = banUtil;
       return user.save();
     });
   }
