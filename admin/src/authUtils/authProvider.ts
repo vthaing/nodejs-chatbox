@@ -20,7 +20,7 @@ export const authProvider = (axiosInstance: AxiosInstance): AuthProvider => {
         },
         checkError: (error) => {
             if (error?.response?.status === 401) {
-                return Promise.reject("/register");
+                return Promise.reject("/login");
             }
             return Promise.resolve();
         },
@@ -30,7 +30,6 @@ export const authProvider = (axiosInstance: AxiosInstance): AuthProvider => {
                 : Promise.reject(),
         getPermissions: () => Promise.resolve(["admin"]),
         getUserIdentity: async () => {
-
             const token = localStorage.getItem(TOKEN_KEY);
             if (!token) {
                 return Promise.reject();
