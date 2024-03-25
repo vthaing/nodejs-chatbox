@@ -19,7 +19,7 @@ export class CreateAdminUserPipe implements PipeTransform {
     const logicErrors: Partial<Omit<CreateUserDto, 'password'>> = {};
     if (hasErrors)
       throw new BadRequestException({ message: 'Invalid data', errors });
-    const existEmail = await this.userService.findOne({ email: userDto.email });
+    const existEmail = await this.userService.findByEmail(userDto.email);
     if (existEmail) {
       logicErrors.email = 'The email has been taken from another user';
     }

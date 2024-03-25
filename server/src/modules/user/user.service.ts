@@ -32,7 +32,10 @@ export class UserService {
   }
 
   createAdminUser(createUserDto: CreateUserDto) {
-    const createdUser = new this.userModel(createUserDto);
+    const createdUser = new this.userModel({
+      ...createUserDto,
+      email: createUserDto.email.trim().toLowerCase(),
+    });
     createdUser.roles.push(Role.Admin);
     return createdUser.save();
   }
@@ -53,6 +56,10 @@ export class UserService {
   async findOne(params: FilterQuery<UserDocument>) {
     // const result = await this.userModel.findOne(params).exec();
     return this.userModel.findOne(params).exec();
+  }
+
+  async findByEmail(email: string) {
+    return this.userModel.findOne({ email: email.trim().toLowerCase() });
   }
 
   async findById(id) {

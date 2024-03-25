@@ -30,7 +30,9 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<UserAuthInterface | null> {
-    const user = await this.userService.findOne({ email });
+    const user = await this.userService.findOne({
+      email: email.trim().toLowerCase(),
+    });
     if (!user || user.isBanned || !user.brandStatus) {
       return;
     }
