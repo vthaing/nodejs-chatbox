@@ -9,6 +9,7 @@ import { BadWordMessageFilterFactor } from './message-filter-factor/bad-word-mes
 import { PhoneNumberMessageFilterFactor } from './message-filter-factor/phone-number-message-filter-factor';
 import { UserBanRequestModule } from '../user-ban-request/user-ban-request.module';
 import { UserModule } from '../user/user.module';
+import { MessageFilterFactorInterface } from './message-filter-factor/message-filter-factor-interface';
 
 @Module({
   imports: [
@@ -27,6 +28,12 @@ import { UserModule } from '../user/user.module';
     MessageService,
     BadWordMessageFilterFactor,
     PhoneNumberMessageFilterFactor,
+    {
+      provide: 'MessageFilterFactor',
+      useFactory: (...messageFilterFactors: MessageFilterFactorInterface[]) =>
+        messageFilterFactors,
+      inject: [BadWordMessageFilterFactor, PhoneNumberMessageFilterFactor],
+    },
     MessageFilterService,
   ],
   exports: [MessageService, MessageFilterService],

@@ -1,14 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { Message, MessageDocument } from './entities/message.entity';
-import { BadWordMessageFilterFactor } from './message-filter-factor/bad-word-message-filter-factor';
-import { PhoneNumberMessageFilterFactor } from './message-filter-factor/phone-number-message-filter-factor';
+import { Inject, Injectable } from '@nestjs/common';
+import { MessageDocument } from './entities/message.entity';
 import { UserService } from '../user/user.service';
+import { MessageFilterFactorInterface } from './message-filter-factor/message-filter-factor-interface';
 
 @Injectable()
 export class MessageFilterService {
   constructor(
-    private badWordMessageFilterFactor: BadWordMessageFilterFactor,
-    private phoneNumberMessageFilterFactor: PhoneNumberMessageFilterFactor,
+    @Inject('MessageFilterFactor')
+    private messageFilterFactors: MessageFilterFactorInterface[],
     private userService: UserService,
   ) {}
 
@@ -17,23 +16,13 @@ export class MessageFilterService {
   ): Promise<MessageDocument> {
     const userBanRequests = [];
 
-    const badWordBanRequest =
-      await this.badWordMessageFilterFactor.filterAndHandleViolateMessage(
-        message,
-      );
-    if (badWordBanRequest) {
-      message.userBanRequests.push(badWordBanRequest._id);
-      userBanRequests.push(badWordBanRequest);
-    }
-
-    const phoneNumberBanRequest =
-      await this.phoneNumberMessageFilterFactor.filterAndHandleViolateMessage(
-        message,
-      );
-
-    if (phoneNumberBanRequest) {
-      message.userBanRequests.push(phoneNumberBanRequest._id);
-      userBanRequests.push(phoneNumberBanRequest);
+    for (const messageFilterFactor of this.messageFilterFactors) {
+      const userBanRequest =
+        await messageFilterFactor.filterAndHandleViolateMessage(message);
+      if (userBanRequest) {
+        message.userBanRequests.push(userBanRequest._id);
+        userBanRequests.push(userBanRequest);
+      }
     }
 
     if (userBanRequests.length > 0) {
@@ -42,6 +31,7 @@ export class MessageFilterService {
         userBanRequests,
       );
     }
+
     return message.save();
   }
 }
