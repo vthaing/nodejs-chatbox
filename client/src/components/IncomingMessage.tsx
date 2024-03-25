@@ -1,6 +1,7 @@
 import React from 'react'
 import { IMessage } from '../context/chat/ChatContext'
 import { horaMes } from '../helpers/horaMes'
+import {Element as ScrollElement} from "react-scroll/modules";
 
 export type IncomingMessageProps = {
     message: IMessage;
@@ -17,7 +18,10 @@ export const IncomingMessage: React.FC<IncomingMessageProps> = ({ message }) => 
                 </div>
                 <div className="received_msg">
                     <div className="received_withd_msg">
-                        <p><strong>{message.senderInfo ? message.senderInfo.displayName : 'Unknown User'}</strong>: {message.messageContent}</p>
+                        {message.isPinnedMessage && <ScrollElement name={'pinned-message-' + message.id}/>}
+                        <p>
+                            <strong>{message.senderInfo ? message.senderInfo.displayName : 'Unknown User'}</strong>: {message.messageContent}
+                        </p>
                         <span className="time_date">{horaMes(message.createdAt as string)}</span>
                     </div>
                 </div>

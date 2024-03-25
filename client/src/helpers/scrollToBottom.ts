@@ -1,4 +1,4 @@
-import {animateScroll} from 'react-scroll';
+import {animateScroll, scroller} from 'react-scroll';
 
 export const scrollToBottom = (id: string) => {
 
@@ -21,4 +21,13 @@ export const scrollToBottomAnimated = (id: string) => {
         }
     );
 
+}
+
+
+export const scrollToMessage = (messageId: string) => {
+    scroller.scrollTo('pinned-message-' + messageId, {
+        duration: 250,
+        containerId: 'messages',
+        smooth: true
+    })
 }

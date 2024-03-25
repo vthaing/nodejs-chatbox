@@ -1,5 +1,6 @@
 import React from 'react'
 import { IMessage } from '../context/chat/ChatContext'
+import {scrollToMessage} from "../helpers/scrollToBottom";
 
 export type PinMessageProps = {
     message: IMessage;
@@ -18,7 +19,7 @@ export const PinnedMessage: React.FC<PinMessageProps> = ({ message }) => {
             <div className="incoming_msg">
                 <div className="received_msg">
                     <div>
-                        <p style={{background: 'lightcyan'}}>{stringTruncate(message.messageContent, 30)}</p>
+                        <p style={{background: 'lightcyan'}}>{stringTruncate(message.messageContent, 30)} <button onClick={() => scrollToMessage(message.id)} style={{color: "blue"}}>Go to message</button></p>
                     </div>
                 </div>
             </div>
