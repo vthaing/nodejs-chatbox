@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty } from 'class-validator';
+import { UserBanRequestTypeEnum } from '../enum/user-ban-request-type.enum';
+import { UserBanRequestStatusEnum } from '../enum/user-ban-request-status.enum';
 
 export class CreateUserBanRequestDto {
   @ApiProperty()
@@ -7,8 +9,14 @@ export class CreateUserBanRequestDto {
   user: string;
   @ApiProperty()
   reason?: string;
-  @ApiProperty()
+  @ApiProperty({ enum: UserBanRequestTypeEnum })
   @IsNotEmpty()
+  @IsEnum(UserBanRequestTypeEnum)
   type: string;
-  params: [];
+  @ApiProperty({ enum: UserBanRequestStatusEnum })
+  @IsEnum(UserBanRequestStatusEnum)
+  status?: string;
+  @ApiProperty()
+  @IsArray()
+  params?: [];
 }
