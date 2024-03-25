@@ -36,11 +36,12 @@ export class MessageFilterService {
       userBanRequests.push(phoneNumberBanRequest);
     }
 
-    await this.userService.banUserViaUserBanRequests(
-      message.from,
-      userBanRequests,
-    );
-
+    if (userBanRequests.length > 0) {
+      await this.userService.banUserViaUserBanRequests(
+        message.from,
+        userBanRequests,
+      );
+    }
     return message.save();
   }
 }
