@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, useContext, useState } from 'react'
 import { AuthContext } from '../auth/AuthContext';
-import {ActiveChatTypesEnum, ChatContext, IMessage, IMessageToSave} from '../context/chat/ChatContext';
+import {ActiveChatTypesEnum, ChatContext, IMessageToSave} from '../context/chat/ChatContext';
 import { SocketContext } from '../context/SocketContext';
 
 export const SendMessage: React.FC = () => {
