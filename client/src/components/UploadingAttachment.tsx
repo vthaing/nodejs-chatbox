@@ -30,7 +30,7 @@ export const UploadingAttachments: React.FC<UploadingAttachmentsProps> = ({messa
     const uploadFiles = useCallback(() => {
         fileList.forEach((attachment, index) => {
             const form = new FormData();
-            form.append('file', attachment as RcFile);
+            form.append('file', attachment.originFileObj as RcFile);
             axios.post(
                 process.env.REACT_APP_API_URL + `/message/${message.id}/upload-attachment`,
                 form,
@@ -93,7 +93,7 @@ export const UploadingAttachments: React.FC<UploadingAttachmentsProps> = ({messa
             >
             </Upload>
             <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                <img alt="Peview" style={{ width: '100%' }} src={previewImage} />
             </Modal>
         </>
     );

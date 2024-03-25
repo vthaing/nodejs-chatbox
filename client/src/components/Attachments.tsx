@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Upload } from 'antd';
+import {Modal, Upload, UploadProps} from 'antd';
 import type { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 
@@ -37,6 +37,10 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
   };
 
+    const handleChange: UploadProps['onChange'] = ({file, fileList: newFileList }) => {
+        setFileList(newFileList);
+    }
+
   useEffect(function () {
       setShowAttachment(fileList.length > 0);
       if (onAttachmentsChange) {
@@ -72,6 +76,7 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
             beforeUpload={beforeUpload}
             onRemove={onRemove}
             multiple={true}
+            onChange={handleChange}
         >
           {fileList.length >= 8 ? null : uploadButton}
         </Upload>
