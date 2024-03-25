@@ -73,7 +73,7 @@ ConversationSchema.virtual('memberObjects', {
 ConversationSchema.virtual('brand', {
   ref: 'Brand',
   localField: 'brandId',
-  foreignField: 'id',
+  foreignField: '_id',
   justOne: true,
 });
 

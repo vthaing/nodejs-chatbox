@@ -12,6 +12,7 @@ export type BrandDocument = Brand & Document;
       delete ret.__v;
       ret.id = ret._id;
       delete ret._id;
+      delete ret.secretKey;
     },
   },
 })

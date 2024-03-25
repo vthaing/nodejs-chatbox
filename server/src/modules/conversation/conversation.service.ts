@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import {FilterQuery, Model, PaginateModel, PaginateOptions} from 'mongoose';
+import { FilterQuery, Model, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   Conversation,
   ConversationDocument,
@@ -37,7 +37,7 @@ export class ConversationService {
       .find({
         ...params,
       })
-      .populate('memberObjects')
+      .populate(['memberObjects', 'brand'])
       .exec();
   }
 
@@ -46,7 +46,10 @@ export class ConversationService {
   }
 
   findOne(id: string): Promise<ConversationDocument> {
-    return this.conversationModel.findById(id).populate('memberObjects').exec();
+    return this.conversationModel
+      .findById(id)
+      .populate(['brand', 'memberObjects'])
+      .exec();
   }
 
   update(
