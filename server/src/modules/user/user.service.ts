@@ -15,8 +15,7 @@ import { InitChatDto } from '../brand-chat/dto/init-chat.dto';
 import { BrandChatUserDto } from './dto/brand-chat-user.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { UserBanRequestService } from '../user-ban-request/user-ban-request.service';
-import { last } from 'rxjs';
-import Role from "./role.enum";
+import Role from './role.enum';
 
 @Injectable()
 export class UserService {

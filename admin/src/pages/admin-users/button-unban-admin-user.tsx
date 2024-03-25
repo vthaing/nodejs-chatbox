@@ -17,7 +17,7 @@ export const ButtonUnbanAdminUser: React.FC<ButtonBanAdminUserProps> = ({record,
 
     const handleClickBanUser = () => {
         mutate({
-            url: `${apiUrl}/user/${record.id}/unban`,
+            url: `${apiUrl}/admin-user/${record.id}/unban`,
             method: "patch",
             values: {},
         }, {

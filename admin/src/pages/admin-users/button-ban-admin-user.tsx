@@ -20,7 +20,7 @@ export const ButtonBanAdminUser: React.FC<ButtonBanAdminUserProps> = ({record, o
 
     const handleFormSubmit = (values: any) => {
         mutate({
-            url: `${apiUrl}/user/${record.id}/ban`,
+            url: `${apiUrl}/admin-user/${record.id}/ban`,
             method: "patch",
             values: values,
         }, {
