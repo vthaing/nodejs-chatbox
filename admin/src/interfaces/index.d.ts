@@ -14,8 +14,10 @@ export interface IPost {
 export interface IUser {
     id: string;
     online: boolean;
-    username: string;
-    email: string;
+    username?: string | null;
+    email: string | null;
+    displayName: string;
+    brand?: IBrand | null;
     createdAt: string
 }
 
@@ -42,4 +44,12 @@ export interface IRestrictedIp {
     enabled: boolean;
     notes?: string;
     createdAt: string
+}
+
+export interface IBrand {
+    id: string;
+    name: string;
+    secretKey: string;
+    createdAt: string
+    brand?: IBrand | null
 }

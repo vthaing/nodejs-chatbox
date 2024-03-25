@@ -25,6 +25,7 @@ export class UserService {
       .find({
         ...params,
       })
+      .populate('brand')
       .sort('-online')
       .exec();
   }
@@ -35,7 +36,7 @@ export class UserService {
   }
 
   async findById(id) {
-    return this.userModel.findById(id);
+    return this.userModel.findById(id).populate('brand');
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {

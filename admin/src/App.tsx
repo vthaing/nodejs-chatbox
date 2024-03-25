@@ -22,6 +22,8 @@ import {BadWordCreate} from "./pages/bad-word/create";
 import {BadWordEdit, BadWordList} from "./pages/bad-word";
 import {RestrictedIpCreate} from "./pages/restricted-ip/create";
 import {RestrictedIpEdit, RestrictedIpList} from "./pages/restricted-ip";
+import {BrandCreate} from "./pages/brand/create";
+import {BrandEdit, BrandList} from "./pages/brand";
 
 const App: React.FC = () => {
 
@@ -80,6 +82,12 @@ const App: React.FC = () => {
                     list: RestrictedIpList,
                     edit: RestrictedIpEdit,
                     canDelete: true
+                },
+                {
+                    name: "brands",
+                    create: BrandCreate,
+                    list: BrandList,
+                    edit: BrandEdit,
                 },
             ]}
             notificationProvider={notificationProvider}

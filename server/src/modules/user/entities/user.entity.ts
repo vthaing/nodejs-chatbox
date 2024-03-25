@@ -7,6 +7,8 @@ export type UserDocument = User & Document;
 @Schema({
   timestamps: true,
   toJSON: {
+    virtuals: true,
+    getters: true,
     transform: (doc: UserDocument, ret) => {
       delete ret.__v;
       ret.id = ret._id;
@@ -60,6 +62,13 @@ UserSchema.virtual('isBanned').get(function (): boolean {
   }
 
   return this.bannedTo > new Date();
+});
+
+UserSchema.virtual('brand', {
+  ref: 'Brand',
+  localField: 'brandId',
+  foreignField: 'id',
+  justOne: true,
 });
 
 export { UserSchema };
