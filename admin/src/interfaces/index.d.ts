@@ -66,6 +66,7 @@ export interface IUserBanRequest {
     reason?: string;
     type: string;
     typeLabel: string;
+    isUnbanned: boolean;
     params: {};
     createdAt: string
 }

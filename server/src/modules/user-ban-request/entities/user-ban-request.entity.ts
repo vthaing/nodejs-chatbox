@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { User } from '../../user/entities/user.entity';
-import { getUserBanRequestLabelById } from '../enum/user-ban-request-type.enum';
+import {getUserBanRequestLabelById, UserBanRequestTypeEnum} from '../enum/user-ban-request-type.enum';
 
 export type UserBanRequestDocument = UserBanRequest & Document;
 @Schema({
@@ -42,6 +42,10 @@ const UserBanRequestSchema = SchemaFactory.createForClass(UserBanRequest);
 
 UserBanRequestSchema.virtual('typeLabel').get(function () {
   return getUserBanRequestLabelById(this.type);
+});
+
+UserBanRequestSchema.virtual('isUnbanned').get(function () {
+  return this.type === UserBanRequestTypeEnum.MANUAL_UNBAN;
 });
 
 export { UserBanRequestSchema };
