@@ -12,6 +12,8 @@ import { UserModule } from '../user/user.module';
 import { MessageFilterFactorInterface } from './message-filter-factor/message-filter-factor-interface';
 import { DuplicateMessageFilterFactor } from './message-filter-factor/duplicate-mesage-filter-factor';
 import { ReachLimitMessagesFilterFactor } from './message-filter-factor/reach-limit-messages-filter-factor';
+import { MediaModule } from '../media-item/media.module';
+import { MediaItemService } from '../media-item/media-item.service';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { ReachLimitMessagesFilterFactor } from './message-filter-factor/reach-li
     forwardRef(() => UserBanRequestModule),
     forwardRef(() => BadWordModule),
     forwardRef(() => UserModule),
+    forwardRef(() => MediaModule),
   ],
   controllers: [MessageController],
   providers: [

@@ -16,7 +16,19 @@ export type MediaItemDocument = MediaItem & Document;
 })
 export class MediaItem {
   @Prop({ type: mongoose.Schema.Types.String })
-  ip: string;
+  name: string;
+
+  @Prop({ type: mongoose.Schema.Types.Number })
+  size: number;
+
+  @Prop({ type: mongoose.Schema.Types.String })
+  path: string;
+
+  @Prop({ type: mongoose.Schema.Types.String })
+  mimeType: string;
+
+  @Prop({ type: mongoose.Schema.Types.String })
+  disk: string;
 
   @Prop({
     required: false,
@@ -24,6 +36,13 @@ export class MediaItem {
     ref: 'User',
   })
   userId;
+
+  @Prop({
+    required: false,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Message',
+  })
+  messageId;
 }
 
 const MediaItemSchema = SchemaFactory.createForClass(MediaItem);

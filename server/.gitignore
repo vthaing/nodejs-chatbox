@@ -19,6 +19,8 @@ lerna-debug.log*
 
 .env.local
 
+uploaded-attachments/*
+
 # IDEs and editors
 /.idea
 .project

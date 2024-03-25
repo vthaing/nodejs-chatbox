@@ -4,17 +4,50 @@ import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, PaginateModel, PaginateOptions } from 'mongoose';
 import { MediaItem, MediaItemDocument } from './entities/media-item.entity';
+import { MessageDocument } from '../message/entities/message.entity';
+import { ConfigService } from '@nestjs/config';
+import { StorageService } from '@codebrew/nestjs-storage';
 
 @Injectable()
 export class MediaItemService {
   constructor(
     @InjectModel(MediaItem.name)
     private readonly restrictedIpModel: PaginateModel<MediaItemDocument>,
+    private readonly config: ConfigService,
+    private readonly storageService: StorageService,
   ) {}
 
   create(createMediaItemDto: CreateMediaItemDto) {
     const createdMediaItem = new this.restrictedIpModel(createMediaItemDto);
     return createdMediaItem.save();
+  }
+
+  async createMessageAttachment(
+    message: MessageDocument,
+    file: Express.Multer.File,
+  ) {
+    const dto = new CreateMediaItemDto();
+    dto.messageId = message.id;
+    dto.userId = message.from;
+    dto.disk = this.config.get('messageAttachmentDisk');
+    dto.name = file.filename;
+    dto.size = file.size;
+    dto.mimeType = file.mimetype;
+
+    const mediaItem = await this.create(dto);
+    message.mediaItemIds.push(mediaItem.id);
+    await message.save();
+    mediaItem.path = mediaItem.id;
+    await mediaItem.save();
+    await this.saveMediaItemFile(mediaItem, file);
+
+    return mediaItem.id;
+  }
+
+  async saveMediaItemFile(mediaItem: MediaItem, file: Express.Multer.File) {
+    return await this.storageService
+      .getDisk(mediaItem.disk)
+      .put(mediaItem.path, file.buffer);
   }
 
   paginate(query: FilterQuery<any>, options: PaginateOptions) {

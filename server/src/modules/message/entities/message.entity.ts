@@ -52,6 +52,8 @@ export class Message {
 
   @Prop({ required: false, type: mongoose.Schema.Types.Array })
   attachments?: [];
+  @Prop({ ref: 'MediaItem', type: [SchemaTypes.ObjectId] })
+  mediaItemIds: [ObjectId];
   @Prop({ ref: 'UserBanRequest', type: [SchemaTypes.ObjectId] })
   userBanRequests?: [ObjectId | UserBanRequest];
   userBanRequestDocuments?: [UserBanRequest];

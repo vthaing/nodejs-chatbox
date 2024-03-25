@@ -22,7 +22,8 @@ import RoleGuard from '../auth/guards/roles.guard';
 import Role from '../user/role.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { StorageService } from '@codebrew/nestjs-storage';
-import {MessageAttachmentDto} from "./dto/message-attachment.dto";
+import { MessageAttachmentDto } from './dto/message-attachment.dto';
+import RequestWithUserInterface from '../auth/request-with-user.interface';
 
 @ApiBearerAuth()
 @ApiTags('Messages')
@@ -89,9 +90,11 @@ export class MessageController {
     type: MessageAttachmentDto,
   })
   @ApiConsumes('multipart/form-data')
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-    this.storageService.getDisk().put('uploaded.png', file.buffer);
-    return 'ok';
+  uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') id: string,
+    @Req() req: RequestWithUserInterface,
+  ) {
+    return this.messageService.attachMediaItem(id, req.user.id, file);
   }
 }
