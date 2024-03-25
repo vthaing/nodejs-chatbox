@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {IBrandChannel, IBrandRoom, IConversation, IRestrictedIp, IUser, IUserIp} from "../../interfaces";
-import {DateField, DeleteButton, EditButton, List, Table, TagField} from "@pankod/refine-antd";
+import {Checkbox, DateField, DeleteButton, EditButton, List, Table, TagField} from "@pankod/refine-antd";
 import {ButtonAddToRestrictedIp} from "./button-add-to-restricted-ip";
 import {useList, useMany} from "@pankod/refine-core";
 
@@ -12,6 +12,26 @@ type UserIpHistoryProps = {
 
 
 export const UserIpHistory: React.FC<UserIpHistoryProps> = ({user}) => {
+
+    const [showAllHistory, setShowAllHistory] = useState(true);
+    const [ipDataSource, setIpDataSource] = useState<Array<IUserIp>>(user.ipHistory);
+
+    useEffect(() => {
+        if (showAllHistory) {
+            setIpDataSource(user.ipHistory);
+        } else {
+            const existedList: string[] = [];
+            const result = user.ipHistory.filter(element => {
+                if (existedList.includes(element.ip)) {
+                    return false;
+                }
+                existedList.push(element.ip);
+                return true;
+            });
+            setIpDataSource(result);
+        }
+
+    }, [ipDataSource, showAllHistory]);
 
     const getRestrictedIpsText = (): string[] => {
         let result: string[] = [];
@@ -45,10 +65,22 @@ export const UserIpHistory: React.FC<UserIpHistoryProps> = ({user}) => {
 
 
     return (
-        <List breadcrumb={false} title={"User IP History"} >
+        <List
+            breadcrumb={false} title={"User IP History"}
+            headerButtons={() => (
+                <>
+                    <Checkbox defaultChecked={true} onChange={(e) => {
+                        setShowAllHistory(e.target.checked);
+                    }}>
+                        Show Duplicated IPs
+                    </Checkbox>
+                </>
+            )}
+        >
+
             <Table
                loading={isRestrictedIPLoading && user.ipHistory.length > 0}
-               dataSource={user.ipHistory}
+               dataSource={ipDataSource}
                pagination={{
                     defaultPageSize: 6
                 }}
