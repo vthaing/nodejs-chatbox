@@ -42,7 +42,13 @@ function chatBoxesManagement () {
 
     this.handleSuccessRequestAccessToken = function (data, chatBoxElement) {
         var jsonData = JSON.parse(data);
-        chatBoxElement.innerhtml = '<iframe src="' + this.getConversationIframeUrl(jsonData.conversation_id) + '"></iframe>';
+        console.log(chatBoxElement);
+        var iframe = document.createElement('iframe');
+        iframe.src = this.getConversationIframeUrl(jsonData.conversation_id);
+        iframe.dataset.chatBoxData = data;
+        iframe.width = '600px';
+        iframe.height = '600px';
+        chatBoxElement.append(iframe);
     }
 
     /**

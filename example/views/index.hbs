@@ -5,6 +5,11 @@
 <head>
   <meta charset="utf-8">
   <title>Example chat app</title>
+  <style>
+    .chatbox {
+      border: 2px solid #4e60ab;
+    }
+  </style>
 </head>
 <body>
 
@@ -36,28 +41,33 @@
     <section class="jumbotron text-center">
       <div class="container">
         <div class="row">
-          <div class="chatbox"
-               data-brand-id="63b109ab1d33d74995325a91"
-               data-user-id="tyson"
-               data-user-display-name="tyson"
-               data-chat-name="Example Chat 1"
-               data-channel-id="C123"
-               data-channel-name="Channel 1 - Example Chat 1"
-               data-room-id="R356"
-               data-room-name="Channel 1 - Room 1 - Example Chat 1"
-          ></div>
-        </div>
-        <div class="row">
-          <div class="chatbox"
-               data-brand-id="63b109ab1d33d74995325a91"
-               data-user-id="mike_brand"
-               data-user-display-name="tyson"
-               data-chat-name="Example Chat 2"
-               data-channel-id="C126"
-               data-channel-name="Channel 2 - Example Chat 2"
-               data-room-id="R3567"
-               data-room-name="Channel 2 - Room 2 - Example Chat 2"
-          ></div>
+          <div class="col-md-6">
+            <h2>Chat box for channel 1</h2>
+            <div class="chatbox "
+                 data-brand-id="63b109ab1d33d74995325a91"
+                 data-user-id="tyson"
+                 data-user-display-name="tyson"
+                 data-chat-name="Example Chat 1"
+                 data-channel-id="C123"
+                 data-channel-name="Channel 1 - Example Chat 1"
+                 data-room-id="R356"
+                 data-room-name="Channel 1 - Room 1 - Example Chat 1"
+            ></div>
+          </div>
+          <div class="col-md-6">
+            <h2>Chat box for channel 2</h2>
+            <div class="chatbox"
+                 data-brand-id="63b109ab1d33d74995325a91"
+                 data-user-id="mike_brand"
+                 data-user-display-name="tyson"
+                 data-chat-name="Example Chat 2"
+                 data-channel-id="C126"
+                 data-channel-name="Channel 2 - Example Chat 2"
+                 data-room-id="R3567"
+                 data-room-name="Channel 2 - Room 2 - Example Chat 2"
+            ></div>
+          </div>
+
         </div>
       </div>
     </section>
