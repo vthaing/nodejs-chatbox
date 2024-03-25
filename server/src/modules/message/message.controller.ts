@@ -22,10 +22,9 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 import RoleGuard from '../auth/guards/roles.guard';
 import Role from '../user/role.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { StorageService } from '@codebrew/nestjs-storage';
 import { MessageAttachmentDto } from './dto/message-attachment.dto';
 import RequestWithUserInterface from '../auth/request-with-user.interface';
-import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
+import { ChatGateway } from '../chat/chat.gateway';
 
 @ApiBearerAuth()
 @ApiTags('Messages')
@@ -34,7 +33,7 @@ import { BadRequestException } from '@nestjs/common/exceptions/bad-request.excep
 export class MessageController {
   constructor(
     private readonly messageService: MessageService,
-    private readonly storageService: StorageService,
+    private chatGateway: ChatGateway,
   ) {}
   @UseGuards(RoleGuard(Role.Admin))
   @Post()
@@ -92,7 +91,7 @@ export class MessageController {
     type: MessageAttachmentDto,
   })
   @ApiConsumes('multipart/form-data')
-  uploadFile(
+  async uploadFile(
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
@@ -107,6 +106,14 @@ export class MessageController {
     @Param('id') id: string,
     @Req() req: RequestWithUserInterface,
   ) {
-    return this.messageService.attachMediaItem(id, req.user.id, file);
+    const mediaItem = await this.messageService.attachMediaItem(
+      id,
+      req.user.id,
+      file,
+    );
+
+    await this.chatGateway.emitMediaItemUploaded(mediaItem);
+
+    return mediaItem.id;
   }
 }

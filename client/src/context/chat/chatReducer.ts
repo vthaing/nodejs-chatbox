@@ -1,6 +1,6 @@
 import {IUser} from '../../auth/AuthContext';
 import {ChatTypes} from '../../types/chat.types';
-import {IActiveChatPayload, IConversation, IMessage} from './ChatContext';
+import {IActiveChatPayload, IConversation, IMediaItem, IMessage} from './ChatContext';
 import {UploadFile} from "antd/es/upload/interface";
 
 export type ChatState = {
@@ -37,6 +37,11 @@ export interface ActiveChat extends ChatAction {
 export interface NewMessage extends ChatAction {
     type: ChatTypes.newMessage;
     payload: IMessage;
+}
+
+export interface AttachmentUploaded extends ChatAction {
+    type: ChatTypes.attachmentUploaded;
+    payload: IMediaItem
 }
 
 export interface LoadMessages extends ChatAction {
@@ -130,7 +135,7 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
         
         case ChatTypes.loadMessages:
             const loadMessagesAction = (action as LoadMessages);
-            const pinnedMessages = loadMessagesAction.payload.filter((loadedMessage) => loadedMessage.isPinnedMessage === true)
+            const pinnedMessages = loadMessagesAction.payload.filter((loadedMessage) => loadedMessage.isPinnedMessage)
 
             return {
                 ...state,
@@ -139,7 +144,25 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
                 ],
                 pinnedMessages: pinnedMessages
             };
-        
+        case ChatTypes.attachmentUploaded:
+            const mediaItem = (action as AttachmentUploaded).payload;
+
+            const updatedMessages = state.messages.map((message) => {
+                if (message.id === mediaItem.messageId) {
+                    if (!message.mediaItems || !message.mediaItems.length) {
+                        message.mediaItems = [];
+                    }
+                    if (!message.mediaItems.find((existedMediaItem) => mediaItem.id === existedMediaItem.id)) {
+                        message.mediaItems?.push(mediaItem);
+                    }
+                }
+                return message;
+            });
+
+            return {
+                ...state,
+                messages: updatedMessages
+            };
         case ChatTypes.clean:
             return {
                 ...initialChatState,

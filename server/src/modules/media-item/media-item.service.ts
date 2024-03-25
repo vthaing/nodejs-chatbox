@@ -43,7 +43,7 @@ export class MediaItemService {
     await mediaItem.save();
     await this.saveMediaItemFile(mediaItem, file);
 
-    return mediaItem.id;
+    return mediaItem;
   }
 
   async saveMediaItemFile(

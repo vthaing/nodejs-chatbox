@@ -13,7 +13,7 @@ import { MessageFilterFactorInterface } from './message-filter-factor/message-fi
 import { DuplicateMessageFilterFactor } from './message-filter-factor/duplicate-mesage-filter-factor';
 import { ReachLimitMessagesFilterFactor } from './message-filter-factor/reach-limit-messages-filter-factor';
 import { MediaModule } from '../media-item/media.module';
-import { MediaItemService } from '../media-item/media-item.service';
+import { ChatModule } from '../chat/chat.module';
 
 @Module({
   imports: [
@@ -27,6 +27,7 @@ import { MediaItemService } from '../media-item/media-item.service';
     forwardRef(() => BadWordModule),
     forwardRef(() => UserModule),
     forwardRef(() => MediaModule),
+    forwardRef(() => ChatModule),
   ],
   controllers: [MessageController],
   providers: [

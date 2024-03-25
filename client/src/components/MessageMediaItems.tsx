@@ -28,13 +28,13 @@ export const MessageMediaItems: React.FC<MessageMediaItemsProps> = ({mediaItems}
                 }}
             >
                 {mediaItems.map((mediaItem) => (
-
                     <Item
                         original={process.env.REACT_APP_API_URL + mediaItem.url}
                         thumbnail={process.env.REACT_APP_API_URL + mediaItem.url}
                         width={mediaItem.imageWidth ?? 100}
                         height={mediaItem.imageHeight ?? 100}
                         alt={mediaItem.name}
+                        key={'gallery-item-' + mediaItem.id}
                     >
                         {({ ref, open }) => (
                             <img
@@ -43,6 +43,7 @@ export const MessageMediaItems: React.FC<MessageMediaItemsProps> = ({mediaItems}
                                 ref={ref as React.MutableRefObject<HTMLImageElement>}
                                 onClick={open}
                                 alt={mediaItem.name}
+                                key={'gallery-item-image-' + mediaItem.id}
                             />
                         )}
                     </Item>

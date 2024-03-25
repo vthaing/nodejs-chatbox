@@ -14,6 +14,7 @@ import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { MessageFilterService } from '../message/message-filter.service';
+import {MediaItem} from "../media-item/entities/media-item.entity";
 
 interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
@@ -123,5 +124,11 @@ export class ChatGateway {
 
   sendServerAlert(roomId, data: any) {
     this.server.to(roomId).emit('server-alert', data);
+  }
+
+  async emitMediaItemUploaded(mediaItem: MediaItem) {
+    const message = await this.messageService.findOne(mediaItem.messageId);
+    const roomId = message.to?.toString() ?? message.conversation.toString();
+    this.server.to(roomId).emit('attachment-uploaded', mediaItem);
   }
 }

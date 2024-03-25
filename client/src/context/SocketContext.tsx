@@ -6,8 +6,8 @@ import { scrollToBottomAnimated } from '../helpers/scrollToBottom';
 
 import { useSocket } from '../hooks/useSocket';
 import { ChatTypes } from '../types/chat.types';
-import {ChatContext, IConversation, IMessage, IServerAlert} from './chat/ChatContext';
-import { ListConversations, ListUsers, NewMessage } from './chat/chatReducer';
+import {ChatContext, IConversation, IMediaItem, IMessage, IServerAlert} from './chat/ChatContext';
+import {AttachmentUploaded, ListConversations, ListUsers, NewMessage} from './chat/chatReducer';
 import Swal from "sweetalert2";
 
 
@@ -82,6 +82,17 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
             dispatch(newMessage);
             // Move scroll to final
             scrollToBottomAnimated('messages');
+        });
+    }, [socket, dispatch]);
+
+    useEffect(() => {
+        socket?.on('attachment-uploaded', (mediaItem: IMediaItem) => {
+            const attachmentUploadedAction = {
+                type: ChatTypes.attachmentUploaded,
+                payload: mediaItem,
+            } as AttachmentUploaded;
+
+            dispatch(attachmentUploadedAction);
         });
     }, [socket, dispatch]);
 
