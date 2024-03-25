@@ -9,7 +9,7 @@ export type IncomingMessageProps = {
 
 export const IncomingMessage: React.FC<IncomingMessageProps> = ({ message }) => {
 
-
+console.log(message);
 
     return (
         <>
@@ -19,7 +19,7 @@ export const IncomingMessage: React.FC<IncomingMessageProps> = ({ message }) => 
                 </div>
                 <div className="received_msg">
                     <div className="received_withd_msg">
-                        <p>{message.text}</p>
+                        <p><strong>{message.senderInfo.username}</strong>: {message.text}</p>
                         <span className="time_date">{horaMes(message.createdAt as string)}</span>
                     </div>
                 </div>

@@ -24,11 +24,12 @@ export class MessageService {
       .find({
         ...params,
       })
+      .populate('senderInfo')
       .exec();
   }
 
   findOne(id: string): Promise<MessageDocument> {
-    return this.messageModel.findById(id).exec();
+    return this.messageModel.findById(id).populate('senderInfo').exec();
   }
 
   update(

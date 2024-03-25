@@ -1,11 +1,13 @@
 import React, { createContext, useReducer } from 'react'
 import { ChatAction, chatReducer, ChatState, initialChatState } from './chatReducer';
+import {IUser} from "../../auth/AuthContext";
 
 
 export interface IMessage {
     id: string;
     to?: string;
     channel?: string
+    senderInfo: IUser
     from: string;
     text: string;
     createdAt?: string;

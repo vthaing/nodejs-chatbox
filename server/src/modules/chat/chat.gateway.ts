@@ -85,7 +85,9 @@ export class ChatGateway {
 
   @SubscribeMessage('private-message')
   async handleMessage(@MessageBody() message: CreateMessageDto): Promise<void> {
-    const createMessage = await this.messageService.create(message);
+    const createMessage = await this.messageService
+      .create(message)
+      .then((createdMessage) => createdMessage.populate('senderInfo'));
 
     if (createMessage.channel) {
       this.server
@@ -98,7 +100,7 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('open-channel-chat')
-  async openChannelChat(@MessageBody() message: any): Promise<void> {
-    this.server.socketsJoin(message.channel);
+  async openChannelChat(@MessageBody() messageBody: any): Promise<void> {
+    this.server.socketsJoin(messageBody.channel);
   }
 }
