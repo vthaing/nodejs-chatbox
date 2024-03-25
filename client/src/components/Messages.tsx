@@ -50,12 +50,13 @@ export const Messages: React.FC = () => {
 
                 dispatch(loadAction);
             }
+
+            return data ?? [];
         },
         [activeChat, dispatch],
     );
 
     const handleClickLoadMore = () => {
-        const countBeforeLoadMore = chatState.messages.length;
         const firstMessage = chatState.messages[0].id ?? null;
         if (!firstMessage) {
              return;
@@ -65,8 +66,8 @@ export const Messages: React.FC = () => {
             limit: DEFAULT_MESSAGE_LIMIT
         }
         setLoadingMoreMessages(true);
-        fetchMessages(options).then(() => {
-            if (countBeforeLoadMore === chatState.messages.length) {
+        fetchMessages(options).then((messages) => {
+            if (messages.length < DEFAULT_MESSAGE_LIMIT) {
                 setDontShowButtonLoadMore(true);
             }
             setLoadingMoreMessages(false);
@@ -75,7 +76,7 @@ export const Messages: React.FC = () => {
 
 
     useEffect(() => {
-        fetchMessages().then(() => scrollToBottom('messages'));
+        fetchMessages({limit: DEFAULT_MESSAGE_LIMIT}).then(() => scrollToBottom('messages'));
     }, [fetchMessages]);
 
 
