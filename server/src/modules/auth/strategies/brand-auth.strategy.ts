@@ -15,6 +15,6 @@ export class BrandAuthStrategy extends PassportStrategy(
   }
 
   validate(req: Request): Promise<any> {
-    return this.brandAuthService.validateRequest(req);
+    return this.brandAuthService.validateBrandAuthRequest(req);
   }
 }
