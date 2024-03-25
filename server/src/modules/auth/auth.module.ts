@@ -17,6 +17,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import {BrandAuthStrategy} from "./strategies/brand-auth.strategy";
 import {BrandAuthGuard} from "./guards/brand-auth.guard";
 import {BrandAuthService} from "./brand-auth.service";
+import {BrandModule} from "../brand/brand.module";
 
 @Module({
   controllers: [AuthController],
@@ -37,6 +38,7 @@ import {BrandAuthService} from "./brand-auth.service";
   ],
   imports: [
     forwardRef(() => UserModule),
+    forwardRef(() => BrandModule),
     PassportModule.register({
       defaultStrategy: 'local',
       // refresh: 'jwt-refresh',

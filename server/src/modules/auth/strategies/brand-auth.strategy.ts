@@ -1,17 +1,20 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
-import { InitChatDto } from '../../brand-chat/dto/init-chat.dto';
 import { BrandAuthService } from '../brand-auth.service';
+import { Strategy } from 'passport-custom';
+import { PassportStrategy } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Injectable()
-export class BrandAuthStrategy {
-  constructor(private brandAuthService: BrandAuthService) {}
+export class BrandAuthStrategy extends PassportStrategy(
+  Strategy,
+  'brand-auth',
+) {
+  constructor(private brandAuthService: BrandAuthService) {
+    super();
+  }
 
-  async validate(token: string, payload: Partial<InitChatDto>): Promise<any> {
-    const brand = await this.brandAuthService.validateBrand(token, payload);
-    if (!brand) {
-      throw new UnauthorizedException('Invalid brand');
-    }
-    return brand;
+  validate(req: Request): Promise<any> {
+    return this.brandAuthService.validateRequest(req);
   }
 }
