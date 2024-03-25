@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from 'react'
-import { ChatAction, chatReducer, ChatState, initialChatState } from './chatReducer';
+import {ChatAction, chatReducer, ChatState, initialChatState} from './chatReducer';
 import {IUser} from "../../auth/AuthContext";
 
 
@@ -11,6 +11,7 @@ export interface IMessage {
     messageContent: string;
     from: string;
     isPinnedMessage: boolean;
+    attachmentsInfo?: IAttachmentInfo[];
     createdAt?: string;
 }
 
@@ -20,6 +21,7 @@ export interface IMessageToSave {
     senderInfo: IUser
     text: string;
     from: string;
+    attachments: IAttachmentInfo[]
 }
 
 export interface IServerAlert {
@@ -50,6 +52,13 @@ export interface IChatContext {
     dispatch: React.Dispatch<ChatAction>;
 }
 
+
+export interface IAttachmentInfo {
+    name: string,
+    type: string,
+    uid: string,
+    size: number
+}
 
 
 

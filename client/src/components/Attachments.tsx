@@ -38,21 +38,18 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
   };
 
   useEffect(function () {
-      setShowAttachment(fileList.length > 0)
-  }, [fileList]);
+      setShowAttachment(fileList.length > 0);
+      if (onAttachmentsChange) {
+          onAttachmentsChange(fileList);
+      }
+  }, [fileList, onAttachmentsChange]);
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
       setFileList(newFileList);
-      if (onAttachmentsChange) {
-          onAttachmentsChange(fileList)
-      }
   }
 
   const  beforeUpload = (file: UploadFile) => {
       setFileList([...fileList, file]);
-      if (onAttachmentsChange) {
-          onAttachmentsChange(fileList)
-      }
 
       return autoUpload;
   }
@@ -62,9 +59,6 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
         const newFileList = fileList.slice();
         newFileList.splice(index, 1);
         setFileList(newFileList);
-        if (onAttachmentsChange) {
-            onAttachmentsChange(fileList)
-        }
     }
 
   const uploadButton = (

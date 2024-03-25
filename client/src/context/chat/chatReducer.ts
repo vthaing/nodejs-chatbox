@@ -1,6 +1,7 @@
 import {IUser} from '../../auth/AuthContext';
 import {ChatTypes} from '../../types/chat.types';
 import {IActiveChatPayload, IConversation, IMessage} from './ChatContext';
+import {UploadFile} from "antd/es/upload/interface";
 
 export type ChatState = {
     id: string;
@@ -9,6 +10,7 @@ export type ChatState = {
     conversations: IConversation[];
     messages: IMessage[];
     pinnedMessages: IMessage[];
+    uploadingAttachments: []
 };
 
 
@@ -46,6 +48,11 @@ export interface Clean extends ChatAction {
     type: ChatTypes.clean;
 }
 
+export interface UploadAttachment extends ChatAction {
+    type: ChatTypes.uploadAttachments,
+    payload: UploadFile[]
+}
+
 
 
 export const initialChatState = {
@@ -54,7 +61,8 @@ export const initialChatState = {
     users: [],
     conversations: [],
     messages: [],
-    pinnedMessages: []
+    pinnedMessages: [],
+    uploadingAttachments: []
 } as ChatState;
 
 
@@ -135,6 +143,11 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
         case ChatTypes.clean:
             return {
                 ...initialChatState,
+            }
+        case ChatTypes.uploadAttachments:
+            return {
+                ...state,
+                uploadingAttachments: action.payload
             }
 
         default:

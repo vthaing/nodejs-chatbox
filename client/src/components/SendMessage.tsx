@@ -1,10 +1,17 @@
 import React, {ChangeEvent, FormEvent, useContext, useRef, useState} from 'react'
-import { AuthContext } from '../auth/AuthContext';
-import {ActiveChatTypesEnum, ChatContext, IMessageToSave} from '../context/chat/ChatContext';
-import { SocketContext } from '../context/SocketContext';
+import {AuthContext} from '../auth/AuthContext';
+import {
+    ActiveChatTypesEnum,
+    ChatContext,
+    IAttachmentInfo,
+    IMessageToSave
+} from '../context/chat/ChatContext';
+import {SocketContext} from '../context/SocketContext';
 import {Attachments} from "./Attachments";
 import {PaperClipOutlined} from "@ant-design/icons";
 import {UploadFile} from "antd/es/upload/interface";
+import {ChatTypes} from "../types/chat.types";
+import {UploadAttachment} from "../context/chat/chatReducer";
 
 const MESSAGE_MAX_LENGTH = 164;
 
@@ -14,7 +21,7 @@ export const SendMessage: React.FC = () => {
     const [message, setMessage] = useState('');
 
     const { auth } = useContext(AuthContext);
-    const { chatState } = useContext(ChatContext);
+    const { chatState, dispatch } = useContext(ChatContext);
     const { socket } = useContext(SocketContext);
     const buttonUploadRef = useRef();
     const [attachments, setAttachments] = useState<UploadFile[]>([]);
@@ -35,16 +42,32 @@ export const SendMessage: React.FC = () => {
             to: _getTo(),
             conversation: _getConversation(),
             text: message,
+            attachments: _getAttachmentsInfo(),
         } as IMessageToSave;
         // Emit a websocket
         socket?.emit('private-message', messageToSend);
-        
         setMessage('');
+
+        if (attachments) {
+            const action: UploadAttachment = {
+                type: ChatTypes.uploadAttachments,
+                payload: attachments
+            }
+            dispatch(action);
+        }
+    }
+
+    const _getAttachmentsInfo = () => {
+        return attachments.map((attachment) => ({
+            name: attachment.name,
+            type: attachment.type,
+            uid: attachment.uid,
+            size: attachment.size
+        } as IAttachmentInfo))
     }
 
     const handleOnAttachmentsChange = (fileList: UploadFile[]) => {
         setAttachments(fileList);
-        console.log(attachments);
     }
 
     const _getTo = () => {
@@ -70,7 +93,7 @@ export const SendMessage: React.FC = () => {
         >
             <div className="type_msg row">
                 <div className="col-sm-2">
-                   <button className="mt-3" onClick={handleAttachmentClick}><PaperClipOutlined /></button>
+                   <button type={"button"} className="mt-3" onClick={handleAttachmentClick}><PaperClipOutlined /></button>
                 </div>
                 <div className="input_msg_write col-sm-8">
                     <input

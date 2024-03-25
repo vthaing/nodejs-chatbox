@@ -20,4 +20,7 @@ export class CreateMessageDto {
   @ApiProperty()
   @IsOptional()
   isPinnedMessage: boolean;
+  @ApiProperty()
+  @IsOptional()
+  attachments: [];
 }

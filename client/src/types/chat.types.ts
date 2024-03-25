@@ -5,4 +5,5 @@ export enum ChatTypes {
     newMessage = '[Chat] New Message', 
     loadMessages = '[Chat] Load Messages',
     clean = '[Chat] Clean',
+    uploadAttachments = '[Chat] Upload attachments',
 }
