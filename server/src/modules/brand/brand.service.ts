@@ -22,7 +22,6 @@ export class BrandService {
       .find({
         ...params,
       })
-      .populate('memberObjects')
       .exec();
   }
 
@@ -31,7 +30,7 @@ export class BrandService {
   }
 
   findOne(id: string): Promise<BrandDocument> {
-    return this.brandModel.findById(id).populate('memberObjects').exec();
+    return this.brandModel.findById(id).exec();
   }
 
   update(id: string, updateBrandDto: UpdateBrandDto): Promise<BrandDocument> {
