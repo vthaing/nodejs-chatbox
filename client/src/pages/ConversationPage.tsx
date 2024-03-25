@@ -16,7 +16,7 @@ export const ConversationPage: React.FC<ConversationPageProps> = (props: Convers
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	useEffect(() => {
-		if (isLoading) {
+		if (isLoading && socket) {
 			const action: ActiveChat = {
 				payload: ({
 					type: ActiveChatTypesEnum.CHANNEL, activeChatId: conversationId

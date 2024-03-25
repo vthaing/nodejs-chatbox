@@ -68,7 +68,7 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
                 } as ListConversations,
             );
         });
-    }, [socket, dispatch, logout]);
+    }, [socket, dispatch]);
 
     useEffect(() => {
         socket?.on('private-message', (message: IMessage) => {
@@ -82,7 +82,7 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
             // Move scroll to final
             scrollToBottomAnimated('messages');
         });
-    }, [socket, dispatch, logout]);
+    }, [socket, dispatch]);
 
     useEffect(() => {
         socket?.on('server-alert', (alertMessage: IServerAlert) => {
@@ -92,7 +92,7 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
                 logout();
             }
         });
-    }, [socket, dispatch, logout]);
+    }, [logout, socket]);
 
 
     return (
