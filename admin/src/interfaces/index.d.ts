@@ -53,5 +53,15 @@ export interface IBrand {
     name: string;
     secretKey: string;
     createdAt: string
-    brand?: IBrand | null
+}
+
+
+export interface IUserBanRequest {
+    id: string;
+    userId: User | string;
+    duration?: number;
+    reason?: string;
+    type: string;
+    params: {};
+    createdAt: string
 }

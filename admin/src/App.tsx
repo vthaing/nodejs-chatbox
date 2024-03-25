@@ -89,6 +89,9 @@ const App: React.FC = () => {
                     list: BrandList,
                     edit: BrandEdit,
                 },
+                {
+                    name: 'user-ban-requests'
+                }
             ]}
             notificationProvider={notificationProvider}
             LoginPage={() => (
