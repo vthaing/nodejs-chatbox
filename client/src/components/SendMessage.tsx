@@ -4,6 +4,7 @@ import {ActiveChatTypesEnum, ChatContext, IMessageToSave} from '../context/chat/
 import { SocketContext } from '../context/SocketContext';
 import {Attachments} from "./Attachments";
 import {PaperClipOutlined} from "@ant-design/icons";
+import {UploadFile} from "antd/es/upload/interface";
 
 const MESSAGE_MAX_LENGTH = 164;
 
@@ -16,6 +17,7 @@ export const SendMessage: React.FC = () => {
     const { chatState } = useContext(ChatContext);
     const { socket } = useContext(SocketContext);
     const buttonUploadRef = useRef();
+    const [attachments, setAttachments] = useState<UploadFile[]>([]);
 
 
     const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +40,11 @@ export const SendMessage: React.FC = () => {
         socket?.emit('private-message', messageToSend);
         
         setMessage('');
+    }
+
+    const handleOnAttachmentsChange = (fileList: UploadFile[]) => {
+        setAttachments(fileList);
+        console.log(attachments);
     }
 
     const _getTo = () => {
@@ -92,6 +99,7 @@ export const SendMessage: React.FC = () => {
                 <Attachments
                     refButtonUpload={buttonUploadRef}
                     autoUpload={false}
+                    onAttachmentsChange={handleOnAttachmentsChange}
                 />
         </form>
     )

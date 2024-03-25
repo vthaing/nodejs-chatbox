@@ -15,11 +15,10 @@ const getBase64 = (file: RcFile): Promise<string> =>
 type AttachmentsProps = {
     refButtonUpload?: any;
     onAttachmentsChange?: any
-    onBeforeUpload?: any
     autoUpload?: boolean
 }
 
-export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAttachmentsChange, onBeforeUpload, autoUpload = true}) => {
+export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAttachmentsChange, autoUpload = true}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
@@ -51,12 +50,22 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
 
   const  beforeUpload = (file: UploadFile) => {
       setFileList([...fileList, file]);
-      if (onBeforeUpload) {
-          onBeforeUpload(file, fileList)
+      if (onAttachmentsChange) {
+          onAttachmentsChange(fileList)
       }
 
       return autoUpload;
   }
+
+    const onRemove = (file: UploadFile) => {
+        const index = fileList.indexOf(file);
+        const newFileList = fileList.slice();
+        newFileList.splice(index, 1);
+        setFileList(newFileList);
+        if (onAttachmentsChange) {
+            onAttachmentsChange(fileList)
+        }
+    }
 
   const uploadButton = (
       <div>
@@ -67,12 +76,13 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
   return (
       <div hidden={!showAttachment}>
         <Upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             listType="picture-card"
             fileList={fileList}
             onPreview={handlePreview}
             onChange={handleChange}
             beforeUpload={beforeUpload}
+            onRemove={onRemove}
+            multiple={true}
         >
           {fileList.length >= 8 ? null : uploadButton}
         </Upload>
