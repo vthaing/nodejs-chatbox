@@ -7,6 +7,7 @@ import '../css/login-register.css';
 import { AuthContext } from '../auth/AuthContext';
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';
+import {ConversationPage} from "../pages/ConversationPage";
 
 
 export const AppRouter: React.FC = () => {
@@ -39,6 +40,13 @@ export const AppRouter: React.FC = () => {
                         isAuthenticated={logged}
                         component={ChatPage}
                         redirectTo='/auth'
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/conversation/:conversationId"
+                      isAuthenticated={logged}
+                      component={ConversationPage}
+                      redirectTo='/auth'
                     />
                     <Redirect to="/" />
                 </Switch>

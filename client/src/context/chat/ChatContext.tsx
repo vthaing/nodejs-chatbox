@@ -40,8 +40,8 @@ export enum ActiveChatTypesEnum  {
 }
 
 export interface IActiveChatPayload {
-    type?: string;
-    activeChatId?: ActiveChatTypesEnum
+    type?: ActiveChatTypesEnum;
+    activeChatId?: string
 }
 
 export interface IChatContext {
