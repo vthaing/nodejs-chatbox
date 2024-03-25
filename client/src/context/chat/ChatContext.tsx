@@ -21,6 +21,12 @@ export interface IMessageToSave {
     from: string;
 }
 
+export interface IServerAlert {
+    message: string,
+    reasons: [string],
+    forceLogout: boolean,
+}
+
 export interface IChannel {
     id: string;
     name?: string;
@@ -42,6 +48,8 @@ export interface IChatContext {
     chatState: ChatState;
     dispatch: React.Dispatch<ChatAction>;
 }
+
+
 
 
 const initialChatContext = {

@@ -1,8 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {Document, ObjectId, SchemaTypes} from 'mongoose';
+import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import * as mongoose from 'mongoose';
-import {User, UserDocument} from '../../user/entities/user.entity';
+import { User, UserDocument } from '../../user/entities/user.entity';
 import { Channel } from '../../channels/entities/channel.entity';
+import {
+  UserBanRequest,
+  UserBanRequestDocument,
+} from '../../user-ban-request/entities/user-ban-request.entity';
 
 export type MessageDocument = Message & Document;
 
@@ -48,7 +52,11 @@ export class Message {
   maskedText?: string;
 
   @Prop({ ref: 'UserBanRequest', type: [SchemaTypes.ObjectId] })
-  userBanRequests?: [ObjectId];
+  userBanRequests?: [ObjectId | UserBanRequest];
+  userBanRequestDocuments?: [UserBanRequest];
+  isViolatedMessage: boolean;
+
+  bannedReasons?: [string | ObjectId];
 }
 const MessageSchema = SchemaFactory.createForClass(Message);
 MessageSchema.virtual('senderInfo', {
@@ -58,8 +66,26 @@ MessageSchema.virtual('senderInfo', {
   justOne: true,
 });
 
+MessageSchema.virtual('userBanRequestDocuments', {
+  ref: 'UserBanRequest',
+  localField: 'userBanRequests',
+  foreignField: '_id',
+});
+
 MessageSchema.virtual('messageContent').get(function () {
   return this.maskedText ?? this.text;
 });
 
+MessageSchema.virtual('isViolatedMessage').get(function () {
+  return this.userBanRequests.length > 0;
+});
+
+MessageSchema.virtual('bannedReasons').get(function () {
+  if (!this.userBanRequestDocuments) {
+    return [];
+  }
+  return this.userBanRequestDocuments.map((userBanRequest) => {
+    return userBanRequest.reason;
+  });
+});
 export { MessageSchema };

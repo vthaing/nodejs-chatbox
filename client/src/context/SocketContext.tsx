@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect } from 'react';
 
 import { Socket } from 'socket.io-client';
-import {AuthContext, IUser} from '../auth/AuthContext';
+import {AuthContext, IUser, } from '../auth/AuthContext';
 import { scrollToBottomAnimated } from '../helpers/scrollToBottom';
 
 import { useSocket } from '../hooks/useSocket';
 import { ChatTypes } from '../types/chat.types';
-import {ChatContext, IChannel, IMessage} from './chat/ChatContext';
+import {ChatContext, IChannel, IMessage, IServerAlert} from './chat/ChatContext';
 import { ListChannels, ListUsers, NewMessage } from './chat/chatReducer';
 
 
@@ -30,7 +30,7 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
       process.env.REACT_APP_SOCKET_PATH ?? 'http://localhost:3002/chat'
     );
 
-    const { auth } = useContext(AuthContext);
+    const { auth, logout } = useContext(AuthContext);
     const { dispatch } = useContext(ChatContext);
 
 
@@ -81,6 +81,16 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
             dispatch(newMessage);
             // Move scroll to final
             scrollToBottomAnimated('messages');
+        });
+    }, [socket, dispatch]);
+
+    useEffect(() => {
+        socket?.on('server-alert', (alertMessage: IServerAlert) => {
+            alert(alertMessage.message + '. Reasons: ' + alertMessage.reasons.join('. ') );
+            console.log(alertMessage);
+            if (alertMessage.forceLogout) {
+                logout();
+            }
         });
     }, [socket, dispatch]);
 

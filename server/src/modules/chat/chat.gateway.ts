@@ -102,6 +102,16 @@ export class ChatGateway {
       this.server.to(message.to).emit('private-message', createMessage);
       this.server.to(message.from).emit('private-message', createMessage);
     }
+
+    if (createMessage.isViolatedMessage) {
+      await createMessage.populate('userBanRequestDocuments');
+      this.server.to(message.from).emit('server-alert', {
+        message: 'Your account has been banned',
+        reasons: createMessage.bannedReasons,
+        forceLogout: true,
+      });
+      this.server.in(message.from).disconnectSockets();
+    }
   }
 
   @SubscribeMessage('open-channel-chat')

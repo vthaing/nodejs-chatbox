@@ -14,7 +14,7 @@ export class MessageFilterService {
 
   async filterAndHandleViolateMessage(
     message: MessageDocument,
-  ): Promise<Message> {
+  ): Promise<MessageDocument> {
     const userBanRequests = [];
 
     const badWordBanRequest =
