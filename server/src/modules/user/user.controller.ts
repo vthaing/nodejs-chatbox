@@ -59,7 +59,7 @@ export class UserController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.userService.findById(id);
-    if (!user) {
+    if (!user || user.isAdmin()) {
       throw new NotFoundException('User not found');
     }
     return user;
@@ -68,7 +68,7 @@ export class UserController {
   @Patch(':id/ban')
   async ban(@Param('id') id: string, @Body() banUserDto: BanUserDto) {
     const user = await this.userService.findById(id);
-    if (!user) {
+    if (!user || user.isAdmin()) {
       throw new NotFoundException('User not found');
     }
     await this.userService.banUser(user, banUserDto);
@@ -81,19 +81,27 @@ export class UserController {
   @Patch(':id/unban')
   async unban(@Param('id') id: string) {
     const user = await this.userService.findById(id);
-    if (!user) {
+    if (!user || user.isAdmin()) {
       throw new NotFoundException('User not found');
     }
     await this.userService.unbanUser(user);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const user = await this.userService.findById(id);
+    if (!user || user.isAdmin()) {
+      throw new NotFoundException('User not found');
+    }
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    const user = await this.userService.findById(id);
+    if (!user || user.isAdmin()) {
+      throw new NotFoundException('User not found');
+    }
     return this.userService.remove(id);
   }
 
@@ -136,6 +144,8 @@ export class UserController {
         pagingQuery['bannedFrom'] = { $eq: null };
       }
     }
+
+    pagingQuery['roles'] = { $ne: Role.Admin };
 
     return pagingQuery;
   }
