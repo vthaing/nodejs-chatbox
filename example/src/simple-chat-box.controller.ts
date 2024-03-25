@@ -25,7 +25,7 @@ export class SimpleChatBoxController {
     return {
       chatBoxLibraryUrl: this.configService.get('chatBoxLibraryUrl'),
       chatBoxData: {
-        ...this.getChatBoxData(),
+        ...chatBoxData,
         token: requestToken,
       },
     };
