@@ -1,7 +1,9 @@
-import React, { ChangeEvent, FormEvent, useContext, useState } from 'react'
+import React, {ChangeEvent, FormEvent, useContext, useRef, useState} from 'react'
 import { AuthContext } from '../auth/AuthContext';
 import {ActiveChatTypesEnum, ChatContext, IMessageToSave} from '../context/chat/ChatContext';
 import { SocketContext } from '../context/SocketContext';
+import {Attachments} from "./Attachments";
+import {PaperClipOutlined} from "@ant-design/icons";
 
 const MESSAGE_MAX_LENGTH = 164;
 
@@ -13,6 +15,8 @@ export const SendMessage: React.FC = () => {
     const { auth } = useContext(AuthContext);
     const { chatState } = useContext(ChatContext);
     const { socket } = useContext(SocketContext);
+    const buttonUploadRef = useRef();
+    const [showAttachment, setShowAttachment] = useState(false);
 
 
 
@@ -50,13 +54,37 @@ export const SendMessage: React.FC = () => {
             null;
     }
 
+    const handleAttachmentClick = () => {
+        // @ts-ignore
+        buttonUploadRef.current.click()
+    }
+
+    const onAttachmentsChange = (newFileList: []) => {
+        if (newFileList.length > 0) {
+            setShowAttachment(true);
+        } else {
+            setShowAttachment(false);
+        }
+    }
+
+    const handleBeforeUpload = (file: any, fileList: []) => {
+        if (fileList.length > 0) {
+            setShowAttachment(true);
+        }
+    }
+
+
+
 
     return (
         <form
             onSubmit={onSubmit}
         >
             <div className="type_msg row">
-                <div className="input_msg_write col-sm-9">
+                <div className="col-sm-2">
+                   <button className="mt-3" onClick={handleAttachmentClick}><PaperClipOutlined /></button>
+                </div>
+                <div className="input_msg_write col-sm-8">
                     <input
                         type="text"
                         className="write_msg"
@@ -70,7 +98,7 @@ export const SendMessage: React.FC = () => {
                         && <p className={'invalid-feedback'}>The message length should not be greater than {MESSAGE_MAX_LENGTH}</p>
                     }
                 </div>
-                <div className="col-sm-3 text-center">
+                <div className="col-sm-2 text-center">
                     <button
                         className="msg_send_btn mt-3"
                         type="submit"
@@ -79,6 +107,14 @@ export const SendMessage: React.FC = () => {
                         Send
                     </button>
                 </div>
+            </div>
+            <div hidden={!showAttachment}>
+                <Attachments
+                    onAttachmentsChange={onAttachmentsChange}
+                    refButtonUpload={buttonUploadRef}
+                    onBeforeUpload={handleBeforeUpload}
+                    autoUpload={false}
+                />
             </div>
         </form>
     )
