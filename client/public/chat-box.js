@@ -88,14 +88,20 @@ function chatBoxesManagement () {
      * @param chatBoxElement HTMLElementTagNameMap
      */
     this.requestAccessToken = function (chatBoxData, chatBoxElement) {
-        var request = new XMLHttpRequest();
-        request.addEventListener('load', function () {
-            self.handleSuccessRequestAccessToken(this.responseText, chatBoxElement);
-        })
-        request.open('POST', this.getApiInitChatBoxEndpoint());
-        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
-        request.send(JSON.stringify(chatBoxData));
+        //TODO: should have solution to send request parallel
+        setTimeout(function () {
+            var request = new XMLHttpRequest();
+            request.open('POST', self.getApiInitChatBoxEndpoint());
+            request.addEventListener('load', function () {
+                self.handleSuccessRequestAccessToken(this.responseText, chatBoxElement);
+            })
+            request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
+            request.send(JSON.stringify(chatBoxData));
+        }, this.delayTime);
+        this.delayTime += 100;
     }
+
+    this.delayTime = 100;
 
     //@TODO: should config
     this.getApiInitChatBoxEndpoint = function () {
