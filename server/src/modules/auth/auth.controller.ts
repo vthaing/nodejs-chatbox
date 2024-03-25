@@ -10,8 +10,11 @@ import {
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RegisterUserValidationPipe } from './pipes/register-user.pipe';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -28,6 +31,7 @@ export class AuthController {
   }
 
   @UseGuards(LocalAuthGuard)
+  @ApiBody({ type: LoginUserDto })
   @Post('login')
   async login(@Request() req: any): Promise<TokenUser> {
     return this.authService.login(req.user);

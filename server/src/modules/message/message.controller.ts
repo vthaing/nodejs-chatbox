@@ -12,7 +12,10 @@ import {
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Messages')
 @UseGuards(JwtAuthGuard)
 @Controller('message')
 export class MessageController {

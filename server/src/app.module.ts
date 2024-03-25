@@ -12,8 +12,9 @@ import { ChatModule } from './modules/chat/chat.module';
     MongooseModule.forRoot(
       'mongodb://chat_user:12345678@localhost:3007/test?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false',
       {
-        useCreateIndex: true,
-        useFindAndModify: false,
+        //@TODO: temporary disable because they are not support
+        // useCreateIndex: true,
+        // useFindAndModify: false,
       },
     ),
     UserModule,
