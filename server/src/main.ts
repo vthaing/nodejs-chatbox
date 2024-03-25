@@ -7,6 +7,7 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 import mongoose from 'mongoose';
+import {ConfigService} from "@nestjs/config";
 mongoose.set('debug', true);
 
 async function bootstrap() {
@@ -29,7 +30,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('openapi', app, document);
+  const configService = app.get<ConfigService>(ConfigService);
 
-  await app.listen(3001);
+  await app.listen(configService.get('port'));
 }
 bootstrap();
