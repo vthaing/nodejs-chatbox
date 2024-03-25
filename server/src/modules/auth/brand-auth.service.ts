@@ -27,6 +27,11 @@ export class BrandAuthService {
       return null;
     }
 
+    if (!this.validateToken(req, brand)) {
+      console.warn(`Invalid brand auth token`);
+      return null;
+    }
+
     return brand;
   }
 
