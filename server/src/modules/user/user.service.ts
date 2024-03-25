@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, ObjectId, PaginateModel } from 'mongoose';
+import {FilterQuery, ObjectId, PaginateModel, PaginateOptions} from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
@@ -35,8 +35,8 @@ export class UserService {
       .exec();
   }
 
-  paginate(req: Request) {
-    return this.userModel.paginate(...new PaginationParameters(req).get());
+  paginate(query: FilterQuery<any>, options: PaginateOptions) {
+    return this.userModel.paginate(query, options);
   }
 
   async findOne(params: FilterQuery<UserDocument>) {

@@ -39,7 +39,8 @@ export class UserController {
 
   @Get()
   async findAll(@Req() req: Request, @Res() res) {
-    const pagingResult = await this.userService.paginate(req);
+    const pagingOptions = this.pagingService.getPagingOptionsFromRequest(req);
+    const pagingResult = await this.userService.paginate({}, pagingOptions);
     return this.pagingService.createPaginationResponse(res, pagingResult);
   }
 
