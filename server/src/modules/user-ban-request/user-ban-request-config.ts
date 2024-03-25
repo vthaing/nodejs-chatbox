@@ -1,6 +1,7 @@
 import { UserBanRequestTypeEnum } from './enum/user-ban-request-type.enum';
 
 const DUPLICATED_MESSAGE_TIME_LIMIT_MINUTES = 10;
+const REACH_LIMIT_MESSAGE_TIME_SECONDS = 3;
 export class UserBanRequestConfig {
   static getBanDurations() {
     const config = {};
@@ -17,5 +18,9 @@ export class UserBanRequestConfig {
 
   static getDuplicatedMessageTimeLimitMinutes(): number {
     return DUPLICATED_MESSAGE_TIME_LIMIT_MINUTES;
+  }
+
+  static getReachLimitMessageTimeSeconds(): number {
+    return REACH_LIMIT_MESSAGE_TIME_SECONDS;
   }
 }

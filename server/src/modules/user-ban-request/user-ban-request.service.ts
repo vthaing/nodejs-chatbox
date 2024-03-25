@@ -114,6 +114,30 @@ export class UserBanRequestService {
     return createdUserBanRequest.save();
   }
 
+  createReachLimitMessagesUserBanRequest(
+    message: MessageDocument,
+    oldMessages: MessageDocument[],
+    status = UserBanRequestStatusEnum.APPROVED,
+  ): Promise<UserBanRequestDocument | null> {
+    const dto = new CreateUserBanRequestDto();
+    const banRequestParams = {
+      message: message.id,
+      oldMessageIds: oldMessages.map((message) => message.id),
+      countMessages: oldMessages.length,
+    };
+
+    dto.userId = message.from.toString();
+    dto.reason = `Reach the limited messages in a time range. Count messages: ${banRequestParams.countMessages}`;
+
+    dto.type = UserBanRequestTypeEnum.REACH_MESSAGES_LIMITATION_IN_TIME_RANGE;
+    dto.status = status;
+    dto.duration = UserBanRequestConfig.getBanDurationByType(dto.type);
+    dto.params = banRequestParams;
+
+    const createdUserBanRequest = new this.userBanRequestModel(dto);
+    return createdUserBanRequest.save();
+  }
+
   createManualBanRequest(
     user: UserDocument,
     banUserDto: BanUserDto,
