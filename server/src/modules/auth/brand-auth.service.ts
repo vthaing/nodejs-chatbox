@@ -13,23 +13,23 @@ export class BrandAuthService {
 
   async validateBrandAuthRequest(req: Request): Promise<BrandDocument | null> {
     if (!this.validateRequestData(req)) {
-      return null;
+      throw new UnauthorizedException('Invalid brand auth request');
     }
     const brand = await this.brandService.findOne(this.getRequestBrandId(req));
     if (!brand) {
-      return null;
+      throw new UnauthorizedException('Brand is not found');
     }
 
     if (!brand.enabled) {
       console.warn(
         `Brand ${brand.name} (${brand.id}) has been disabled but still have request from it`,
       );
-      return null;
+      throw new UnauthorizedException('Brand is not enabled');
     }
 
     if (!this.validateToken(req, brand)) {
       console.warn(`Invalid brand auth token`);
-      return null;
+      throw new UnauthorizedException('Invalid token');
     }
 
     return brand;
@@ -61,7 +61,7 @@ export class BrandAuthService {
     }
 
     if (!this.getRequestNonce(req)) {
-      throw new UnauthorizedException('Invalid X-Nonce');
+      throw new UnauthorizedException('Invalid x-nonce');
     }
 
     return true;
@@ -72,28 +72,28 @@ export class BrandAuthService {
   }
 
   getRequestBrandId(req: Request): string | null {
-    return req.headers['X-Brand-Id']?.toString();
+    return req.headers['x-brand-id']?.toString();
   }
 
   getRequestTimestamp(req: Request): string | null {
-    return req.headers['X-Timestamp']?.toString();
+    return req.headers['x-timestamp']?.toString();
   }
 
   getRequestToken(req: Request): string | null {
-    return req.headers['X-Token']?.toString();
+    return req.headers['x-token']?.toString();
   }
 
   getRequestNonce(req: Request): string | null {
-    return req.headers['X-Nonce']?.toString();
+    return req.headers['x-nonce']?.toString();
   }
 
   generateToken(req, brand: BrandDocument): string {
     const requestProperties = {
       //TODO: Should we use the payload for more secure?
       // ...this.getRequestPayload(req),
-      'X-Nonce': this.getRequestNonce(req),
-      'X-Timestamp': this.getRequestTimestamp(req),
-      'X-Brand-Id': this.getRequestBrandId(req),
+      'x-nonce': this.getRequestNonce(req),
+      'x-timestamp': this.getRequestTimestamp(req),
+      'x-brand-id': this.getRequestBrandId(req),
     };
     const sortedRequestProperties = Object.keys(requestProperties)
       .sort()

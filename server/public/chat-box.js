@@ -156,10 +156,10 @@ function chatBoxesManagement() {
       'application/json;charset=UTF-8',
     );
 
-    xmlRequest.setRequestHeader('X-Brand-Id', chatBoxData.brandId);
-    xmlRequest.setRequestHeader('X-Token', chatBoxData.token);
-    xmlRequest.setRequestHeader('X-Timestamp', chatBoxData.timestamp);
-    xmlRequest.setRequestHeader('X-Nonce', chatBoxData.xNonce);
+    xmlRequest.setRequestHeader('x-brand-id', chatBoxData.brandId);
+    xmlRequest.setRequestHeader('x-token', chatBoxData.token);
+    xmlRequest.setRequestHeader('x-timestamp', chatBoxData.timestamp);
+    xmlRequest.setRequestHeader('x-nonce', chatBoxData.xNonce);
   };
 
   this.delayTime = 100;

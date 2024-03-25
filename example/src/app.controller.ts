@@ -24,9 +24,9 @@ export class AppController {
 
   generateToken(chatBoxData) {
     const headerMissingToken = {
-      'X-Nonce': chatBoxData['xNonce'],
-      'X-Timestamp': chatBoxData['timestamp'],
-      'X-Brand-Id': chatBoxData['brandId'],
+      'n-nonce': chatBoxData['xNonce'],
+      'x-timestamp': chatBoxData['timestamp'],
+      'x-brand-id': chatBoxData['brandId'],
     };
 
     const sortedRequestProperties = Object.keys(headerMissingToken)
