@@ -1,8 +1,9 @@
-import { useShow, IResourceComponentsProps } from "@pankod/refine-core";
+import {useShow, IResourceComponentsProps, useMany} from "@pankod/refine-core";
 
-import {Col, DateField, List, Row, Show, Table, Typography, useTable} from "@pankod/refine-antd";
+import {Col, DateField, List, Row, Show, Table, TagField, TextField, Typography, useTable} from "@pankod/refine-antd";
 
-import {IBrand, IBrandChannel, IUserBanRequest} from "../../interfaces";
+import {IBrand, IBrandChannel, IBrandRoom, IUser, IUserBanRequest} from "../../interfaces";
+import {Link} from "@pankod/refine-react-router-v6";
 
 const { Title, Text } = Typography;
 
@@ -36,7 +37,7 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
     });
 
     const { tableProps: roomTableProps } = useTable<
-        IBrandChannel
+        IBrandRoom
     >({
         resource: "brand-rooms",
         initialSorter: [
@@ -57,6 +58,27 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
             enabled: record !== undefined,
         },
         syncWithLocation: false,
+    });
+
+
+    const getChannelIds = (): string[] => {
+        let result: string[] = [];
+        roomTableProps?.dataSource?.map(function (brandRoom: IBrandRoom) {
+            if (brandRoom.brandChannelId && !result.includes(brandRoom.brandChannelId)) {
+                result.push(brandRoom.brandChannelId);
+            }
+        });
+
+        return result;
+    }
+    const channelIds = getChannelIds();
+
+    const { data: brandChannels, isLoading: isBrandChannelLoading } = useMany<IBrandChannel>({
+        resource: "brand-channels",
+        ids: channelIds,
+        queryOptions: {
+            enabled: channelIds.length > 0,
+        },
     });
 
     return (
@@ -137,6 +159,24 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
                                 key="externalBrandChannelId"
                                 dataIndex={'externalBrandChannelId'}
                                 title={"External Channel Id"}
+                            />
+                            <Table.Column
+                                title="Channel"
+                                render={(record) => {
+                                    if (isBrandChannelLoading) {
+                                        return <TextField value="Loading..." />;
+                                    }
+
+                                    return (
+                                            <TagField
+                                                value={
+                                                    brandChannels?.data.find(
+                                                        (item) => record.brandChannelId === item.id,
+                                                    )?.name
+                                                }
+                                            />
+                                    );
+                                }}
                             />
                             <Table.Column
                                 key="createdAt"
