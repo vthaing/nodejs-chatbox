@@ -15,7 +15,6 @@ import { UpdateUserBanRequestDto } from './dto/update-user-ban-request.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
-import {userBanRequestTypes} from "./enum/user-ban-request-type.enum";
 
 @Controller('user-ban-requests')
 @ApiBearerAuth()

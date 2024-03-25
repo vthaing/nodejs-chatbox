@@ -7,8 +7,9 @@ import {
   Param,
   Delete,
   UseGuards,
-  Request,
   NotFoundException,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,6 +18,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { BanUserDto } from './dto/ban-user.dto';
 import { ChatGateway } from '../chat/chat.gateway';
+import { Request } from 'express';
+import { PagingService } from '../common/service/paging.service';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -26,6 +29,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly chatGateway: ChatGateway,
+    private readonly pagingService: PagingService,
   ) {}
 
   @Post()
@@ -34,12 +38,13 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll(@Req() req: Request, @Res() res) {
+    const pagingResult = await this.userService.paginate(req);
+    return this.pagingService.createPaginationResponse(res, pagingResult);
   }
 
   @Get('me')
-  getMyInfo(@Request() req: any) {
+  getMyInfo(@Req() req: any) {
     return req.user;
   }
 

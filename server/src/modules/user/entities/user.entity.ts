@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export type UserDocument = User & Document;
 
@@ -56,6 +57,8 @@ export class User {
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.plugin(mongoosePaginate);
 
 UserSchema.virtual('isBanned').get(function (): boolean {
   if (!this.bannedFrom) {

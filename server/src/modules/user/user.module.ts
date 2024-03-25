@@ -5,7 +5,8 @@ import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User } from './entities/user.entity';
 import { UserBanRequestModule } from '../user-ban-request/user-ban-request.module';
-import {ChatModule} from "../chat/chat.module";
+import { ChatModule } from '../chat/chat.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import {ChatModule} from "../chat/chat.module";
     ]),
     forwardRef(() => UserBanRequestModule),
     forwardRef(() => ChatModule),
+    forwardRef(() => CommonModule),
   ],
   controllers: [UserController],
   providers: [UserService],
