@@ -1,47 +1,53 @@
-import React, { useState} from 'react'
+import React from 'react'
 import {IMediaItem} from "../context/chat/ChatContext";
-import Lightbox from "yet-another-react-lightbox";
+import {Gallery, Item} from "react-photoswipe-gallery";
+import 'photoswipe/dist/photoswipe.css'
 
 export type MessageMediaItemsProps = {
     mediaItems: IMediaItem[]
 }
 export const MessageMediaItems: React.FC<MessageMediaItemsProps> = ({mediaItems}) => {
 
-    const [lightboxIndex, setLightboxIndex] = useState(-1);
-
-
-
+    const smallItemStyles: React.CSSProperties = {
+        cursor: 'pointer',
+        objectFit: 'cover',
+        width: '100%',
+        maxHeight: '100%',
+        border: "1px solid #d9d9d9", borderRadius: 5,
+        margin: 3, padding: 3
+    }
     return (
-        <div className={'message-media-items'}>
-            {mediaItems.map((mediaItem, mediaIndex) => (
-                <button
-                    onClick={(e) => {
-                        e.preventDefault();
-                        setLightboxIndex(mediaIndex)
-                    }}
-                    key={'media-item-link-' + mediaItem.id}
-                >
-                    <img
+        <Gallery>
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: '100px 100px 100px',
+                    gridTemplateRows: '100px 100px',
+                    gridGap: 12,
+                }}
+            >
+                {mediaItems.map((mediaItem) => (
+
+                    <Item
+                        original={process.env.REACT_APP_API_URL + mediaItem.url}
+                        thumbnail={process.env.REACT_APP_API_URL + mediaItem.url}
+                        width={mediaItem.imageWidth ?? 100}
+                        height={mediaItem.imageHeight ?? 100}
                         alt={mediaItem.name}
-                        key={'media-item-img-' + mediaItem.id} className={'message-media-item'} src={process.env.REACT_APP_API_URL + mediaItem.url}
-                        style={{
-                           maxHeight: 100, maxWidth: 100, margin: 2, padding: 3,
-                           border: "1px solid #d9d9d9", borderRadius: 5
-                        }}
-                    />
-                </button>
+                    >
+                        {({ ref, open }) => (
+                            <img
+                                style={smallItemStyles}
+                                src={process.env.REACT_APP_API_URL + mediaItem.url}
+                                ref={ref as React.MutableRefObject<HTMLImageElement>}
+                                onClick={open}
+                                alt={mediaItem.name}
+                            />
+                        )}
+                    </Item>
                 ))}
-            <Lightbox
-                open={lightboxIndex > 0}
-                index={lightboxIndex}
-                close={() =>setLightboxIndex(-1)}
-                slides={mediaItems.map((mediaItem) => ({
-                    src: mediaItem.url,
-                    key: mediaItem.id,
-                    width: mediaItem.imageWidth ?? 100,
-                    height: mediaItem.imageHeight ?? 100
-                }))}
-            />
-        </div>
+            </div>
+        </Gallery>
     )
 }
+
