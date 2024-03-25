@@ -18,10 +18,18 @@ export const ButtonBanUser: React.FC<ButtonBanUserProps> = ({record, onSuccess})
         duration: null
     });
 
+    const apiUrl = useApiUrl();
+    const [open, setOpen] = useState(false);
+    const { mutate, isLoading } = useCustomMutation();
 
-    const { modalProps, show } = useModal();
     const handleFormSubmit = (values: any) => {
-        alert('sdsdsd');
+        mutate({
+            url: `${apiUrl}/user/${record.id}/ban`,
+            method: "patch",
+            values: values,
+        }, {
+            onSuccess: onSuccess,
+        });
     }
 
     const handleOnChange = (
@@ -43,11 +51,20 @@ export const ButtonBanUser: React.FC<ButtonBanUserProps> = ({record, onSuccess})
                 danger
                 icon={<StopOutlined  />}
                 title={'Ban user'}
-                onClick={show}
+                onClick={() => setOpen(true)}
             >
+                Ban
             </Button>
-            <Modal {...modalProps} onOk={() => onOk()}
+            <Modal open={open}
                title={`Ban user ${record.displayName}`}
+               footer={[
+                   <Button key="back" onClick={() => setOpen(false)}>
+                       Return
+                   </Button>,
+                   <Button key="submit" type="primary" loading={isLoading} onClick={onOk}>
+                       Submit
+                   </Button>,
+               ]}
             >
                 <Form form={form} onFinish={handleFormSubmit}>
                     <Form.Item label="Reason" name="reason">

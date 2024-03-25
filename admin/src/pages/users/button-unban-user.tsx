@@ -38,6 +38,7 @@ export const ButtonUnbanUser: React.FC<ButtonBanUserProps> = ({record, onSuccess
                 icon={<CheckOutlined className={'ant-btn-primary'} />}
                 title={'Unban'}
             >
+                Unban
             </Button>
         </Popconfirm>
     );

@@ -12,8 +12,6 @@ import {
 import {IBrand, IUser} from "interfaces";
 import dayjs from "dayjs";
 import {Link} from "@pankod/refine-react-router-v6";
-import {StopOutlined} from "@ant-design/icons";
-import {Button} from "antd";
 import React from "react";
 import {ButtonUnbanUser} from "./button-unban-user";
 import {ButtonBanUser} from "./button-ban-user";
@@ -21,7 +19,7 @@ import {ButtonBanUser} from "./button-ban-user";
 export const UserList: React.FC<IResourceComponentsProps> = () => {
     const { tableProps } = useTable<IUser>();
 
-    const { editUrl: generateEditUrl, list } = useNavigation();
+    const { editUrl: generateEditUrl } = useNavigation();
 
     const getBrandIds = (): string[] => {
         let result: string[] = [];
@@ -93,11 +91,11 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                             />
                             {
                                 !record.isBanned &&
-                                <ButtonBanUser record={record}/>
+                                <ButtonBanUser onSuccess={() => window.location.reload()} record={record}/>
                             }
                             {
-                                record.isBanned && <ButtonUnbanUser onSuccess={() => window.location.reload()} record={record}/>
-
+                                record.isBanned &&
+                                <ButtonUnbanUser onSuccess={() => window.location.reload()} record={record}/>
                             }
                         </Space>
                     )}
