@@ -1,9 +1,20 @@
 import {useShow, IResourceComponentsProps, useMany} from "@pankod/refine-core";
 
-import {Col, DateField, List, Row, Show, Table, TagField, TextField, Typography, useTable} from "@pankod/refine-antd";
+import {
+    Col,
+    DateField, EditButton,
+    List,
+    Row,
+    Show, ShowButton,
+    Space,
+    Table,
+    TagField,
+    TextField,
+    Typography,
+    useTable
+} from "@pankod/refine-antd";
 
-import {IBrand, IBrandChannel, IBrandRoom, IConversation, IUser, IUserBanRequest} from "../../interfaces";
-import {Link} from "@pankod/refine-react-router-v6";
+import {IBrand, IBrandChannel, IBrandRoom, IConversation} from "../../interfaces";
 
 const { Title, Text } = Typography;
 
@@ -310,6 +321,26 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
                                 title={'Created At'}
                                 render={(value) => (
                                     <DateField value={value} format="LLL" />
+                                )}
+                            />
+                            <Table.Column<IConversation>
+                                title="Actions"
+                                dataIndex="actions"
+                                render={(_, conversation) => (
+                                    <Space>
+                                        <EditButton
+                                            hideText
+                                            size="small"
+                                            resourceNameOrRouteName={'conversations'}
+                                            recordItemId={conversation.id}
+                                        />
+                                        <ShowButton
+                                            hideText
+                                            size="small"
+                                            resourceNameOrRouteName={'conversations'}
+                                            recordItemId={conversation.id}
+                                        />
+                                    </Space>
                                 )}
                             />
                         </Table>

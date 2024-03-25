@@ -18,8 +18,6 @@ export const ConversationShow: React.FC<IResourceComponentsProps> = () => {
 
             <Title level={5}>Name</Title>
             <Text>{record?.name}</Text>
-
-            <Title level={5}>Category</Title>
         </Show>
     );
 };
