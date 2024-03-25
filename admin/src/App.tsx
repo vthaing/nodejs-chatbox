@@ -18,6 +18,7 @@ import {API_URL} from "./constants";
 import {authProvider} from "./authUtils/authProvider";
 import {axiosInstance} from "./authUtils/axiosInstance";
 import {ChannelEdit, ChannelList, ChannelShow} from "./pages/channel";
+import {ChannelCreate} from "./pages/channel/create";
 
 const App: React.FC = () => {
 
@@ -55,6 +56,7 @@ const App: React.FC = () => {
                 },
                 {
                     name: "channels",
+                    create: ChannelCreate,
                     list: ChannelList,
                     edit: ChannelEdit,
                     show: ChannelShow,
