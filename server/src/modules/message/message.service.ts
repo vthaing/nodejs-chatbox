@@ -4,12 +4,14 @@ import { FilterQuery, Model } from 'mongoose';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { Message, MessageDocument } from './entities/message.entity';
+import { StorageService } from '@codebrew/nestjs-storage';
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectModel(Message.name)
     private readonly messageModel: Model<MessageDocument>,
+    private readonly storageService: StorageService,
   ) {}
 
   create(createMessageDto: CreateMessageDto): Promise<MessageDocument> {

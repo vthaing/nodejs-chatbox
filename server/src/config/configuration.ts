@@ -8,4 +8,5 @@ export default () => ({
   redisPassword: process.env.REDIS_PASSWORD,
   chatBoxInitEndpoint: process.env.CHAT_BOX_INIT_ENDPOINT,
   chatBoxConversationEndpoint: process.env.CHAT_BOX_CONVERSATION_ENDPOINT,
+  messageAttachmentPath: process.env.MESSAGE_ATTACHMENT_PATH,
 });

@@ -15,19 +15,24 @@ import {
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import RoleGuard from '../auth/guards/roles.guard';
 import Role from '../user/role.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { StorageService } from '@codebrew/nestjs-storage';
+import {MessageAttachmentDto} from "./dto/message-attachment.dto";
 
 @ApiBearerAuth()
 @ApiTags('Messages')
 @UseGuards(JwtAuthGuard)
 @Controller('message')
 export class MessageController {
-  constructor(private readonly messageService: MessageService) {}
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly storageService: StorageService,
+  ) {}
   @UseGuards(RoleGuard(Role.Admin))
   @Post()
   create(@Req() { user }: any, @Body() createMessageDto: CreateMessageDto) {
@@ -79,11 +84,14 @@ export class MessageController {
 
   @UseInterceptors(FileInterceptor('file'))
   @Post(':id/upload-attachment')
+  @ApiBody({
+    required: true,
+    type: MessageAttachmentDto,
+  })
+  @ApiConsumes('multipart/form-data')
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file, 'sdsdsdsdhhhohoasidasdsadads');
-    // return {
-    //   file: file.buffer.toString(),
-    // };
+    console.log(file);
+    this.storageService.getDisk().put('uploaded.png', file.buffer);
     return 'ok';
   }
 }

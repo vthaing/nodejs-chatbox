@@ -22,6 +22,7 @@ import { BrandRoomModule } from './modules/brand-room/brand-room.module';
 import { BrandChatModule } from './modules/brand-chat/brand-chat.module';
 import { ClientScriptModule } from './modules/client-script/client-script.module';
 import { MediaModule } from './modules/media-item/media.module';
+import { DriverType, StorageModule } from '@codebrew/nestjs-storage';
 
 @Module({
   imports: [
@@ -45,6 +46,21 @@ import { MediaModule } from './modules/media-item/media.module';
         whitelist: ['.*'],
         useDenyException: true,
       }),
+    }),
+    StorageModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        default: 'local',
+        disks: {
+          local: {
+            driver: DriverType.LOCAL,
+            config: {
+              root: configService.get('messageAttachmentPath'),
+            },
+          },
+        },
+      }),
+      inject: [ConfigService],
     }),
     UserModule,
     MessageModule,
