@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import React from "react";
 import {ButtonUnbanAdminUser} from "./button-unban-admin-user";
 import {ButtonBanAdminUser} from "./button-ban-admin-user";
+import {ButtonChangePassword} from "./button-change-password";
 
 export const AdminUserList: React.FC<IResourceComponentsProps> = () => {
     const { tableProps, filters } = useTable<IUser>({
@@ -107,6 +108,9 @@ export const AdminUserList: React.FC<IResourceComponentsProps> = () => {
                                     recordItemId={record.id}
                                 />
                             </Space>
+                            {
+                                <ButtonChangePassword onSuccess={() => window.location.reload()} record={record}/>
+                            }
                             {
                                 !record.isBanned &&
                                 <ButtonBanAdminUser onSuccess={() => window.location.reload()} record={record}/>

@@ -9,7 +9,7 @@ import {
   UseGuards,
   NotFoundException,
   Req,
-  Res,
+  Res, UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,6 +24,7 @@ import RoleGuard from '../auth/guards/roles.guard';
 import Role from './role.enum';
 import { CreateAdminUserPipe } from './pipes/create-admin-user.pipe';
 import { UpdateAdminUserPipe } from './pipes/update-admin-user.pipe';
+import {UpdatePasswordDto} from "./dto/update-password.dto";
 
 @ApiBearerAuth()
 @ApiTags('Admin User')
@@ -94,6 +95,18 @@ export class AdminUserController {
       throw new NotFoundException('User not found');
     }
     return this.userService.update(id, updateUserDto);
+  }
+
+  @Patch(':id/update-password')
+  async updatePassword(
+    @Param('id') id: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ) {
+    const user = await this.userService.findById(id);
+    if (!user || !user.isAdmin()) {
+      throw new NotFoundException('User not found');
+    }
+    return this.userService.updatePassword(id, updatePasswordDto);
   }
 
   @Delete(':id')
