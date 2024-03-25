@@ -7,9 +7,8 @@ import {
   UserBanRequest,
   UserBanRequestDocument,
 } from './entities/user-ban-request.entity';
-import { UserDocument } from '../user/entities/user.entity';
 import { MessageDocument } from '../message/entities/message.entity';
-import { BadWord, BadWordDocument } from '../bad-word/entities/bad-word.entity';
+import { BadWordDocument } from '../bad-word/entities/bad-word.entity';
 import { UserBanRequestTypeEnum } from './enum/user-ban-request-type.enum';
 import { UserBanRequestStatusEnum } from './enum/user-ban-request-status.enum';
 import { UserBanRequestConfig } from './user-ban-request-config';
@@ -32,23 +31,30 @@ export class UserBanRequestService {
     message: MessageDocument,
     badWords: Array<BadWordDocument>,
     status = UserBanRequestStatusEnum.APPROVED,
-  ) {
+  ): Promise<UserBanRequestDocument | null> {
+    if (badWords.length === 0) {
+      return null;
+    }
     const dto = new CreateUserBanRequestDto();
-    const badWordsToSave = { badWordIds: [], badWords: [] };
+    const banRequestParams = {
+      badWordIds: [],
+      badWords: [],
+      message: message._id,
+    };
     badWords.map((badword) => {
-      badWordsToSave.badWordIds.push(badword._id);
-      badWordsToSave.badWords.push(badword.term);
+      banRequestParams.badWordIds.push(badword._id);
+      banRequestParams.badWords.push(badword.term);
     });
 
     dto.user = message.from.toString();
     dto.reason =
       'Message contains bad words: "' +
-      badWordsToSave.badWords.join('; ') +
+      banRequestParams.badWords.join('; ') +
       '"';
     dto.type = UserBanRequestTypeEnum.MESSAGE_CONTAINS_BAD_WORDS;
     dto.status = status;
     dto.duration = UserBanRequestConfig.getBanDurationByType(dto.type);
-    dto.params = badWordsToSave;
+    dto.params = banRequestParams;
 
     const createdUserBanRequest = new this.userBanRequestModel(dto);
     return createdUserBanRequest.save();

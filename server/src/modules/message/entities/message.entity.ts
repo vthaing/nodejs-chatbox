@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import {Document, ObjectId, SchemaTypes} from 'mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../../user/entities/user.entity';
 import { Channel } from '../../channels/entities/channel.entity';
@@ -46,6 +46,9 @@ export class Message {
 
   @Prop({ required: false, type: mongoose.Schema.Types.String })
   maskedText?: string;
+
+  @Prop({ ref: 'UserBanRequest', type: [SchemaTypes.ObjectId] })
+  userBanRequests?: [ObjectId];
 }
 const MessageSchema = SchemaFactory.createForClass(Message);
 MessageSchema.virtual('senderInfo', {

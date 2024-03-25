@@ -5,10 +5,15 @@ import {
   BadWord,
   BadWordDocument,
 } from '../../bad-word/entities/bad-word.entity';
+import { UserBanRequestService } from '../../user-ban-request/user-ban-request.service';
+import { UserBanRequestDocument } from '../../user-ban-request/entities/user-ban-request.entity';
 
 @Injectable()
 export class BadWordMessageFilterFactor {
-  constructor(private badWordService: BadWordService) {}
+  constructor(
+    private badWordService: BadWordService,
+    private userBanRequestService: UserBanRequestService,
+  ) {}
 
   getProfaneWords(message: MessageDocument): Promise<BadWordDocument[]> {
     return this.badWordService.findProfane(message.text);
@@ -16,12 +21,16 @@ export class BadWordMessageFilterFactor {
 
   async filterAndHandleViolateMessage(
     message: MessageDocument,
-  ): Promise<Message> {
-    await this.filterBadWords(message);
-    return message;
+  ): Promise<UserBanRequestDocument | null> {
+    return this.filterBadWords(message).then((badWords) =>
+      this.userBanRequestService.createMessageBadWordBanRequest(
+        message,
+        badWords,
+      ),
+    );
   }
 
-  filterBadWords(message: MessageDocument): Promise<BadWord[]> {
+  filterBadWords(message: MessageDocument): Promise<BadWordDocument[]> {
     return this.getProfaneWords(message).then((badWords) => {
       if (badWords.length === 0) {
         return badWords;

@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BadWordService } from '../bad-word/bad-word.service';
 import { Message, MessageDocument } from './entities/message.entity';
-import { BadWord, BadWordDocument } from '../bad-word/entities/bad-word.entity';
 import { BadWordMessageFilterFactor } from './message-filter-factor/bad-word-message-filter-factor';
 import { PhoneNumberMessageFilterFactor } from './message-filter-factor/phone-number-message-filter-factor';
 
@@ -15,13 +13,22 @@ export class MessageFilterService {
   async filterAndHandleViolateMessage(
     message: MessageDocument,
   ): Promise<Message> {
-    await this.badWordMessageFilterFactor.filterAndHandleViolateMessage(
-      message,
-    );
+    const badWordBanRequest =
+      await this.badWordMessageFilterFactor.filterAndHandleViolateMessage(
+        message,
+      );
+    if (badWordBanRequest) {
+      message.userBanRequests.push(badWordBanRequest._id);
+    }
 
-    await this.phoneNumberMessageFilterFactor.filterAndHandleViolateMessage(
-      message,
-    );
+    const phoneNumberBanRequest =
+      await this.phoneNumberMessageFilterFactor.filterAndHandleViolateMessage(
+        message,
+      );
+
+    if (phoneNumberBanRequest) {
+      message.userBanRequests.push(phoneNumberBanRequest._id);
+    }
 
     return message.save();
   }

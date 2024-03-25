@@ -8,6 +8,7 @@ import { MessageFilterService } from './message-filter.service';
 import { BadWordModule } from '../bad-word/bad-word.module';
 import { BadWordMessageFilterFactor } from './message-filter-factor/bad-word-message-filter-factor';
 import { PhoneNumberMessageFilterFactor } from './message-filter-factor/phone-number-message-filter-factor';
+import { UserBanRequestModule } from '../user-ban-request/user-ban-request.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PhoneNumberMessageFilterFactor } from './message-filter-factor/phone-nu
       },
     ]),
     AuthModule,
+    forwardRef(() => UserBanRequestModule),
     forwardRef(() => BadWordModule),
   ],
   controllers: [MessageController],
