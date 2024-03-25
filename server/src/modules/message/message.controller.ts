@@ -45,19 +45,32 @@ export class MessageController {
   ) {}
   @UseGuards(RoleGuard(Role.Admin))
   @Post()
+  @ApiOkResponse({
+    type: ChatMessage,
+  })
   create(@Req() { user }: any, @Body() createMessageDto: CreateMessageDto) {
     createMessageDto.from = (user as UserDocument).id;
-    return this.messageService.create(createMessageDto);
+    return this.messageService
+      .create(createMessageDto)
+      .then((message) => message.transformToChatBoxData());
   }
 
   @UseGuards(RoleGuard(Role.Admin))
   @Patch(':id')
+  @ApiOkResponse({
+    type: ChatMessage,
+  })
   update(@Param('id') id: string, @Body() updateMessageDto: UpdateMessageDto) {
-    return this.messageService.update(id, updateMessageDto);
+    return this.messageService
+      .update(id, updateMessageDto)
+      .then((message) => message.transformToChatBoxData());
   }
 
   @UseGuards(RoleGuard(Role.Admin))
   @Patch(':id/pin')
+  @ApiOkResponse({
+    type: ChatMessage,
+  })
   pin(@Param('id') id: string) {
     return this.messageService
       .findOne(id)
@@ -70,6 +83,9 @@ export class MessageController {
 
   @UseGuards(RoleGuard(Role.Admin))
   @Patch(':id/unpin')
+  @ApiOkResponse({
+    type: ChatMessage,
+  })
   unpin(@Param('id') id: string) {
     return this.messageService
       .findOne(id)
@@ -120,6 +136,9 @@ export class MessageController {
 
   @UseGuards(RoleGuard(Role.Admin))
   @Delete(':id')
+  @ApiOkResponse({
+    type: ChatMessage,
+  })
   remove(@Param('id') id: string) {
     return this.messageService
       .remove(id)

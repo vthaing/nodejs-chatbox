@@ -141,13 +141,13 @@ export class ChatGateway {
     await message.populate(this.messageService.getRequiredRelationProperties());
     const roomId = message.to?.toString() ?? message.conversation.toString();
     this.server.to(roomId).emit('pin-message-status-changed', message);
-    return message;
+    return message.transformToChatBoxData();
   }
 
   async emitMessageDeleted(message: MessageDocument) {
     await message.populate(this.messageService.getRequiredRelationProperties());
     const roomId = message.to?.toString() ?? message.conversation.toString();
     this.server.to(roomId).emit('message-deleted', message);
-    return message;
+    return message.transformToChatBoxData();
   }
 }

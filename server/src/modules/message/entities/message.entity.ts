@@ -6,6 +6,7 @@ import { Conversation } from '../../conversation/entities/conversation.entity';
 import { UserBanRequest } from '../../user-ban-request/entities/user-ban-request.entity';
 import { MediaItem } from '../../media-item/entities/media-item.entity';
 import { ChatMessage } from '../dto/chat-message';
+import { MessageSenderInfo } from '../dto/message-sender-info';
 
 export type MessageDocument = Message & Document;
 
@@ -107,7 +108,12 @@ MessageSchema.methods.transformToChatBoxData = function (): ChatMessage {
     id: this.id,
     to: this.to,
     conversation: this.conversation,
-    senderInfo: this.senderInfo,
+    senderInfo: {
+      id: this.senderInfo.id,
+      online: this.senderInfo.online,
+      displayName: this.senderInfo.displayName,
+      roles: this.senderInfo.roles,
+    } as MessageSenderInfo,
     messageContent: this.messageContent,
     from: this.from,
     isPinnedMessage: this.isPinnedMessage,

@@ -1,4 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { MessageSenderInfo } from './message-sender-info';
+import { MediaItem } from '../../media-item/entities/media-item.entity';
 export class ChatMessage {
   @ApiProperty()
   id: string;
@@ -7,7 +9,7 @@ export class ChatMessage {
   @ApiProperty()
   conversation?: string;
   @ApiProperty()
-  senderInfo: any;
+  senderInfo: MessageSenderInfo;
   @ApiProperty()
   messageContent: string;
   @ApiProperty()
@@ -15,10 +17,9 @@ export class ChatMessage {
   @ApiProperty()
   isPinnedMessage: boolean;
   @ApiProperty()
-  @ApiProperty()
   attachments?: [];
   @ApiProperty()
-  mediaItems?: [];
+  mediaItems?: [MediaItem];
   @ApiProperty()
   createdAt?: string;
 }

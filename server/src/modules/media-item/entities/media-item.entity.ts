@@ -1,6 +1,7 @@
 import mongoose, { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type MediaItemDocument = MediaItem & Document;
 @Schema({
@@ -12,6 +13,7 @@ export type MediaItemDocument = MediaItem & Document;
       delete ret.__v;
       ret.id = ret._id;
       delete ret._id;
+      delete ret.path;
     },
   },
 })
@@ -26,8 +28,10 @@ export class MediaItem {
   path: string;
 
   @Prop({ type: mongoose.Schema.Types.String })
+  @ApiProperty()
   mimeType: string;
 
+  @ApiProperty()
   @Prop({ type: mongoose.Schema.Types.String })
   disk: string;
 
@@ -36,8 +40,10 @@ export class MediaItem {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   })
+  @ApiProperty()
   userId;
 
+  @ApiProperty()
   @Prop({
     required: false,
     type: mongoose.Schema.Types.ObjectId,
@@ -46,9 +52,12 @@ export class MediaItem {
   messageId;
 
   @Prop({ required: false, type: mongoose.Schema.Types.Mixed })
+  @ApiProperty()
   params?: any | null;
 
+  @ApiProperty()
   width: number | null;
+  @ApiProperty()
   height: number | null;
 }
 
