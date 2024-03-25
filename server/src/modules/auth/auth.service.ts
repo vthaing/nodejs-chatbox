@@ -1,6 +1,6 @@
-import { UserDocument } from './../user/entities/user.entity';
-import { CreateUserDto } from './../user/dto/create-user.dto';
-import { UserService } from './../user/user.service';
+import { UserDocument } from '../user/entities/user.entity';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { UserService } from '../user/user.service';
 import {
   BadRequestException,
   Injectable,
@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants, jwtRefreshConstants } from './constants';
 import { UserAuthInterface } from './UserAuthInterface';
+import { ConfigService } from '@nestjs/config';
 
 export interface TokenUser {
   access_token: string;
@@ -22,6 +22,7 @@ export interface TokenUser {
 export class AuthService {
   constructor(
     private readonly userService: UserService,
+    private readonly configService: ConfigService,
     private jwtService: JwtService,
   ) {}
 
@@ -83,12 +84,12 @@ export class AuthService {
       roles: user.roles,
     };
     const accessToken = this.jwtService.sign(payload, {
-      secret: jwtConstants.secret, // unique refresh secret from environment vars
-      expiresIn: jwtConstants.expiresIn, // unique refresh expiration from environment vars
+      secret: this.configService.get('jwtSecret'),
+      expiresIn: this.configService.get('jwtExpiresIn'),
     });
     const refreshToken = this.jwtService.sign(payload, {
-      secret: jwtRefreshConstants.secret, // unique refresh secret from environment vars
-      expiresIn: jwtRefreshConstants.expiresIn, // unique refresh expiration from environment vars
+      secret: this.configService.get('jwtRefreshSecret'),
+      expiresIn: this.configService.get('jwtRefreshExpiresIn'),
     });
     return {
       access_token: accessToken,
@@ -104,9 +105,9 @@ export class AuthService {
       // }
       const payload = await this.jwtService.verifyAsync<
         Omit<UserDocument, 'password'>
-      >(refreshToken, { secret: jwtRefreshConstants.secret });
+      >(refreshToken, { secret: this.configService.get('jwtRefreshSecret') });
       const accessToken = this.jwtService.sign(payload, {
-        secret: jwtConstants.secret, // unique refresh secret from environment vars
+        secret: this.configService.get('jwtSecret'),
       });
 
       return {
