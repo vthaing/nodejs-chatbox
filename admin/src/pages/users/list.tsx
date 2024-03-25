@@ -67,8 +67,13 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                         );
                     }}
                 />
-                <Table.Column dataIndex="createdAt" title="Is Online"
-                      render={(_, record: IUser) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
+                <Table.Column dataIndex="isBanned" title="Is Banned"
+                      render={(_, record: IUser) => (
+                          <TagField color={record.isBanned ? 'red' : 'green'} value={record.isBanned ? 'Banned' : 'No'}/>
+                      )}
+                />
+                <Table.Column dataIndex="createdAt" title="Created At"
+                              render={(_, record: IUser) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
                 />
                 <Table.Column<IUser>
                     title="Actions"
