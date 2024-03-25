@@ -38,12 +38,36 @@
 
   <main role="main">
 
+    <div class="container">
+      <div class="row">
+        <div class="row" id="user-info">
+          <form id="user-form">
+            <div class="form-group">
+              <label for="user-id">User ID</label>
+              <input required type="text" class="form-control" id="user-id" aria-describedby="emailHelp" placeholder="Brand user id">
+              <small id="emailHelp" class="form-text text-muted">This is the ID of the user on the brand</small>
+            </div>
+            <div class="form-group">
+              <label for="user-display-name">Display Name</label>
+              <input type="text" required class="form-control" id="user-display-name" aria-describedby="displayNameHelp" placeholder="Tyson">
+              <small id="displayNameHelp" class="form-text text-muted">This is the username will display on the chat box</small>
+            </div>
+            <div class="form-group">
+              <button type="submit">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <section class="jumbotron text-center">
-      <div class="container">
+      <div id="chatbox-container" style="display: none" class="container">
         <div class="row">
+          <h2>Open new anonymous browser or use another browser to init chats via a new user. The chat box doesn't support multiple users on a browser</h2>
+        </div>
+        <div  class="row">
           <div class="col-md-6">
             <h2>Chat box for channel 1</h2>
-            <div class="chatbox "
+            <div class="chatbox"
                  data-brand-id="63b109ab1d33d74995325a91"
                  data-user-id="tyson"
                  data-user-display-name="tyson"
@@ -58,8 +82,6 @@
             <h2>Chat box for channel 2</h2>
             <div class="chatbox"
                  data-brand-id="63b109ab1d33d74995325a91"
-                 data-user-id="tyson"
-                 data-user-display-name="tyson"
                  data-chat-name="Example Chat 2"
                  data-channel-id="C126"
                  data-channel-name="Channel 2 - Example Chat 2"
@@ -88,8 +110,41 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   <script src="http://localhost:3000/chat-box.js"></script>
   <script>
-    var chatBoxObject = new chatBoxesManagement();
-    chatBoxObject.initChatBoxFromSelector('.chatbox');
+    var initChatboxes = function() {
+      var chatBoxObject = new chatBoxesManagement();
+      chatBoxObject.initChatBoxFromSelector('.chatbox');
+      document.getElementById('chatbox-container').style.display = 'block';
+      document.getElementById('user-info').style.display = 'none';
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      var userId = localStorage.getItem('userId');
+      var userDisplayName = localStorage.getItem('userDisplayName')
+
+      if (userId && userDisplayName) {
+        var chatBoxes = document.querySelectorAll('.chatbox')
+        for (var chatBox of chatBoxes) {
+          chatBox.dataset.userId = userId;
+          chatBox.dataset.userDisplayName = userDisplayName;
+        }
+        initChatboxes();
+      }
+    });
+
+    document.getElementById('user-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      localStorage.setItem('userId', document.getElementById('user-id').value);
+      localStorage.setItem('userDisplayName', document.getElementById('user-display-name').value)
+
+      var chatBoxes = document.querySelectorAll('.chatbox')
+      for (var chatBox of chatBoxes) {
+        chatBox.dataset.userId = document.getElementById('user-id').value;
+        chatBox.dataset.userDisplayName = document.getElementById('user-display-name').value;
+      }
+
+      initChatboxes();
+
+    })
   </script>
 </body>
 
