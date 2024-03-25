@@ -6,7 +6,6 @@ import {
     TextField,
     useTable,
     Space,
-    EditButton,
     ShowButton, TagField, FilterDropdownProps, FilterDropdown, Select, useSelect, Input,
 } from "@pankod/refine-antd";
 

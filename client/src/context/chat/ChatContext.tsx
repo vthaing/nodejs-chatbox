@@ -73,6 +73,7 @@ export interface IMediaItem {
     userId: string;
     imageWidth: number | null;
     imageHeight: number | null
+    params: any;
 }
 
 

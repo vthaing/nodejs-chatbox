@@ -30,6 +30,7 @@ export const UploadingAttachments: React.FC<UploadingAttachmentsProps> = ({messa
     const uploadFiles = useCallback(() => {
         fileList.forEach((attachment, index) => {
             const form = new FormData();
+            form.append('uid', attachment.uid);
             form.append('file', attachment.originFileObj as RcFile);
             axios.post(
                 process.env.REACT_APP_API_URL + `/message/${message.id}/upload-attachment`,

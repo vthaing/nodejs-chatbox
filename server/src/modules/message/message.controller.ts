@@ -104,12 +104,14 @@ export class MessageController {
     )
     file: Express.Multer.File,
     @Param('id') id: string,
+    @Body() messageAttachmentDto: MessageAttachmentDto,
     @Req() req: RequestWithUserInterface,
   ) {
     const mediaItem = await this.messageService.attachMediaItem(
       id,
       req.user.id,
       file,
+      messageAttachmentDto.uid,
     );
 
     await this.chatGateway.emitMediaItemUploaded(mediaItem);

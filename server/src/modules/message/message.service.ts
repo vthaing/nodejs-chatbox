@@ -58,6 +58,7 @@ export class MessageService {
     messageId: string,
     userId: string,
     uploadedFile: Express.Multer.File,
+    uid?: string | null,
   ) {
     const message = await this.messageModel.findById(messageId).exec();
     if (!message) {
@@ -71,6 +72,7 @@ export class MessageService {
     return await this.mediaItemService.createMessageAttachment(
       message,
       uploadedFile,
+      uid,
     );
   }
 }

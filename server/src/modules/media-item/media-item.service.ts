@@ -26,6 +26,7 @@ export class MediaItemService {
   async createMessageAttachment(
     message: MessageDocument,
     file: Express.Multer.File,
+    uid?: string | null,
   ) {
     const dto = new CreateMediaItemDto();
     dto.messageId = message.id;
@@ -35,6 +36,7 @@ export class MediaItemService {
     dto.size = file.size;
     dto.mimeType = file.mimetype;
     dto.params = sizeOf(file.buffer);
+    dto.params['uid'] = uid;
 
     const mediaItem = await this.create(dto);
     message.mediaItemIds.push(mediaItem.id);

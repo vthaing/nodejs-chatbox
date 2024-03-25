@@ -1,8 +1,12 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class MessageAttachmentDto {
   @ApiProperty({ type: 'string', format: 'binary' })
-  @IsNotEmpty()
+  @IsOptional()
   file: Express.Multer.File;
+
+  @ApiProperty({ type: 'string' })
+  @IsOptional()
+  uid?: string | null;
 }

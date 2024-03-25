@@ -14,7 +14,7 @@ import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { MessageFilterService } from '../message/message-filter.service';
-import {MediaItem} from "../media-item/entities/media-item.entity";
+import { MediaItem } from '../media-item/entities/media-item.entity';
 
 interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
