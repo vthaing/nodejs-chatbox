@@ -11,9 +11,10 @@ export const MessageMediaItems: React.FC<MessageMediaItemsProps> = ({mediaItems}
     const smallItemStyles: React.CSSProperties = {
         cursor: 'pointer',
         objectFit: 'cover',
-        width: '100%',
-        maxHeight: '100%',
-        border: "1px solid #d9d9d9", borderRadius: 5,
+        maxHeight: "100px",
+        maxWidth: "100px",
+        border: "1px solid #d9d9d9",
+        borderRadius: 5,
         margin: 3, padding: 3
     }
     return (
@@ -22,7 +23,7 @@ export const MessageMediaItems: React.FC<MessageMediaItemsProps> = ({mediaItems}
                 style={{
                     display: 'grid',
                     gridTemplateColumns: '100px 100px 100px',
-                    gridTemplateRows: '100px 100px',
+                    gridTemplateRows: '100px',
                     gridGap: 12,
                 }}
             >
