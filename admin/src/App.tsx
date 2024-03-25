@@ -11,7 +11,6 @@ import routerProvider from "@pankod/refine-react-router-v6";
 
 import "@pankod/refine-antd/dist/reset.css";
 
-import { PostList, PostEdit, PostShow } from "pages/posts";
 import { DashboardPage } from "pages/dashboard";
 import {UserEdit, UserList, UserShow} from "./pages/users";
 import {API_URL} from "./constants";
@@ -52,7 +51,6 @@ const App: React.FC = () => {
                     list: UserList,
                     // edit: UserEdit,
                     show: UserShow,
-                    canDelete: true
                 },
                 {
                     name: "channels",
