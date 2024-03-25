@@ -56,7 +56,7 @@ export class BrandAuthService {
     }
 
     if (!this.getRequestNonce(req)) {
-      throw new UnauthorizedException('Invalid X-nonce');
+      throw new UnauthorizedException('Invalid X-Nonce');
     }
 
     return true;
@@ -84,8 +84,9 @@ export class BrandAuthService {
 
   generateToken(req, brand: BrandDocument): string {
     const requestProperties = {
-      ...this.getRequestPayload(req),
-      'X-nonce': this.getRequestNonce(req),
+      //TODO: Should we use the payload for more secure?
+      // ...this.getRequestPayload(req),
+      'X-Nonce': this.getRequestNonce(req),
       'X-Timestamp': this.getRequestTimestamp(req),
       'X-Brand-Id': this.getRequestBrandId(req),
     };
@@ -93,7 +94,6 @@ export class BrandAuthService {
       .sort()
       .reduce((accumulator, key) => {
         accumulator[key] = requestProperties[key];
-
         return accumulator;
       }, {});
     const requestString = new URLSearchParams(

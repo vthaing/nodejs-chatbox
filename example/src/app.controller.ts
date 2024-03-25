@@ -2,6 +2,10 @@ import { Controller, Get, Render, Req } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import * as crypto from 'crypto';
+
+const BRAND_AUTH_HASH_ALGORITHM = 'sha1';
+const BRAND_AUTH_HASH_DIGEST = 'hex';
 
 @Controller()
 export class AppController {
@@ -18,13 +22,36 @@ export class AppController {
     }
   }
 
-  generateToken(chatBoxData) {}
+  generateToken(chatBoxData) {
+    const headerMissingToken = {
+      'X-Nonce': chatBoxData['xNonce'],
+      'X-Timestamp': chatBoxData['timestamp'],
+      'X-Brand-Id': chatBoxData['brandId'],
+    };
+
+    const sortedRequestProperties = Object.keys(headerMissingToken)
+        .sort()
+        .reduce((accumulator, key) => {
+          accumulator[key] = headerMissingToken[key];
+          return accumulator;
+        }, {});
+    const requestString = new URLSearchParams(
+        sortedRequestProperties,
+    ).toString();
+
+    return crypto
+        .createHmac(
+            BRAND_AUTH_HASH_ALGORITHM,
+            this.configService.get('chatBoxSecretKey'),
+        )
+        .update(requestString)
+        .digest(BRAND_AUTH_HASH_DIGEST);
+  }
 
   getChatBoxesData(req: Request) {
-    return [
+    const chatBoxesData = [
       {
         brandId: this.configService.get('brandId'),
-        secretKey: this.configService.get('chatBoxSecretKey'),
         chatName: 'Crypto future trade',
         channelId: 'Future_123',
         channelName: 'Crypto future trade',
@@ -34,11 +61,9 @@ export class AppController {
         userDisplayName: req.query.userDisplayName,
         timestamp: Date.now() / 1000,
         xNonce: randomStringGenerator(),
-        token: 'sdsdsd',
       },
       {
         brandId: this.configService.get('brandId'),
-        secretKey: this.configService.get('chatBoxSecretKey'),
         chatName: 'Crypto margin trade',
         channelId: 'TAMCHUYEN_456',
         channelName: 'Crypto margin trade',
@@ -48,8 +73,13 @@ export class AppController {
         userDisplayName: req.query.userDisplayName,
         timestamp: Date.now() / 1000,
         xNonce: randomStringGenerator(),
-        token: 'sdsdsd',
       },
     ];
+
+    for (const i in chatBoxesData) {
+      chatBoxesData[i]['token'] = this.generateToken(chatBoxesData[i]);
+    }
+
+    return chatBoxesData;
   }
 }
