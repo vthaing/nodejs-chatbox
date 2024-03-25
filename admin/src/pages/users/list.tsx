@@ -1,4 +1,4 @@
-import { IResourceComponentsProps, useMany } from "@pankod/refine-core";
+import {IResourceComponentsProps, useMany, useNavigation} from "@pankod/refine-core";
 
 import {
     List,
@@ -6,15 +6,17 @@ import {
     TextField,
     useTable,
     Space,
-    EditButton,
-    ShowButton,
+    ShowButton, Tag, TagField,
 } from "@pankod/refine-antd";
 
 import {IBrand, IUser} from "interfaces";
 import dayjs from "dayjs";
+import {Link} from "@pankod/refine-react-router-v6";
 
 export const UserList: React.FC<IResourceComponentsProps> = () => {
     const { tableProps } = useTable<IUser>();
+
+    const { editUrl: generateEditUrl } = useNavigation();
 
     const getBrandIds = (): string[] => {
         let result: string[] = [];
@@ -46,22 +48,22 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                   render={(_, record: IUser) => (record.online ? 'Yes' : 'No')}
                 />
                 <Table.Column
-                    title="Category"
+                    title="Brand"
                     render={(record) => {
                         if (isLoading) {
                             return <TextField value="Loading..." />;
                         }
 
-                        console.log(brands);
-
                         return (
-                            <TextField
-                                value={
-                                    brands?.data.find(
-                                        (item) => record.brandId === item.id,
-                                    )?.name
-                                }
-                            />
+                            <Link  to={generateEditUrl('brands', record.brandId)}>
+                                <TagField
+                                    value={
+                                        brands?.data.find(
+                                            (item) => record.brandId === item.id,
+                                        )?.name
+                                    }
+                                />
+                            </Link>
                         );
                     }}
                 />
