@@ -17,7 +17,8 @@
 - Redis
 - ReactJS
 - TypeScript
-- 
+- NestJS
+- Refine.dev
 
 ### Các thành phần cần thiết để deploy Chat Box:
 
