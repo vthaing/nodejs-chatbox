@@ -6,13 +6,14 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
+  UseGuards, Req,
 } from '@nestjs/common';
 import { ConversationService } from './conversation.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import {Request} from "express";
 
 @ApiBearerAuth()
 @ApiTags('Conversation')
@@ -27,8 +28,15 @@ export class ConversationController {
   }
 
   @Get()
-  findAll() {
-    return this.conversationService.findAll();
+  findAll(@Req() req: Request) {
+    const params: any = {};
+    if (req.query.id) {
+      params._id = { $in: req.query.id };
+    }
+    if (req.query.brandId) {
+      params.brandId = { $in: req.query.brandId };
+    }
+    return this.conversationService.findAll(params);
   }
 
   //@TODO: should move this route to the user module. The URL should be: user/:userId/conversation
