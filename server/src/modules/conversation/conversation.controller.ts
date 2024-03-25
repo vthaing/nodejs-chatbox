@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 @ApiBearerAuth()
 @ApiTags('Conversation')
 @UseGuards(JwtAuthGuard)
-@Controller('conversations')
+@Controller('conversation')
 export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
 
@@ -31,8 +31,8 @@ export class ConversationController {
     return this.conversationService.findAll();
   }
 
-  //@TODO: should move this route to the user module. The URL should be: user/:userId/conversations
-  @Get('user-conversations/:userId')
+  //@TODO: should move this route to the user module. The URL should be: user/:userId/conversation
+  @Get('user-conversation/:userId')
   findAllUserConversations(@Param('userId') userId: string) {
     return this.conversationService.findAll({ members: { $all: [userId] } });
   }

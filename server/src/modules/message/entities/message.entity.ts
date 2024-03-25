@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { User, UserDocument } from '../../user/entities/user.entity';
-import { Conversation } from '../../conversations/entities/conversation.entity';
+import { Conversation } from '../../conversation/entities/conversation.entity';
 import {
   UserBanRequest,
   UserBanRequestDocument,

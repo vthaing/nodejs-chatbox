@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 import { MessageModule } from './modules/message/message.module';
 import { UserModule } from './modules/user/user.module';
 import { ChatModule } from './modules/chat/chat.module';
-import { ConversationModule } from './modules/conversations/conversation.module';
+import { ConversationModule } from './modules/conversation/conversation.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BadWordModule } from './modules/bad-word/bad-word.module';
 import { RestrictedIpModule } from './modules/restricted-ip/restricted-ip.module';

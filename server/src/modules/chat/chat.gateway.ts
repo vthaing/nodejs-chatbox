@@ -12,7 +12,7 @@ import {
 import { getUserFromWSToken } from '../auth/utils/validate-user-ws';
 import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
-import { ConversationService } from '../conversations/conversation.service';
+import { ConversationService } from '../conversation/conversation.service';
 import { MessageFilterService } from '../message/message-filter.service';
 
 interface SocketWithUserData extends Socket {
@@ -56,7 +56,7 @@ export class ChatGateway {
 
       console.log(userFromSocket.id);
       this.server.emit('online-users', connectedUsers);
-      this.server.emit('user-conversations', userConversations);
+      this.server.emit('user-conversation', userConversations);
     } catch (e) {
       logger.error(
         'Socket disconnected within handleConnection() in AppGateway:',
