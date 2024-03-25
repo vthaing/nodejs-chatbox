@@ -35,3 +35,11 @@ export interface IBadWord {
     categoriesLabel: [string];
     createdAt: string
 }
+
+export interface IRestrictedIp {
+    id: string;
+    ip: string;
+    enabled: boolean;
+    notes?: string;
+    createdAt: string
+}

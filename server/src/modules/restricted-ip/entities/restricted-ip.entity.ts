@@ -18,10 +18,10 @@ export class RestrictedIp {
   ip: string;
 
   @Prop({ type: mongoose.Schema.Types.Boolean })
-  status: boolean;
+  enabled: boolean;
 
   @Prop({ type: mongoose.Schema.Types.String })
-  notes?: boolean;
+  notes?: string;
 }
 
 export const RestrictedIpSchema = SchemaFactory.createForClass(RestrictedIp);
