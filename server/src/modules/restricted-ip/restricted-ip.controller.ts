@@ -21,6 +21,7 @@ import Role from '../user/role.enum';
 import { PagingService } from '../common/service/paging.service';
 import { Request } from 'express';
 import { PagingRestrictedIpDto } from './dto/paging-restricted-ip.dto';
+import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
 
 @Controller('restricted-ips')
 @ApiBearerAuth()
@@ -34,7 +35,10 @@ export class RestrictedIpController {
   ) {}
 
   @Post()
-  create(@Body() createRestrictedIpDto: CreateRestrictedIpDto) {
+  async create(@Body() createRestrictedIpDto: CreateRestrictedIpDto) {
+    if (!(await this.validateUniqueIp(createRestrictedIpDto.ip))) {
+      throw new BadRequestException('The IP is already existed');
+    }
     return this.restrictedIpService.create(createRestrictedIpDto);
   }
 
@@ -57,15 +61,32 @@ export class RestrictedIpController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateRestrictedIpDto: UpdateRestrictedIpDto,
   ) {
+    if (!(await this.validateUniqueIp(updateRestrictedIpDto.ip))) {
+      throw new BadRequestException('The IP is already existed');
+    }
     return this.restrictedIpService.update(id, updateRestrictedIpDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.restrictedIpService.remove(id);
+  }
+
+  async validateUniqueIp(ip: string, recordId?: string | null) {
+    const existedIp = await this.restrictedIpService.findOneBy({
+      ip: { $regex: new RegExp(`^${ip}`), $options: 'i' },
+    });
+    if (existedIp) {
+      if (!recordId) {
+        return false;
+      } else {
+        return recordId.toString() === ip;
+      }
+    }
+    return true;
   }
 }
