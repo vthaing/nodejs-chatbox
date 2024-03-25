@@ -3,7 +3,7 @@ import {IUser} from "../../interfaces";
 import {Button, Popconfirm} from "antd";
 import {CheckOutlined, StopOutlined} from "@ant-design/icons";
 import {useApiUrl, useCustom, useCustomMutation, useUpdate} from "@pankod/refine-core";
-import {Form, Input, Modal, useForm, useModal} from "@pankod/refine-antd";
+import {Form, Input, InputNumber, Modal, useForm, useModal} from "@pankod/refine-antd";
 
 type ButtonBanUserProps = {
     record: IUser
@@ -13,10 +13,6 @@ type ButtonBanUserProps = {
 export const ButtonBanUser: React.FC<ButtonBanUserProps> = ({record, onSuccess}) => {
 
     const [form] = Form.useForm();
-    const [formValues, setFormValues] = useState({
-        reason: '',
-        duration: null
-    });
 
     const apiUrl = useApiUrl();
     const [open, setOpen] = useState(false);
@@ -31,15 +27,6 @@ export const ButtonBanUser: React.FC<ButtonBanUserProps> = ({record, onSuccess})
             onSuccess: onSuccess,
         });
     }
-
-    const handleOnChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
-        setFormValues({
-            ...formValues,
-            [e.target.name]: e.target.value,
-        });
-    };
 
     const onOk = () => {
         form.submit();
@@ -68,10 +55,10 @@ export const ButtonBanUser: React.FC<ButtonBanUserProps> = ({record, onSuccess})
             >
                 <Form form={form} onFinish={handleFormSubmit}>
                     <Form.Item label="Reason" name="reason">
-                        <Input onChange={handleOnChange} />
+                        <Input />
                     </Form.Item>
-                    <Form.Item label="Duration" name="duration">
-                        <Input placeholder={'Empty is meaning ban forever'} onChange={handleOnChange} type={'number'} />
+                    <Form.Item help={'Empty is meaning Ban forever'} label="Duration" name="duration" rules={[{type: "number", min: 1}]}>
+                        <InputNumber />
                     </Form.Item>
                 </Form>
             </Modal>
