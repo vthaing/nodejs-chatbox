@@ -1,4 +1,10 @@
-import {IResourceComponentsProps, useMany, useNavigation, useResourceWithRoute} from "@pankod/refine-core";
+import {
+    getDefaultFilter,
+    IResourceComponentsProps,
+    useMany,
+    useNavigation,
+    useResourceWithRoute
+} from "@pankod/refine-core";
 
 import {
     List,
@@ -6,7 +12,7 @@ import {
     TextField,
     useTable,
     Space,
-    ShowButton, Tag, TagField,
+    ShowButton, TagField, useSelect, FilterDropdownProps, FilterDropdown, Select,
 } from "@pankod/refine-antd";
 
 import {IBrand, IUser} from "interfaces";
@@ -17,9 +23,19 @@ import {ButtonUnbanUser} from "./button-unban-user";
 import {ButtonBanUser} from "./button-ban-user";
 
 export const UserList: React.FC<IResourceComponentsProps> = () => {
-    const { tableProps } = useTable<IUser>();
+    const { tableProps, filters } = useTable<IUser>({
+        syncWithLocation: true,
+    });
 
     const { editUrl: generateEditUrl } = useNavigation();
+
+
+    const { selectProps: brandSelectProps } = useSelect<IBrand>({
+        resource: "brands",
+        optionLabel: "name",
+        optionValue: "id",
+        defaultValue: getDefaultFilter("brandId", filters, "in"),
+    });
 
     const getBrandIds = (): string[] => {
         let result: string[] = [];
@@ -45,7 +61,7 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
     return (
         <List>
             <Table {...tableProps} rowKey="id">
-                <Table.Column dataIndex="id" title="ID" />
+                <Table.Column dataIndex="id" title="ID"  />
                 <Table.Column dataIndex="externalId" title="External ID" />
                 <Table.Column dataIndex="displayName" title="Display Name" />
                 <Table.Column dataIndex="online" title="Is Online"
@@ -53,23 +69,45 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                 />
                 <Table.Column
                     title="Brand"
-                    render={(record) => {
+                    dataIndex={'brandId'}
+                    render={(_, record: IUser) => {
+
                         if (isLoading) {
                             return <TextField value="Loading..." />;
                         }
 
                         return (
-                            <Link  to={generateEditUrl('brands', record.brandId)}>
-                                <TagField
-                                    value={
-                                        brands?.data.find(
-                                            (item) => record.brandId === item.id,
-                                        )?.name
-                                    }
-                                />
-                            </Link>
+                            <>
+                                {
+                                    record?.brandId &&
+                                    <Link  to={generateEditUrl('brands', record.brandId)}>
+                                        <TagField
+                                            value={
+                                                brands?.data.find(
+                                                    (item) => record.brandId === item.id,
+                                                )?.name
+                                            }
+                                        />
+                                    </Link>
+                                }
+                            </>
                         );
                     }}
+                    filterDropdown={(props: FilterDropdownProps) => (
+                        <FilterDropdown
+                            {...props}
+                        >
+                            <Select
+                                style={{ minWidth: 200 }}
+                                {...brandSelectProps}
+                            />
+                        </FilterDropdown>
+                    )}
+                    defaultFilteredValue={getDefaultFilter(
+                        "brandId",
+                        filters,
+                        "in",
+                    )}
                 />
                 <Table.Column dataIndex="isBanned" title="Is Banned"
                       render={(_, record: IUser) => (
