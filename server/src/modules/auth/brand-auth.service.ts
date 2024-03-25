@@ -3,6 +3,7 @@ import { BrandService } from '../brand/brand.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import * as crypto from 'crypto';
+import {UserAuthInterface} from "./UserAuthInterface";
 
 const BRAND_AUTH_HASH_ALGORITHM = 'sha1';
 const BRAND_AUTH_HASH_DIGEST = 'hex';
@@ -11,7 +12,9 @@ const BRAND_AUTH_HASH_DIGEST = 'hex';
 export class BrandAuthService {
   constructor(private readonly brandService: BrandService) {}
 
-  async validateBrandAuthRequest(req: Request): Promise<BrandDocument | null> {
+  async validateBrandAuthRequest(
+    req: Request,
+  ): Promise<UserAuthInterface | null> {
     if (!this.validateRequestData(req)) {
       throw new UnauthorizedException('Invalid brand auth request');
     }
@@ -32,7 +35,11 @@ export class BrandAuthService {
       throw new UnauthorizedException('Invalid token');
     }
 
-    return brand;
+    return {
+      displayName: brand.name,
+      id: brand.id,
+      online: false,
+    } as UserAuthInterface;
   }
 
   validateToken(req, brand: BrandDocument): boolean {

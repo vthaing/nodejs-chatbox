@@ -10,6 +10,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants, jwtRefreshConstants } from './constants';
+import { UserAuthInterface } from './UserAuthInterface';
 
 export interface TokenUser {
   access_token: string;
@@ -27,7 +28,7 @@ export class AuthService {
   async validateUser(
     email: string,
     password: string,
-  ): Promise<Pick<UserDocument, 'online' & 'username' & 'email'> | null> {
+  ): Promise<UserAuthInterface | null> {
     const user = await this.userService.findOne({ email });
     if (!user || user.isBanned) {
       return;
@@ -35,8 +36,11 @@ export class AuthService {
     // compare the password hash
     const isPasswordCorrect = bcrypt.compareSync(password, user.password);
     if (isPasswordCorrect) {
-      const { online, username, email, id } = user; // do not select the password
-      return { online, username, email, id };
+      return {
+        online: user.online,
+        id: user.id,
+        displayName: user.displayName,
+      } as UserAuthInterface;
     }
     return null;
   }
@@ -53,7 +57,7 @@ export class AuthService {
 
   async validateByUsername(
     username: string,
-  ): Promise<Pick<UserDocument, 'online' & 'displayName'> | null> {
+  ): Promise<UserAuthInterface | null> {
     const user = await this.userService.findOne({ username });
     if (user && !user.isBanned) {
       const { online, displayName, id } = user;
@@ -64,7 +68,7 @@ export class AuthService {
 
   async validateByUserId(
     id: string,
-  ): Promise<Pick<UserDocument, 'online' & 'displayName'> | null> {
+  ): Promise<UserAuthInterface | null> {
     const user = await this.userService.findById(id);
     if (user && !user.isBanned) {
       const { online, displayName, id } = user;
