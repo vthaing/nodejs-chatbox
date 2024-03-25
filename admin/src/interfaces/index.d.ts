@@ -65,3 +65,21 @@ export interface IUserBanRequest {
     params: {};
     createdAt: string
 }
+
+export interface IBrandChannel {
+    id: string;
+    name?: string;
+    brandId: string;
+    externalId: string;
+    createdAt: string
+}
+
+export interface IBrandRoom {
+    id: string;
+    name?: string;
+    brandId: string;
+    externalId: string;
+    createdAt: string
+    brandChannelId: string;
+    externalBrandChannelId: string;
+}

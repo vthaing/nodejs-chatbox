@@ -6,13 +6,14 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
+  UseGuards, Req,
 } from '@nestjs/common';
 import { BrandChannelService } from './brand-channel.service';
 import { CreateBrandChannelDto } from './dto/create-brand-channel.dto';
 import { UpdateBrandChannelDto } from './dto/update-brand-channel.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import {Request} from "express";
 
 @ApiBearerAuth()
 @ApiTags('Brand Channel')
@@ -27,8 +28,15 @@ export class BrandChannelController {
   }
 
   @Get()
-  findAll() {
-    return this.brandChannelService.findAll();
+  findAll(@Req() req: Request) {
+    const params: any = {};
+    if (req.query.id) {
+      params._id = { $in: req.query.id };
+    }
+    if (req.query.brandId) {
+      params.brandId = { $in: req.query.brandId };
+    }
+    return this.brandChannelService.findAll(params);
   }
 
   @Get(':id')
