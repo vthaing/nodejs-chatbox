@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import {Link} from "@pankod/refine-react-router-v6";
 import {ButtonBanUser} from "./button-ban-user";
 import {ButtonUnbanUser} from "./button-unban-user";
+import React from "react";
 
 
 const { Title, Text } = Typography;
@@ -57,6 +58,22 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
                 enabled: !!record,
             },
         });
+
+    const displayBannedStatus = (user: IUser) => {
+        if (!user.isBanned) {
+            return <TagField color="green" value="No"/>
+        }
+        let text = '';
+        if (user.bannedFrom) {
+            text = 'From ' + dayjs(user.bannedFrom).format('H:mm:ss MMM DD, YYYY');
+        }
+        if (user.bannedTo) {
+            text += ' To ' +  dayjs(user.bannedTo).format('H:mm:ss MMM DD, YYYY');
+        } else {
+            text += ' To: Until admin unban';
+        }
+        return <TagField color="red" value={text}/>
+    }
 
     return (
         <Show isLoading={isLoading}
@@ -110,7 +127,7 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
                     <Text>{record && (record.online ? 'Yes' : 'No')}</Text>
 
                     <Title level={5}>Is Banned</Title>
-                    <TagField color={record && (record.isBanned ? 'red' : 'green')} value={record && (record.isBanned ? 'Banned' : 'No')}></TagField>
+                    {record && displayBannedStatus(record)}
 
                     <Title level={5}>Created At</Title>
                     <Text>{dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY')}</Text>

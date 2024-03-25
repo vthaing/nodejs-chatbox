@@ -37,6 +37,22 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
         defaultValue: getDefaultFilter("brandId", filters, "in"),
     });
 
+    const displayBannedStatus = (user: IUser) => {
+        if (!user.isBanned) {
+            return <TagField color="green" value="No"/>
+        }
+        let text = '';
+        if (user.bannedFrom) {
+            text = 'From ' + dayjs(user.bannedFrom).format('H:mm:ss MMM DD, YYYY');
+        }
+        if (user.bannedTo) {
+            text += ' To ' +  dayjs(user.bannedTo).format('H:mm:ss MMM DD, YYYY');
+        } else {
+            text += ' To: Until admin unban';
+        }
+        return <TagField color="red" value={text}/>
+    }
+
     const getBrandIds = (): string[] => {
         let result: string[] = [];
         tableProps?.dataSource?.map(function (user: IUser) {
@@ -137,7 +153,7 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                 />
                 <Table.Column dataIndex="isBanned" title="Is Banned"
                       render={(_, record: IUser) => (
-                          <TagField color={record.isBanned ? 'red' : 'green'} value={record.isBanned ? 'Banned' : 'No'}/>
+                          displayBannedStatus(record)
                       )}
                       filterMultiple={false}
                       filters={[
