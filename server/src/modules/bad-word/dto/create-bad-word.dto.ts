@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 export class CreateBadWordDto {
   @ApiProperty({ required: true })
@@ -6,6 +6,6 @@ export class CreateBadWordDto {
   term: string;
 
   @ApiProperty({ required: false })
-  @IsArray()
+  @IsOptional()
   categories?: Array<string>;
 }

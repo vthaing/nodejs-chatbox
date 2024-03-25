@@ -6,7 +6,7 @@ export class CreateRestrictedIpDto {
   @IsNotEmpty()
   ip: string;
   @ApiProperty({ required: true })
-  @IsNotEmpty()
+  @IsOptional()
   enabled: boolean;
   @ApiProperty({ required: false })
   @IsOptional()

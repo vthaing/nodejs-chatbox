@@ -65,7 +65,7 @@ export class RestrictedIpController {
     @Param('id') id: string,
     @Body() updateRestrictedIpDto: UpdateRestrictedIpDto,
   ) {
-    if (!(await this.validateUniqueIp(updateRestrictedIpDto.ip))) {
+    if (!(await this.validateUniqueIp(updateRestrictedIpDto.ip, id))) {
       throw new BadRequestException('The IP is already existed');
     }
     return this.restrictedIpService.update(id, updateRestrictedIpDto);
