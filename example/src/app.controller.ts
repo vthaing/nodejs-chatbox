@@ -24,7 +24,7 @@ export class AppController {
 
   generateToken(chatBoxData) {
     const headerMissingToken = {
-      'n-nonce': chatBoxData['xNonce'],
+      'x-nonce': chatBoxData['xNonce'],
       'x-timestamp': chatBoxData['timestamp'],
       'x-brand-id': chatBoxData['brandId'],
     };
@@ -59,7 +59,7 @@ export class AppController {
         channelRoomName: 'Crypto future trade',
         userId: req.query.userId,
         userDisplayName: req.query.userDisplayName,
-        timestamp: Date.now() / 1000,
+        timestamp: Date.now(),
         xNonce: randomStringGenerator(),
       },
       {
@@ -71,7 +71,7 @@ export class AppController {
         channelRoomName: 'Room tám chuyện',
         userId: req.query.userId,
         userDisplayName: req.query.userDisplayName,
-        timestamp: Date.now() / 1000,
+        timestamp: Date.now(),
         xNonce: randomStringGenerator(),
       },
     ];
