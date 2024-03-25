@@ -8,15 +8,17 @@ export type MessageMediaItemsProps = {
 export const MessageMediaItems: React.FC<MessageMediaItemsProps> = ({mediaItems}) => {
 
     return (
-        <Image.PreviewGroup>
-            {mediaItems.map((mediaItem) => (
-                <Image src={process.env.REACT_APP_API_URL + mediaItem.url}
-                   style={{
-                       maxHeight: 100, maxWidth: 100, margin: 2, padding: 3,
-                       border: "1px solid #d9d9d9", borderRadius: 5
-                    }}
-                />
-            ))}
-        </Image.PreviewGroup>
+        <div className={'message-media-items'}>
+            <Image.PreviewGroup>
+                {mediaItems.map((mediaItem) => (
+                    <Image className={'message-media-item'} src={process.env.REACT_APP_API_URL + mediaItem.url}
+                       style={{
+                           maxHeight: 100, maxWidth: 100, margin: 2, padding: 3,
+                           border: "1px solid #d9d9d9", borderRadius: 5
+                        }}
+                    />
+                ))}
+            </Image.PreviewGroup>
+        </div>
     )
 }
