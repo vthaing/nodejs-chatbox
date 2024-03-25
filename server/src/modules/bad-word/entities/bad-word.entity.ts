@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import mongoose from 'mongoose';
 import { BadWordCategoryEnum } from '../bad-word-category.enum';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export type BadWordDocument = BadWord & Document;
 
@@ -30,4 +31,7 @@ export class BadWord {
   }
 }
 
-export const BadWordSchema = SchemaFactory.createForClass(BadWord);
+const BadWordSchema = SchemaFactory.createForClass(BadWord);
+BadWordSchema.plugin(mongoosePaginate);
+
+export { BadWordSchema };

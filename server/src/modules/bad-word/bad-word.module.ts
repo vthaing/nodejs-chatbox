@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { BadWordService } from './bad-word.service';
 import { BadWordController } from './bad-word.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BadWord, BadWordSchema } from './entities/bad-word.entity';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { BadWord, BadWordSchema } from './entities/bad-word.entity';
         schema: BadWordSchema,
       },
     ]),
+    forwardRef(() => CommonModule),
   ],
   controllers: [BadWordController],
   providers: [BadWordService],

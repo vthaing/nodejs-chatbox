@@ -47,7 +47,6 @@ export class RestrictedIpService {
   }
 
   findOneBy(params): Promise<RestrictedIpDocument> {
-    console.log(params, 'searchsdsdsdsdsd');
     return this.restrictedIpModel.findOne(params).exec();
   }
 

@@ -3,19 +3,27 @@ import { CreateBadWordDto } from './dto/create-bad-word.dto';
 import { UpdateBadWordDto } from './dto/update-bad-word.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { BadWord, BadWordDocument } from './entities/bad-word.entity';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, PaginateModel, PaginateOptions } from 'mongoose';
 
 @Injectable()
 export class BadWordService {
   constructor(
     @InjectModel(BadWord.name)
-    private readonly badWordModel: Model<BadWordDocument>,
+    private readonly badWordModel: PaginateModel<BadWordDocument>,
   ) {}
 
   create(createBadWordDto: CreateBadWordDto) {
     const createdBadWord = new this.badWordModel(createBadWordDto);
     createdBadWord.term = createdBadWord.term.toLowerCase();
     return createdBadWord.save();
+  }
+
+  paginate(query: FilterQuery<any>, options: PaginateOptions) {
+    return this.badWordModel.paginate(query, options);
+  }
+
+  findOneBy(params): Promise<BadWordDocument> {
+    return this.badWordModel.findOne(params).exec();
   }
 
   findAll(

@@ -50,7 +50,7 @@ export class RestrictedIpController {
   ) {
     const pagingResult = await this.restrictedIpService.paginate(
       query.getPagingQuery(),
-      query.getPagingOptions(),
+      query.getPagingOptions({ sort: { ip: 'asc' } }),
     );
     return this.pagingService.createPaginationResponse(res, pagingResult);
   }
@@ -78,13 +78,13 @@ export class RestrictedIpController {
 
   async validateUniqueIp(ip: string, recordId?: string | null) {
     const existedIp = await this.restrictedIpService.findOneBy({
-      ip: { $regex: new RegExp(`^${ip}`), $options: 'i' },
+      ip: { $regex: new RegExp(`^${ip}$`), $options: 'i' },
     });
     if (existedIp) {
       if (!recordId) {
         return false;
       } else {
-        return recordId.toString() === ip;
+        return existedIp.id.toString() === recordId;
       }
     }
     return true;
