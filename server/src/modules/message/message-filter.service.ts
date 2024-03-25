@@ -17,7 +17,7 @@ export class MessageFilterService {
 
   filterViolateMessage(message: Message): Promise<Message> {
     return this.getProfaneWords(message).then((badWords) => {
-      if (!badWords) {
+      if (badWords.length === 0) {
         return message;
       }
 
@@ -60,5 +60,7 @@ export class MessageFilterService {
       }
       return text;
     }
+
+    return text;
   }
 }
