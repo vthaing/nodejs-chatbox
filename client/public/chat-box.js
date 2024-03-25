@@ -34,8 +34,31 @@ function ChatBoxData (token, brandId, userId, userDisplayName, chatName, channel
 function chatBoxesManagement () {
     var self = this;
 
+    this.createErrorMessage = function (chatBoxElement, message) {
+        var errorElement = document.createElement('p')
+        errorElement.textContent = message;
+        errorElement.style = {
+            color: 'red',
+            fontWeight: 'bold'
+        }
+
+        chatBoxElement.append(errorElement);
+    }
+
     this.handleSuccessRequestAccessToken = function (data, chatBoxElement) {
-        var jsonData = JSON.parse(data);
+        var jsonData = null;
+        try {
+            jsonData = JSON.parse(data);
+        } catch (e) {
+            this.createErrorMessage(chatBoxElement, "There is an error while initializing the chat box. Please try again later");
+            console.warn('There is an error while initializing the chat box. ' + e.message)
+            return;
+        }
+
+        if (jsonData.error) {
+            this.createErrorMessage(chatBoxElement, jsonData.error);
+            return;
+        }
         var iframe = document.createElement('iframe');
         iframe.src = this.getConversationIframeUrl(jsonData);
         iframe.width = '600px';

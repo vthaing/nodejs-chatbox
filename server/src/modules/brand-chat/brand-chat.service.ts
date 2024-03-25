@@ -22,6 +22,10 @@ export class BrandChatService {
       initChatDto,
     );
 
+    if (user.isBanned) {
+      return { error: 'Your user has been banned' };
+    }
+
     return {
       ...(await this.authService.login(user)),
       conversation_id: conversation.id,
