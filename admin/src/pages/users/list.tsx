@@ -11,6 +11,7 @@ import {
 } from "@pankod/refine-antd";
 
 import { IUser } from "interfaces";
+import dayjs from "dayjs";
 
 export const UserList: React.FC<IResourceComponentsProps> = () => {
     const { tableProps } = useTable<IUser>();
@@ -23,6 +24,9 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                 <Table.Column dataIndex="email" title="Email" />
                 <Table.Column dataIndex="online" title="Is Online"
                   render={(_, record: IUser) => (record.online ? 'Yes' : 'No')}
+                />
+                <Table.Column dataIndex="createdAt" title="Is Online"
+                      render={(_, record: IUser) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
                 />
                 <Table.Column<IUser>
                     title="Actions"

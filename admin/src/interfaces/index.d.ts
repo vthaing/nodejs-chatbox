@@ -16,4 +16,6 @@ export interface IUser {
     online: boolean;
     username: string;
     email: string;
+
+    createdAt: string
 }
