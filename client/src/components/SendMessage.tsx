@@ -12,6 +12,7 @@ import {PaperClipOutlined} from "@ant-design/icons";
 import {UploadFile} from "antd/es/upload/interface";
 import {ChatTypes} from "../types/chat.types";
 import {UploadAttachment} from "../context/chat/chatReducer";
+import Swal from "sweetalert2";
 
 const MESSAGE_MAX_LENGTH = 164;
 
@@ -35,7 +36,10 @@ export const SendMessage: React.FC = () => {
 
     const onSubmit = (ev: FormEvent) => {
         ev.preventDefault();
-        if (message.trim().length === 0) { return; }
+        if (message.trim().length === 0) {
+            Swal.fire('Warning', 'Please enter the message', 'warning');
+            return;
+        }
         if (message.trim().length > MESSAGE_MAX_LENGTH) {return;}
 
         const messageToSend = {
@@ -112,7 +116,7 @@ export const SendMessage: React.FC = () => {
                     />
                     {
                         (message.length >= MESSAGE_MAX_LENGTH)
-                        && <p className={'invalid-feedback'}>The message length should not be greater than {MESSAGE_MAX_LENGTH}</p>
+                        && <p style={{display: "block"}} className={'invalid-feedback'}>The message length should not be greater than {MESSAGE_MAX_LENGTH}</p>
                     }
                 </div>
                 <div className="col-sm-2 text-center">
