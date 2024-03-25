@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { Modal, Upload } from 'antd';
 import type { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
@@ -40,17 +40,38 @@ export const UploadingAttachments: React.FC<UploadingAttachmentsProps> = ({messa
                         'Content-Type': 'multipart/form-data'
                     },
                     onUploadProgress: (progressEvent) => {
-                        attachment.percent = progressEvent.progress ? progressEvent.progress * 100 : 0;
-                        fileList[index] = attachment;
-                        setFileList(fileList);
-                        console.log(progressEvent);
+                        const newFileList = fileList.map((item) => {
+                            if (item.uid === attachment.uid) {
+                                item.percent = progressEvent.progress;
+                                if (!progressEvent.progress || progressEvent.progress < 1) {
+                                    item.status = "uploading";
+                                } else {
+                                    item.status = "done";
+                                }
+                            }
+                            return item;
+                        });
+
+                        setFileList(newFileList);
                     },
                 }
-            );
+            ).then((response) => {
+                const newFileList = fileList.map((item) => {
+                    if (item.uid === attachment.uid) {
+                        item.status = "done";
+                        item.percent = 100;
+                    }
+                    return item;
+                });
+
+                setFileList(newFileList);
+            });
         });
     }, [fileList, message.id])
 
-    uploadFiles();
+    useEffect(() => {
+        uploadFiles()
+    }, [])
 
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
