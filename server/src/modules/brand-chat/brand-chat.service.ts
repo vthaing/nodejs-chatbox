@@ -53,7 +53,7 @@ export class BrandChatService {
 
     const user = await this.userService.getOrCreateUser(brand, initChatDto);
 
-    if (conversation.members.includes(user.id)) {
+    if (!conversation.members.includes(user.id)) {
       conversation.members.push(user.id);
       await conversation.save();
     }
