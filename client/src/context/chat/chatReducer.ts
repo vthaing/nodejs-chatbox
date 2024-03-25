@@ -7,6 +7,7 @@ import {
     IMessage
 } from './ChatContext';
 import {UploadFile} from "antd/es/upload/interface";
+import {message} from "antd";
 
 export type ChatState = {
     id: string;
@@ -99,7 +100,9 @@ const handlePinMessageChange = (state: ChatState, action: ChangePinMessageStatus
 
     let pinnedMessages = state.pinnedMessages;
     if (updatedMessage.isPinnedMessage) {
-        pinnedMessages.push(updatedMessage);
+        if (!pinnedMessages.find(message => message.id === updatedMessage.id)) {
+            pinnedMessages.push(updatedMessage);
+        }
     } else {
         pinnedMessages = pinnedMessages.filter(message => message.id !== updatedMessage.id);
     }
