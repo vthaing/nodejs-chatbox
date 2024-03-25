@@ -14,6 +14,8 @@ import {
 import {IBrand, IUser, IUserBanRequest} from "../../interfaces";
 import dayjs from "dayjs";
 import {Link} from "@pankod/refine-react-router-v6";
+import {ButtonBanUser} from "./button-ban-user";
+import {ButtonUnbanUser} from "./button-unban-user";
 
 
 const { Title, Text } = Typography;
@@ -59,7 +61,21 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
         });
 
     return (
-        <Show isLoading={isLoading} >
+        <Show isLoading={isLoading}
+              headerButtons={({ defaultButtons }) => (
+                  <>
+                      {defaultButtons}
+                      {
+                          record?.isBanned &&
+                          <ButtonUnbanUser record={record} onSuccess={() => window.location.reload()}/>
+                      }
+                      {
+                          record?.isBanned === false &&
+                          <ButtonBanUser record={record} onSuccess={() => window.location.reload()}/>
+                      }
+                  </>
+              )}
+        >
             <Row>
                 <Col xl={12} xs={24}>
 

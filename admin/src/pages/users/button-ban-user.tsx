@@ -59,7 +59,7 @@ export const ButtonBanUser: React.FC<ButtonBanUserProps> = ({record, onSuccess})
                title={`Ban user ${record.displayName}`}
                footer={[
                    <Button key="back" onClick={() => setOpen(false)}>
-                       Return
+                       Close
                    </Button>,
                    <Button key="submit" type="primary" loading={isLoading} onClick={onOk}>
                        Submit
@@ -71,7 +71,7 @@ export const ButtonBanUser: React.FC<ButtonBanUserProps> = ({record, onSuccess})
                         <Input onChange={handleOnChange} />
                     </Form.Item>
                     <Form.Item label="Duration" name="duration">
-                        <Input onChange={handleOnChange} type={'number'} />
+                        <Input placeholder={'Empty is meaning ban forever'} onChange={handleOnChange} type={'number'} />
                     </Form.Item>
                 </Form>
             </Modal>
