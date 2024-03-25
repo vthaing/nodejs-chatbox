@@ -1,7 +1,7 @@
 function ChatBoxData(
   token,
   brandId,
-  timestampUTC,
+  timestamp,
   xNonce,
   userId,
   userDisplayName,
@@ -13,7 +13,7 @@ function ChatBoxData(
 ) {
   this.token = token;
   this.brandId = brandId;
-  this.timestampUTC = timestampUTC;
+  this.timestamp = timestamp;
   this.xNonce = xNonce;
   this.userId = userId;
   this.userDisplayName = userDisplayName;
@@ -28,7 +28,7 @@ function ChatBoxData(
   this.isValid = function () {
     var requiredFields = [
       'token',
-      'timestampUTC',
+      'timestamp',
       'xNonce',
       'brandId',
       'userId',
@@ -120,7 +120,7 @@ function chatBoxesManagement() {
     return new ChatBoxData(
       element.dataset.token,
       element.dataset.brandId,
-      element.dataset.timeStampUTC,
+      element.dataset.timestamp,
       element.dataset.xNonce,
       element.dataset.userId,
       element.dataset.userDisplayName,
@@ -158,7 +158,7 @@ function chatBoxesManagement() {
 
     xmlRequest.setRequestHeader('X-Brand-Id', chatBoxData.brandId);
     xmlRequest.setRequestHeader('X-Token', chatBoxData.token);
-    xmlRequest.setRequestHeader('X-Timestamp', chatBoxData.timestampUTC);
+    xmlRequest.setRequestHeader('X-Timestamp', chatBoxData.timestamp);
     xmlRequest.setRequestHeader('X-Nonce', chatBoxData.xNonce);
   };
 
