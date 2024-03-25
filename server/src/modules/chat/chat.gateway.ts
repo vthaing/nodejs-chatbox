@@ -14,6 +14,7 @@ import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { MessageFilterService } from '../message/message-filter.service';
+import { UserIpEntity } from '../user/entities/user-ip.entity';
 
 interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
@@ -44,6 +45,7 @@ export class ChatGateway {
       const updatedUser = await this.userService.update(userFromSocket.id, {
         online: true,
       });
+      this.userService.addUserIpHistory(updatedUser, socket.handshake.address);
       // set user on socket
       socket.user = updatedUser;
       logger.verbose('Client connected to chat');

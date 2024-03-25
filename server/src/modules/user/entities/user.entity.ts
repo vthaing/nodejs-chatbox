@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
+import {UserIpEntity} from "./user-ip.entity";
 
 export type UserDocument = User & Document;
 
@@ -57,6 +58,8 @@ export class User {
 
   @Prop({ type: mongoose.Schema.Types.Array })
   roles: [string];
+  @Prop({ type: mongoose.Schema.Types.Array })
+  ipHistory?: UserIpEntity[] | null;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);

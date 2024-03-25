@@ -15,6 +15,7 @@ import { InitChatDto } from '../brand-chat/dto/init-chat.dto';
 import { BrandChatUserDto } from './dto/brand-chat-user.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { UserBanRequestService } from '../user-ban-request/user-ban-request.service';
+import { last } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -55,6 +56,33 @@ export class UserService {
     return this.userModel
       .findByIdAndUpdate(id, updateUserDto, { upsert: false, new: true })
       .exec();
+  }
+
+  addUserIpHistory(user: UserDocument, ip: string | null) {
+    if (!ip) {
+      return;
+    }
+
+    let lastIp = null;
+    if (user.ipHistory.length > 0) {
+      lastIp = user.ipHistory[user.ipHistory.length - 1];
+    }
+
+    if (!lastIp) {
+      user.ipHistory.push({ ip: ip, time: new Date() });
+      user.save();
+      return;
+    }
+
+    if (lastIp.ip === ip) {
+      const last1Hour = new Date();
+      last1Hour.setHours(last1Hour.getHours() - 1);
+      if (lastIp.time >= last1Hour) {
+        return;
+      }
+    }
+    user.ipHistory.push({ ip: ip, time: new Date() });
+    user.save();
   }
 
   remove(id: string) {
