@@ -35,10 +35,10 @@ export const SideBarChannelItem: React.FC<SideBarChannelItemProps> = ({ channel 
             >
                 <div className="chat_people">
                     <div className="chat_img">
-                        <img style={{maxHeight: '40px'}} src="/avatar/user-profile.png" alt="sun" />
+                        <img style={{maxHeight: '40px'}} src="/avatar/icons8-user-groups-80.png" alt="sun" />
                     </div>
                     <div className="chat_ib">
-                        <h5>{name}</h5>
+                        <h5>Channel: {name}</h5>
                     </div>
                 </div>
             </div>

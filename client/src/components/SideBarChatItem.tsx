@@ -60,7 +60,7 @@ export const SideBarChatItem: React.FC<SideBarChatItemProps> = ({ user }: SideBa
                         <img style={{maxHeight: '40px'}} src="/avatar/user-profile.png" alt="sun" />
                     </div>
                     <div className="chat_ib">
-                        <h5>{username}</h5>
+                        <h5>Direct: {username}</h5>
                         {
                             (online)
                                 ? <span className="text-success">Online</span>
