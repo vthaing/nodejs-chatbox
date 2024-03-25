@@ -31,6 +31,7 @@ const App: React.FC = () => {
         <Refine
             authProvider={ authProvider(axiosInstance) }
             dataProvider={dataProvider(API_URL, axiosInstance)}
+
             routerProvider={{
                 ...routerProvider,
                 routes: [
@@ -99,6 +100,7 @@ const App: React.FC = () => {
                 <AuthPage registerLink={false} rememberMe={false} forgotPasswordLink={false}/>
             )}
             Layout={Layout}
+            Title={() => <></>}
             catchAll={<ErrorComponent />}
         />
     );
