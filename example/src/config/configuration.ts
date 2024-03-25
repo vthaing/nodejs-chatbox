@@ -5,4 +5,5 @@ export default () => ({
   brandId: process.env.BRAND_ID,
   chatBoxSecretKey: process.env.CHATBOX_SECRET_KEY,
   chatBoxLibraryUrl: process.env.CHATBOX_LIBRARY_URL,
+  chatBoxApiBaseUrl: process.env.CHATBOX_API_BASE_URL,
 });

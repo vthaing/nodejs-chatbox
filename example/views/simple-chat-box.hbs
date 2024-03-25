@@ -39,7 +39,7 @@
 
 <main role="main">
 
-  <section class="jumbotron text-center">
+  <section class="jumbotron">
       <div id="chatbox-container" class="container">
         <div  class="row">
           <div class="col-md-6">
@@ -58,7 +58,33 @@
                  data-token="{{chatBoxData.token}}"
             ></div>
           </div>
+          <div class="col-md-6">
+            <div class="row" id="user-info">
+              <form method="POST" action="/update-brand-user/{{chatBoxData.userId}}" id="user-form" method="get">
+                <p>Update user on the brand</p>
+                <div class="form-group">
+                  <label for="user-display-name">Display Name</label>
+                  <input type="text" name="userDisplayName" required class="form-control" id="user-display-name" aria-describedby="displayNameHelp" placeholder="Tyson">
+                  <small id="displayNameHelp" class="form-text text-muted">This is the username will display on the chat box</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="user-status">User Status</label>
+                  <select>
+                    <option value="1">Enable</option>
+                    <option value="0">Disable</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <button type="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
+
+
+
       </div>
   </section>
 

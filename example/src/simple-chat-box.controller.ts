@@ -1,7 +1,19 @@
-import { Controller, Get, Render, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Param,
+  Render,
+  Body,
+  Res,
+  Post,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import * as crypto from 'crypto';
+import { UpdateUserDto } from './update-user.dto';
+import axios from 'axios';
+import { Response, response } from 'express';
 
 const BRAND_AUTH_HASH_ALGORITHM = 'sha1';
 const BRAND_AUTH_HASH_DIGEST = 'hex';
@@ -13,14 +25,6 @@ export class SimpleChatBoxController {
   @Get('simple-chat-box')
   @Render('simple-chat-box')
   root() {
-
-
-
-
-
-
-
-
     const chatBoxData = this.getChatBoxData();
 
     const requestToken = this.generateToken(
@@ -66,6 +70,46 @@ export class SimpleChatBoxController {
       .createHmac(BRAND_AUTH_HASH_ALGORITHM, secretKey)
       .update(requestString)
       .digest(BRAND_AUTH_HASH_DIGEST);
+  }
+
+  @Post('update-brand-user/:id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Res() res: Response,
+  ) {
+    const displayName = updateUserDto.displayName;
+    const status = updateUserDto.status;
+
+    const xBrandId = this.configService.get('brandId');
+    const secretKey = this.configService.get('chatBoxSecretKey');
+    const xNonce = randomStringGenerator();
+    const xTimeStamp = Date.now();
+    const requestToken = this.generateToken(
+      xBrandId,
+      secretKey,
+      xNonce,
+      xTimeStamp,
+    );
+
+    const result = await axios.patch(
+      this.configService.get('chatBoxApiBaseUrl') + 'brand-chat/user/' + id,
+      {
+        displayName: displayName,
+        status: status,
+      },
+      {
+        headers: {
+          'x-brand-id': xBrandId,
+          'x-timestamp': xTimeStamp,
+          'x-nonce': xNonce,
+          'x-token': requestToken,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    return res.redirect('/simple-chat-box');
   }
 
   getChatBoxData() {

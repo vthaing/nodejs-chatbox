@@ -94,6 +94,17 @@ sortedRequestProperties {
 requestString x-brand-id=63b109ab1d33d74995325a91&x-nonce=6bf647c4-f779-4ac8-a332-d0b56cee66a3&x-timestamp=1675420858134
 requestToken 9c70078a4ffd9d2dc52d9cbd638f77bebd82ea8e
 ```
+
+### Sử dụng request token để gởi request tới API chat box
+
+- Khi gởi request tới các endpoint của ChatBox API thì cần phải attach các fields sau lên header:
+  - `x-nonce`: là 1 chuỗi ngẫu nhiên brand cung cấp cho website thông qua request header `x-nonce`
+  - `x-timestamp`: là giá trị timestamp thời điểm hiện tại. (UTC 0). Sẽ được gởi tới brand thông qua request header `x-timestamp`.
+  - `x-brand-id`: là id của brand. Sẽ được admin cấp cho. Mã này là duy nhất và không bao giờ đổi được.
+  - `x-token`: là token được tạo từ các thành phần trên.
+- Sau đây là sample code để gởi gởi request cập nhật trạng thái của user trên brand
+
+
 ## Frontend App (client-folder)
 
 Just install the dependencies and start the app:
