@@ -1,4 +1,9 @@
-# React Chat app
+# Chat app
+
+## Kiến trúc hệ thống
+
+- Mô hình hoạt động
+<img src="documents/screens/chat_box_system_structure.png">
 
 ## Tích hợp chat box vào Brand website
 
