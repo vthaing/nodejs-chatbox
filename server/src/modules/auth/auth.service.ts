@@ -65,7 +65,7 @@ export class AuthService {
   async validateByUserId(
     id: string,
   ): Promise<Pick<UserDocument, 'online' & 'displayName'> | null> {
-    const user = await this.userService.findOne({ id });
+    const user = await this.userService.findById(id);
     if (user && !user.isBanned) {
       const { online, displayName, id } = user;
       return { online, displayName, id };

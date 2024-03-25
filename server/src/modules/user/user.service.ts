@@ -34,6 +34,10 @@ export class UserService {
     return this.userModel.findOne(params).exec();
   }
 
+  async findById(id) {
+    return this.userModel.findById(id);
+  }
+
   update(id: string, updateUserDto: UpdateUserDto) {
     return this.userModel
       .findByIdAndUpdate(id, updateUserDto, { upsert: false, new: true })
