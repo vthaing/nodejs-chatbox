@@ -5,6 +5,7 @@ import { Document } from 'mongoose';
 export type UserDocument = User & Document;
 
 @Schema({
+  timestamps: true,
   toJSON: {
     transform: (doc: UserDocument, ret) => {
       delete ret.__v;

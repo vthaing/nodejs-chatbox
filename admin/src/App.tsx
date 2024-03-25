@@ -135,8 +135,9 @@ const App: React.FC = () => {
                 {
                     name: "user",
                     list: UserList,
-                    edit: UserEdit,
+                    // edit: UserEdit,
                     show: UserShow,
+                    canDelete: true
                 },
             ]}
             notificationProvider={notificationProvider}
