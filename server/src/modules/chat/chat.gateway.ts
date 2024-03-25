@@ -13,6 +13,7 @@ import { getUserFromWSToken } from '../auth/utils/validate-user-ws';
 import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { ChannelService } from '../channels/channel.service';
+import { MessageFilterService } from '../message/message-filter.service';
 
 interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
@@ -28,6 +29,7 @@ export class ChatGateway {
     private readonly userService: UserService,
     private readonly messageService: MessageService,
     private readonly channelService: ChannelService,
+    private readonly messageFilterService: MessageFilterService,
   ) {}
 
   async handleConnection(socket: SocketWithUserData): Promise<void> {
@@ -87,7 +89,10 @@ export class ChatGateway {
   async handleMessage(@MessageBody() message: CreateMessageDto): Promise<void> {
     const createMessage = await this.messageService
       .create(message)
-      .then((createdMessage) => createdMessage.populate('senderInfo'));
+      .then((createdMessage) => createdMessage.populate('senderInfo'))
+      .then((createdMessage) =>
+        this.messageFilterService.filterAndHandleViolateMessage(createdMessage),
+      );
 
     if (createMessage.channel) {
       this.server
