@@ -15,6 +15,7 @@ import { IpFilter } from 'nestjs-ip-filter';
 import { RestrictedIpService } from './modules/restricted-ip/restricted-ip.service';
 import { APP_FILTER } from '@nestjs/core';
 import { IpFilterDenyExceptionFilter } from './exception/ipfilter-exception-filter.exception';
+import { UserBanRequestModule } from './modules/user-ban-request/user-ban-request.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { IpFilterDenyExceptionFilter } from './exception/ipfilter-exception-filt
     ChannelModule,
     BadWordModule,
     RestrictedIpModule,
+    UserBanRequestModule,
   ],
   controllers: [AppController],
   providers: [
