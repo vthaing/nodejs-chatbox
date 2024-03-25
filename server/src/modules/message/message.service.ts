@@ -44,4 +44,10 @@ export class MessageService {
   remove(id: string): Promise<MessageDocument> {
     return this.messageModel.findByIdAndDelete(id).exec();
   }
+
+  findOneBy(
+    params: FilterQuery<MessageDocument> = {},
+  ): Promise<MessageDocument> | null {
+    return this.messageModel.findOne(params).exec();
+  }
 }

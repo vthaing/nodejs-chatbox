@@ -10,6 +10,7 @@ import { PhoneNumberMessageFilterFactor } from './message-filter-factor/phone-nu
 import { UserBanRequestModule } from '../user-ban-request/user-ban-request.module';
 import { UserModule } from '../user/user.module';
 import { MessageFilterFactorInterface } from './message-filter-factor/message-filter-factor-interface';
+import { DuplicateMessageFilterFactor } from './message-filter-factor/duplicate-mesage-filter-factor';
 
 @Module({
   imports: [
@@ -28,11 +29,16 @@ import { MessageFilterFactorInterface } from './message-filter-factor/message-fi
     MessageService,
     BadWordMessageFilterFactor,
     PhoneNumberMessageFilterFactor,
+    DuplicateMessageFilterFactor,
     {
       provide: 'MessageFilterFactor',
       useFactory: (...messageFilterFactors: MessageFilterFactorInterface[]) =>
         messageFilterFactors,
-      inject: [BadWordMessageFilterFactor, PhoneNumberMessageFilterFactor],
+      inject: [
+        BadWordMessageFilterFactor,
+        PhoneNumberMessageFilterFactor,
+        DuplicateMessageFilterFactor,
+      ],
     },
     MessageFilterService,
   ],

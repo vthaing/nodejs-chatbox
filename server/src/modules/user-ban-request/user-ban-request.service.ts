@@ -12,8 +12,8 @@ import { BadWordDocument } from '../bad-word/entities/bad-word.entity';
 import { UserBanRequestTypeEnum } from './enum/user-ban-request-type.enum';
 import { UserBanRequestStatusEnum } from './enum/user-ban-request-status.enum';
 import { UserBanRequestConfig } from './user-ban-request-config';
-import {User, UserDocument} from "../user/entities/user.entity";
-import {BanUserDto} from "../user/dto/ban-user.dto";
+import { User, UserDocument } from '../user/entities/user.entity';
+import { BanUserDto } from '../user/dto/ban-user.dto';
 
 @Injectable()
 export class UserBanRequestService {
@@ -82,6 +82,30 @@ export class UserBanRequestService {
       banRequestParams.phoneNumbers.join('; ') +
       '"';
     dto.type = UserBanRequestTypeEnum.MESSAGE_CONTAINS_PHONE_NUMBER;
+    dto.status = status;
+    dto.duration = UserBanRequestConfig.getBanDurationByType(dto.type);
+    dto.params = banRequestParams;
+
+    const createdUserBanRequest = new this.userBanRequestModel(dto);
+    return createdUserBanRequest.save();
+  }
+
+  createDuplicatedMessageUserBanRequest(
+    message: MessageDocument,
+    duplicatedMessage: MessageDocument,
+    status = UserBanRequestStatusEnum.APPROVED,
+  ): Promise<UserBanRequestDocument | null> {
+    const dto = new CreateUserBanRequestDto();
+    const banRequestParams = {
+      duplicatedMessage: duplicatedMessage.id,
+      message: message.id,
+      duplicatedMessageContent: message.text,
+    };
+
+    dto.userId = message.from.toString();
+    dto.reason = `Message duplicated with the old message  "(${duplicatedMessage.id}) ${duplicatedMessage.text}"`;
+
+    dto.type = UserBanRequestTypeEnum.DUPLICATED_WITH_THE_OLD_MESSAGE;
     dto.status = status;
     dto.duration = UserBanRequestConfig.getBanDurationByType(dto.type);
     dto.params = banRequestParams;
