@@ -19,13 +19,16 @@ const initialContext = {
 } as ISocketContext;
 
 
+
 export const SocketContext: React.Context<ISocketContext> = createContext(initialContext);
 
 
 
 export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }: { children: JSX.Element }) => {
 
-    const { socket, online, disconnectSocket, connectSocket } = useSocket('http://localhost:3002/chat');
+    const { socket, online, disconnectSocket, connectSocket } = useSocket(
+      process.env.REACT_APP_SOCKET_PATH ?? 'http://localhost:3002/chat'
+    );
 
     const { auth } = useContext(AuthContext);
     const { dispatch } = useContext(ChatContext);
