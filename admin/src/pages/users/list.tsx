@@ -157,7 +157,7 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                     defaultFilteredValue={getDefaultFilter(
                         "brandId",
                         filters,
-                        "in",
+                        "eq",
                     )}
                 />
                 <Table.Column dataIndex="isBanned" title="Is Banned"
