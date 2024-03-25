@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import {ActiveChatTypesEnum, ChatContext, IActiveChatPayload, IChannel} from '../context/chat/ChatContext';
 import { ActiveChat } from '../context/chat/chatReducer';
 import { ChatTypes } from '../types/chat.types';
+import {SocketContext} from "../context/SocketContext";
 
 export type SideBarChannelItemProps = {
     channel: IChannel;
@@ -16,6 +17,8 @@ export const SideBarChannelItem: React.FC<SideBarChannelItemProps> = ({ channel 
 
     const { activeChat } = chatState;
 
+    const { socket } = useContext(SocketContext);
+
     const onClick = () => {
         const action: ActiveChat = {
             payload: ({
@@ -24,6 +27,7 @@ export const SideBarChannelItem: React.FC<SideBarChannelItemProps> = ({ channel 
             type: ChatTypes.activeChat,
         };
         dispatch(action);
+        socket?.emit('open-channel-chat', {channel: channel.id})
     }
 
 

@@ -86,7 +86,20 @@ export class ChatGateway {
   @SubscribeMessage('private-message')
   async handleMessage(@MessageBody() message: CreateMessageDto): Promise<void> {
     const createMessage = await this.messageService.create(message);
-    this.server.to(message.to).emit('private-message', createMessage);
+
+    if (createMessage.channel) {
+      this.server
+        .to(createMessage.channel.toString())
+        .emit('private-message', createMessage);
+    } else {
+      this.server.to(message.to).emit('private-message', createMessage);
+    }
+
     this.server.to(message.from).emit('private-message', createMessage);
+  }
+
+  @SubscribeMessage('open-channel-chat')
+  async openChannelChat(@MessageBody() message: any): Promise<void> {
+    this.server.socketsJoin(message.channel);
   }
 }
