@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { AuthContext } from '../auth/AuthContext';
 
 import Swal from 'sweetalert2';
@@ -52,14 +52,14 @@ export const LoginPage: React.FC = () => {
 
     }
 
-    const toggleCheck = () => {
-        setForm(
-            {
-                ...form,
-                rememberMe: !form.rememberMe,
-            }
-        );
-    }
+    // const toggleCheck = () => {
+    //     setForm(
+    //         {
+    //             ...form,
+    //             rememberMe: !form.rememberMe,
+    //         }
+    //     );
+    // }
 
     const onSubmit = async (ev: React.FormEvent) => {
         ev.preventDefault();
@@ -120,28 +120,28 @@ export const LoginPage: React.FC = () => {
             </div>
 
             <div className="row mb-3">
-                <div
-                    className="col"
-                    onClick={toggleCheck}
-                >
-                    <input
-                        name="rememberMe"
-                        className="input-checkbox100"
-                        id="ckb1"
-                        type="checkbox"
-                        checked={form.rememberMe}
-                        onChange={onChange}
-                    />
-                    <label className="label-checkbox100">
-                        Remember Me
-                    </label>
-                </div>
+                {/*<div*/}
+                {/*    className="col"*/}
+                {/*    onClick={toggleCheck}*/}
+                {/*>*/}
+                {/*    <input*/}
+                {/*        name="rememberMe"*/}
+                {/*        className="input-checkbox100"*/}
+                {/*        id="ckb1"*/}
+                {/*        type="checkbox"*/}
+                {/*        checked={form.rememberMe}*/}
+                {/*        onChange={onChange}*/}
+                {/*    />*/}
+                {/*    <label className="label-checkbox100">*/}
+                {/*        Remember Me*/}
+                {/*    </label>*/}
+                {/*</div>*/}
 
-                <div className="col text-right">
-                    <Link to="/auth/register" className="txt1">
-                        Register new account?
-                    </Link>
-                </div>
+                {/*<div className="col text-right">*/}
+                {/*    <Link to="/auth/register" className="txt1">*/}
+                {/*        Register new account?*/}
+                {/*    </Link>*/}
+                {/*</div>*/}
             </div>
 
             <div className="container-login100-form-btn m-t-17">
