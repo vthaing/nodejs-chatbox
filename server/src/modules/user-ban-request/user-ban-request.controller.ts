@@ -6,13 +6,14 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
+  UseGuards, Req,
 } from '@nestjs/common';
 import { UserBanRequestService } from './user-ban-request.service';
 import { CreateUserBanRequestDto } from './dto/create-user-ban-request.dto';
 import { UpdateUserBanRequestDto } from './dto/update-user-ban-request.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import {Request} from "express";
 
 @Controller('user-ban-requests')
 @ApiBearerAuth()
@@ -27,8 +28,15 @@ export class UserBanRequestController {
   }
 
   @Get()
-  findAll() {
-    return this.userBanRequestService.findAll();
+  findAll(@Req() req: Request) {
+    const params: any = {};
+    if (req.query.id) {
+      params._id = { $in: req.query.id };
+    }
+    if (req.query.userId) {
+      params.userId = { $in: req.query.userId };
+    }
+    return this.userBanRequestService.findAll(params);
   }
 
   @Get(':id')

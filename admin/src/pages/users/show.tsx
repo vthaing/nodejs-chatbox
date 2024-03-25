@@ -37,7 +37,7 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
         ],
         permanentFilter: [
             {
-                field: "user.id",
+                field: "userId",
                 operator: "eq",
                 value: record?.id,
             },
