@@ -11,18 +11,21 @@ export class MessageFilterService {
     return this.badWordService.findProfane(message.text);
   }
 
-  filterAndHandleViolateMessage(message: MessageDocument): Promise<Message> {
-    return this.filterBadWords(message);
+  async filterAndHandleViolateMessage(
+    message: MessageDocument,
+  ): Promise<Message> {
+    await this.filterBadWords(message);
+    return message;
   }
 
-  filterBadWords(message: MessageDocument): Promise<Message> {
+  filterBadWords(message: MessageDocument): Promise<BadWord[]> {
     return this.getProfaneWords(message).then((badWords) => {
       if (badWords.length === 0) {
-        return message;
+        return badWords;
       }
 
       message.maskedText = this.cleanBadWords(message.text, badWords);
-      return message.save();
+      return message.save().then(() => badWords);
     });
   }
 
