@@ -80,7 +80,7 @@ export class UserService {
 
   setBanUser(user: UserDocument, duration?: number | null) {
     let banUtil = null;
-    if (duration !== null) {
+    if (duration) {
       banUtil = new Date();
       banUtil.setDate(banUtil.getDate() + duration);
     }
