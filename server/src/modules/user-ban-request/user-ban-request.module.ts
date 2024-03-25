@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { UserBanRequestService } from './user-ban-request.service';
 import { UserBanRequestController } from './user-ban-request.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from '../auth/auth.module';
 import {
   UserBanRequest,
   UserBanRequestSchema,
@@ -16,7 +15,6 @@ import {
         schema: UserBanRequestSchema,
       },
     ]),
-    AuthModule,
   ],
   controllers: [UserBanRequestController],
   providers: [UserBanRequestService],

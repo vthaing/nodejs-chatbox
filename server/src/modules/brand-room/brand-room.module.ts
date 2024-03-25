@@ -3,7 +3,6 @@ import { BrandRoomService } from './brand-room.service';
 import { BrandRoomController } from './brand-room.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BrandRoom, BrandRoomSchema } from './entities/brand-room.entity';
-import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { AuthModule } from '../auth/auth.module';
         schema: BrandRoomSchema,
       },
     ]),
-    AuthModule,
   ],
   controllers: [BrandRoomController],
   providers: [BrandRoomService],

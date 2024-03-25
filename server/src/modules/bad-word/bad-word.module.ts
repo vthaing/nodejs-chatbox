@@ -3,7 +3,6 @@ import { BadWordService } from './bad-word.service';
 import { BadWordController } from './bad-word.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BadWord, BadWordSchema } from './entities/bad-word.entity';
-import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { AuthModule } from '../auth/auth.module';
         schema: BadWordSchema,
       },
     ]),
-    AuthModule,
   ],
   controllers: [BadWordController],
   providers: [BadWordService],

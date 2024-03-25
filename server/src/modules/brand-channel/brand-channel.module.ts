@@ -6,7 +6,6 @@ import {
   BrandChannel,
   BrandChannelSchema,
 } from './entities/brand-channel.entity';
-import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -16,7 +15,6 @@ import { AuthModule } from '../auth/auth.module';
         schema: BrandChannelSchema,
       },
     ]),
-    AuthModule,
   ],
   controllers: [BrandChannelController],
   providers: [BrandChannelService],

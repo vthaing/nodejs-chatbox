@@ -3,14 +3,12 @@ import { forwardRef, Module } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { MessageController } from './message.controller';
 import { Message, MessageSchema } from './entities/message.entity';
-import { AuthModule } from '../auth/auth.module';
 import { MessageFilterService } from './message-filter.service';
 import { BadWordModule } from '../bad-word/bad-word.module';
 import { BadWordMessageFilterFactor } from './message-filter-factor/bad-word-message-filter-factor';
 import { PhoneNumberMessageFilterFactor } from './message-filter-factor/phone-number-message-filter-factor';
 import { UserBanRequestModule } from '../user-ban-request/user-ban-request.module';
-import {UserService} from "../user/user.service";
-import {UserModule} from "../user/user.module";
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -20,7 +18,6 @@ import {UserModule} from "../user/user.module";
         schema: MessageSchema,
       },
     ]),
-    AuthModule,
     forwardRef(() => UserBanRequestModule),
     forwardRef(() => BadWordModule),
     forwardRef(() => UserModule),
