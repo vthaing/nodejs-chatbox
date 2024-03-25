@@ -5,4 +5,5 @@ export default () => ({
   mongoDbUrl: process.env.MONGO_DATABASE_URL,
   redisHost: process.env.REDIS_HOST,
   redisPort: process.env.REDIS_PORT,
+  redisPassword: process.env.REDIS_PASSWORD,
 });

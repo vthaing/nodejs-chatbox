@@ -31,10 +31,18 @@ export class RedisIoAdapter extends IoAdapter {
       }
     };
     const server = super.createIOServer(port, options);
-    const adapter = redisAdapter({
+    const redisConfiguration: any = {
       host: this.configService.get('redisHost'),
       port: this.configService.get('redisPort'),
-    });
+    };
+
+    if (this.configService.get('redisPassword')) {
+      redisConfiguration.password = this.configService.get('redisPassword');
+    }
+
+    console.log(redisConfiguration);
+
+    const adapter = redisAdapter(redisConfiguration);
     server.adapter(adapter);
     return server;
   }
