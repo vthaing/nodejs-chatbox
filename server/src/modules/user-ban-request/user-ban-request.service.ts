@@ -60,6 +60,34 @@ export class UserBanRequestService {
     return createdUserBanRequest.save();
   }
 
+  createPhoneNumberUserBanRequest(
+    message: MessageDocument,
+    phoneNumbers: Array<string>,
+    status = UserBanRequestStatusEnum.APPROVED,
+  ): Promise<UserBanRequestDocument | null> {
+    if (phoneNumbers.length === 0) {
+      return null;
+    }
+    const dto = new CreateUserBanRequestDto();
+    const banRequestParams = {
+      phoneNumbers: phoneNumbers,
+      message: message._id,
+    };
+
+    dto.user = message.from.toString();
+    dto.reason =
+      'Message contains phone numbers: "' +
+      banRequestParams.phoneNumbers.join('; ') +
+      '"';
+    dto.type = UserBanRequestTypeEnum.MESSAGE_CONTAINS_PHONE_NUMBER;
+    dto.status = status;
+    dto.duration = UserBanRequestConfig.getBanDurationByType(dto.type);
+    dto.params = banRequestParams;
+
+    const createdUserBanRequest = new this.userBanRequestModel(dto);
+    return createdUserBanRequest.save();
+  }
+
   findAll(
     params: FilterQuery<UserBanRequestDocument> = {},
   ): Promise<UserBanRequestDocument[]> {

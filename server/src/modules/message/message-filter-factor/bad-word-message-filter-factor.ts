@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { BadWordService } from '../../bad-word/bad-word.service';
-import { Message, MessageDocument } from '../entities/message.entity';
+import { MessageDocument } from '../entities/message.entity';
 import {
   BadWord,
   BadWordDocument,
 } from '../../bad-word/entities/bad-word.entity';
 import { UserBanRequestService } from '../../user-ban-request/user-ban-request.service';
 import { UserBanRequestDocument } from '../../user-ban-request/entities/user-ban-request.entity';
+import { MessageFilterFactorInterface } from './message-filter-factor-interface';
 
 @Injectable()
-export class BadWordMessageFilterFactor {
+export class BadWordMessageFilterFactor
+  implements MessageFilterFactorInterface
+{
   constructor(
     private badWordService: BadWordService,
     private userBanRequestService: UserBanRequestService,
