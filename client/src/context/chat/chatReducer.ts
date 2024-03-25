@@ -98,6 +98,10 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
                     state.activeChat.activeChatId === newMessageAction.payload.to ||
                     state.activeChat.activeChatId === newMessageAction.payload.conversation
                 ) {
+                    const messagesCount = state.messages.length;
+                    if (messagesCount > 0 && state.messages[messagesCount -1].id === newMessageAction.payload.id) {
+                        return state;
+                    }
                     return {
                         ...state,
                         messages: [
