@@ -9,7 +9,5 @@ export class CreateBrandRoomDto {
   @ApiProperty({ required: true })
   externalId: string;
   @ApiProperty({ required: true })
-  externalBrandId: string;
-  @ApiProperty({ required: true })
   externalBrandChannelId: string;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InitChatDto } from './dto/init-chat.dto';
 import { BrandChannelService } from '../brand-channel/brand-channel.service';
 import { BrandRoomService } from '../brand-room/brand-room.service';
@@ -22,10 +22,18 @@ export class BrandChatService {
   ) {}
   async initChat(initChatDto: InitChatDto) {
     const brand = await this.brandService.findOne(initChatDto.brandId);
+    if (!brand) {
+      throw new NotFoundException('Invalid brand id ' + initChatDto.brandId);
+    }
 
-    const brandChannel = this.brandChannelService.getOrCreateBrandChannel(
+    const brandChannel = await this.brandChannelService.getOrCreateBrandChannel(
       brand,
       initChatDto,
+    );
+
+    const brandRoom = await this.brandRoomService.getOrCreateBrandRoom(
+      initChatDto,
+      brandChannel,
     );
   }
 }

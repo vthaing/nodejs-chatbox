@@ -36,9 +36,6 @@ export class BrandRoom {
   externalId: string;
 
   @Prop({ required: true, type: mongoose.Schema.Types.String })
-  externalBrandId: string;
-
-  @Prop({ required: true, type: mongoose.Schema.Types.String })
   externalBrandChannelId: string;
 }
 
