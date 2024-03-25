@@ -84,7 +84,7 @@ function chatBoxesManagement () {
     }
 
     this.getApiInitChatBoxEndpoint = function () {
-        return 'http://localhost:3001/brand-chat/init-chat';
+        return 'http://localhost:3001/api/brand-chat/init-chat';
     }
 
 }
