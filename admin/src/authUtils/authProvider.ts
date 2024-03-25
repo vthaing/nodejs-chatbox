@@ -30,18 +30,13 @@ export const authProvider = (axiosInstance: AxiosInstance): AuthProvider => {
                 : Promise.reject(),
         getPermissions: () => Promise.resolve(["admin"]),
         getUserIdentity: async () => {
-            return Promise.resolve({
-                id: 1,
-                name: "Jane Doe",
-                avatar: "https://unsplash.com/photos/IWLOvomUmWU/download?force=true&w=640",
-            });
-
 
             const token = localStorage.getItem(TOKEN_KEY);
             if (!token) {
                 return Promise.reject();
             }
 
+            //TODO: should get the user data from user/{id}
             const userInfo = await axiosInstance.get(`${API_URL}/user`);
 
             return Promise.resolve(userInfo.data.user);
