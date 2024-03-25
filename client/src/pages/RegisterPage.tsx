@@ -63,7 +63,7 @@ export const RegisterPage: React.FC = () => {
             onSubmit={onSubmit}
         >
             <span className="login100-form-title mb-3">
-                Chat - Registro
+                Register
             </span>
 
             <div className="wrap-input100 validate-input mb-3">
@@ -104,7 +104,7 @@ export const RegisterPage: React.FC = () => {
             <div className="row mb-3">
                 <div className="col text-right">
                     <Link to="/auth/login" className="txt1">
-                        Ya tienes cuenta?
+                        Already have an account? Go to login page
                     </Link>
                 </div>
             </div>
@@ -115,7 +115,7 @@ export const RegisterPage: React.FC = () => {
                     type="submit"
                     disabled={!isFormValid()}
                 >
-                    Crear cuenta
+                    Submit
                 </button>
             </div>
 
