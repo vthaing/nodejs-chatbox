@@ -26,7 +26,6 @@ export const SideBar: React.FC = () => {
                         ))
                 }
             </div>
-            <div className="extra_space"></div>
             <div className="inbox_chat">
                 {
                     chatState

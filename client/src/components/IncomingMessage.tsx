@@ -9,8 +9,6 @@ export type IncomingMessageProps = {
 
 export const IncomingMessage: React.FC<IncomingMessageProps> = ({ message }) => {
 
-console.log(message);
-
     return (
         <>
             <div className="incoming_msg">
