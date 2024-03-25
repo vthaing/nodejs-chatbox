@@ -20,19 +20,19 @@ import { PagingService } from '../common/service/paging.service';
 import { Request } from 'express';
 import { PagingMediaItemDto } from './dto/paging-media-item.dto';
 
-@Controller('media')
+@Controller('media-item')
 @ApiBearerAuth()
 @ApiTags('Media Items')
 @UseGuards(JwtAuthGuard)
 export class MediaItemController {
   constructor(
-    private readonly restrictedIpService: MediaItemService,
+    private readonly mediaItemService: MediaItemService,
     private readonly pagingService: PagingService,
   ) {}
 
   @Post()
   async create(@Body() createMediaItemDto: CreateMediaItemDto) {
-    return this.restrictedIpService.create(createMediaItemDto);
+    return this.mediaItemService.create(createMediaItemDto);
   }
 
   @Get()
@@ -41,7 +41,7 @@ export class MediaItemController {
     @Res() res,
     @Query() query: PagingMediaItemDto,
   ) {
-    const pagingResult = await this.restrictedIpService.paginate(
+    const pagingResult = await this.mediaItemService.paginate(
       query.getPagingQuery(),
       query.getPagingOptions(),
     );
@@ -50,7 +50,7 @@ export class MediaItemController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.restrictedIpService.findOne(id);
+    return this.mediaItemService.findOne(id);
   }
 
   @Patch(':id')
@@ -58,11 +58,11 @@ export class MediaItemController {
     @Param('id') id: string,
     @Body() updateMediaItemDto: UpdateMediaItemDto,
   ) {
-    return this.restrictedIpService.update(id, updateMediaItemDto);
+    return this.mediaItemService.update(id, updateMediaItemDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.restrictedIpService.remove(id);
+    return this.mediaItemService.remove(id);
   }
 }

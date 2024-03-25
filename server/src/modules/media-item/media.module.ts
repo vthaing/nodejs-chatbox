@@ -4,6 +4,7 @@ import { MediaItemController } from './media-item.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MediaItem, MediaItemSchema } from './entities/media-item.entity';
 import { CommonModule } from '../common/common.module';
+import { MediaController } from './media.controller';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { CommonModule } from '../common/common.module';
     ]),
     forwardRef(() => CommonModule),
   ],
-  controllers: [MediaItemController],
+  controllers: [MediaItemController, MediaController],
   providers: [MediaItemService],
   exports: [MediaItemService],
 })

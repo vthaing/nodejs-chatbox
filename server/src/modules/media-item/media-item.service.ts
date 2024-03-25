@@ -44,10 +44,19 @@ export class MediaItemService {
     return mediaItem.id;
   }
 
-  async saveMediaItemFile(mediaItem: MediaItem, file: Express.Multer.File) {
+  async saveMediaItemFile(
+    mediaItem: MediaItemDocument,
+    file: Express.Multer.File,
+  ) {
     return await this.storageService
       .getDisk(mediaItem.disk)
       .put(mediaItem.path, file.buffer);
+  }
+
+  async getFileFromMediaItem(mediaItem: MediaItemDocument) {
+    return this.storageService
+      .getDisk(mediaItem.disk)
+      .getStream(mediaItem.path);
   }
 
   paginate(query: FilterQuery<any>, options: PaginateOptions) {
@@ -63,7 +72,7 @@ export class MediaItemService {
       })
       .exec();
   }
-  findOne(id: string): Promise<MediaItemDocument> {
+  async findOne(id: string): Promise<MediaItemDocument> {
     return this.restrictedIpModel.findById(id).exec();
   }
 
