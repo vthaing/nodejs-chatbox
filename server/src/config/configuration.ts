@@ -10,4 +10,8 @@ export default () => ({
   chatBoxConversationEndpoint: process.env.CHAT_BOX_CONVERSATION_ENDPOINT,
   messageAttachmentPath: process.env.MESSAGE_ATTACHMENT_PATH,
   messageAttachmentDisk: process.env.MESSAGE_ATTACHMENT_DISK,
+  jwtSecret: process.env.JWT_SECRET,
+  jwtExpiresIn: '3600s',
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
+  jwtRefreshExpiresIn: '4400s',
 });

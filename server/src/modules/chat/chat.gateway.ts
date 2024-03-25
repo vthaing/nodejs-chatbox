@@ -9,7 +9,6 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { getUserFromWSToken } from '../auth/utils/validate-user-ws';
 import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { ConversationService } from '../conversation/conversation.service';
@@ -17,6 +16,9 @@ import { MessageFilterService } from '../message/message-filter.service';
 import { MediaItem } from '../media-item/entities/media-item.entity';
 import { IpFilterGuard } from '../ip-filter/ipfilter.guard';
 import { MessageDocument } from '../message/entities/message.entity';
+import { extract, parse } from 'query-string';
+import * as jwt from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 
 interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
@@ -35,6 +37,7 @@ export class ChatGateway {
     private readonly messageService: MessageService,
     private readonly conversationService: ConversationService,
     private readonly messageFilterService: MessageFilterService,
+    private readonly configService: ConfigService,
   ) {}
 
   async handleConnection(socket: SocketWithUserData): Promise<void> {
@@ -42,7 +45,7 @@ export class ChatGateway {
     try {
       // get user from token
       const userFromSocket = await this.wsAuthStrategy.validate(
-        getUserFromWSToken(socket.handshake),
+        this.getUserFromWSToken(socket.handshake),
       );
       // update user online status
       const updatedUser = await this.userService.update(userFromSocket.id, {
@@ -149,5 +152,15 @@ export class ChatGateway {
     const roomId = message.to?.toString() ?? message.conversation.toString();
     this.server.to(roomId).emit('message-deleted', message);
     return message.transformToChatBoxData();
+  }
+
+  getUserFromWSToken(request) {
+    const token = parse(extract(request.url))?.authorization as string;
+    const authToken = token.replace('Bearer', '').trim();
+    const user: Partial<UserDocument> = jwt.verify(
+      authToken,
+      this.configService.get('jwtSecret'),
+    ) as Partial<UserDocument>;
+    return user;
   }
 }
