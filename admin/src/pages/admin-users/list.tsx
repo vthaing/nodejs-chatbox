@@ -8,7 +8,7 @@ import {
     Table,
     useTable,
     Space,
-    ShowButton, TagField, FilterDropdownProps, FilterDropdown, Input,
+    ShowButton, TagField, FilterDropdownProps, FilterDropdown, Input, EditButton,
 } from "@pankod/refine-antd";
 
 import {IUser} from "interfaces";
@@ -100,6 +100,13 @@ export const AdminUserList: React.FC<IResourceComponentsProps> = () => {
                                 size="small"
                                 recordItemId={record.id}
                             />
+                            <Space>
+                                <EditButton
+                                    hideText
+                                    size="small"
+                                    recordItemId={record.id}
+                                />
+                            </Space>
                             {
                                 !record.isBanned &&
                                 <ButtonBanAdminUser onSuccess={() => window.location.reload()} record={record}/>

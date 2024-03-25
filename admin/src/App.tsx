@@ -100,7 +100,8 @@ const App: React.FC = () => {
                     list: AdminUserList,
                     edit: AdminUserEdit,
                     show: AdminUserShow,
-                    create: AdminUserCreate
+                    create: AdminUserCreate,
+                    canDelete: true,
                 },
             ]}
             notificationProvider={notificationProvider}
