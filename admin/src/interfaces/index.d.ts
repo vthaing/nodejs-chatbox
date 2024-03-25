@@ -71,6 +71,11 @@ export interface IBrand {
 }
 
 
+export interface IBrandWithSecret {
+    id: string,
+    secretKey?: string | null
+}
+
 export interface IUserBanRequest {
     id: string;
     userId: User | string;

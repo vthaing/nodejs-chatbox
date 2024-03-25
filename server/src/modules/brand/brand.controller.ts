@@ -45,6 +45,14 @@ export class BrandController {
     return this.brandService.findOne(id);
   }
 
+  @Get(':id/secret-key')
+  getSecretKey(@Param('id') id: string) {
+    return this.brandService.findOne(id).then((brand) => ({
+      id: brand.id,
+      secretKey: brand.secretKey,
+    }));
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBrandDto: UpdateBrandDto) {
     return this.brandService.update(id, updateBrandDto);
