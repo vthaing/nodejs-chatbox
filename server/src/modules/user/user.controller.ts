@@ -34,6 +34,11 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @Get('me')
+  getMyInfo(@Request() req: any) {
+    return req.user;
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.userService.findById(id);
@@ -59,10 +64,6 @@ export class UserController {
       throw new NotFoundException('User not found');
     }
     await this.userService.unbanUser(user);
-  }
-  @Get('me')
-  getMyInfo(@Request() req: any) {
-    return req.user;
   }
 
   @Patch(':id')

@@ -65,6 +65,7 @@ export interface IUserBanRequest {
     duration?: number;
     reason?: string;
     type: string;
+    typeLabel: string;
     params: {};
     createdAt: string
 }

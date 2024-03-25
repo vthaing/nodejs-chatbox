@@ -114,23 +114,20 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
 
                         <Table {...tableProps} rowKey="id">
                             <Table.Column
-                                key="reason"
                                 dataIndex={'reason'}
                                 title={"Reason"}
                             />
                             <Table.Column
-                                key="status"
-                                dataIndex={'status'}
-                                title={"Status"}
+                                dataIndex={'typeLabel'}
+                                title={"Type"}
                             />
                             <Table.Column
                                 key="duration"
                                 dataIndex={'duration'}
-                                title={"Duration"}
+                                title={"Duration (Days)"}
                             />
 
                             <Table.Column
-                                key="createdAt"
                                 dataIndex="createdAt"
                                 title={'Time'}
                                 render={(value) => (
