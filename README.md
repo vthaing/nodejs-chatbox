@@ -6,8 +6,8 @@
 
 - [Admin cung cấp secret key cho brand](#brand-secret-key).
 - [Brand sử dụng secret key để tạo request token từ brand server side](#request-token).
-- [Brand client (javascript) sử dụng token đã được khởi tạo từ bước trên để init chat box](#nhung-chat-box-vao-brand-website).
-- [Khi user status thay đổi (balance, user name, banned status): gọi API đến chat box  để cập nhật status và user name](#su-dung-request-token-dje-goi-request-toi-api-chat-box)
+- [Brand client (javascript) sử dụng token đã được khởi tạo từ bước trên để init chat box](#nhúng-chat-box-vào-brand-website).
+- [Khi user status thay đổi (balance, user name, banned status): gọi API đến chat box  để cập nhật status và user name](#sử-dụng-request-token-để-gởi-request-tới-api-chat-box)
 
 
 ### Brand Secret key
