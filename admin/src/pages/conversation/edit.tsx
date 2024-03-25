@@ -16,7 +16,7 @@ export const ConversationEdit: React.FC<IResourceComponentsProps> = () => {
 
     const { selectProps: userSelectProps } = useSelect({
         resource: "user",
-        optionLabel: "username",
+        optionLabel: "displayName",
     });
 
     return (

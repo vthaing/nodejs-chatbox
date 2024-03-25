@@ -30,7 +30,7 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                                 <TagField
                                     key={item.id}
                                     color="blue"
-                                    value={item.username}
+                                    value={item.displayName}
                                 />
                             );
                         });
