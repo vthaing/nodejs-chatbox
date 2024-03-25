@@ -16,13 +16,17 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { BanUserDto } from './dto/ban-user.dto';
+import { ChatGateway } from '../chat/chat.gateway';
 
 @ApiBearerAuth()
 @ApiTags('User')
 @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly chatGateway: ChatGateway,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -55,6 +59,10 @@ export class UserController {
       throw new NotFoundException('User not found');
     }
     await this.userService.banUser(user, banUserDto);
+    this.chatGateway.sendServerAlert(id, {
+      message: 'Your account has been banned',
+      forceLogout: true,
+    });
   }
 
   @Patch(':id/unban')

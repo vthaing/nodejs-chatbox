@@ -87,9 +87,13 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
 
     useEffect(() => {
         socket?.on('server-alert', (alertMessage: IServerAlert) => {
+            let reasonText = '';
+            if (alertMessage.reasons) {
+                reasonText = '. Reasons: ' + alertMessage.reasons.join('. ');
+            }
             Swal.fire({
                 title: "Alert",
-                text: alertMessage.message + '. Reasons: ' + alertMessage.reasons.join('. '),
+                text: alertMessage.message + reasonText,
                 icon: "warning",
             })
             if (alertMessage.forceLogout) {

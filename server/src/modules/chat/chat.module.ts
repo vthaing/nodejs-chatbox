@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MessageModule } from '../message/message.module';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
@@ -7,6 +7,12 @@ import { ConversationModule } from '../conversation/conversation.module';
 
 @Module({
   providers: [ChatGateway],
-  imports: [AuthModule, UserModule, MessageModule, ConversationModule],
+  imports: [
+    forwardRef(() => AuthModule),
+    forwardRef(() => UserModule),
+    forwardRef(() => MessageModule),
+    forwardRef(() => ConversationModule),
+  ],
+  exports: [ChatGateway],
 })
 export class ChatModule {}

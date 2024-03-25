@@ -2,7 +2,7 @@ import { MessageService } from '../message/message.service';
 import { UserService } from '../user/user.service';
 import { WsAuthStrategy } from 'src/modules/auth/strategies/ws-auth.strategy';
 import { UserDocument } from '../user/entities/user.entity';
-import { Logger } from '@nestjs/common';
+import {Injectable, Logger} from '@nestjs/common';
 import {
   MessageBody,
   SubscribeMessage,
@@ -19,6 +19,7 @@ interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
 }
 
+@Injectable()
 @WebSocketGateway(3002, { namespace: 'chat' })
 export class ChatGateway {
   @WebSocketServer()
@@ -104,7 +105,7 @@ export class ChatGateway {
 
     if (createMessage.isViolatedMessage) {
       await createMessage.populate('userBanRequestDocuments');
-      this.server.to(message.from).emit('server-alert', {
+      this.sendServerAlert(message.from, {
         message: 'Your account has been banned',
         reasons: createMessage.bannedReasons,
         forceLogout: true,
@@ -116,5 +117,9 @@ export class ChatGateway {
   @SubscribeMessage('open-conversation-chat')
   async openConversationChat(@MessageBody() messageBody: any): Promise<void> {
     this.server.socketsJoin(messageBody.conversation);
+  }
+
+  sendServerAlert(roomId, data: any) {
+    this.server.to(roomId).emit('server-alert', data);
   }
 }
