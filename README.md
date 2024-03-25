@@ -143,6 +143,60 @@ requestToken 9c70078a4ffd9d2dc52d9cbd638f77bebd82ea8e
       });
 ```
 
+### Nhúng chat box vào brand website
+
+- Chèn thư viện chat box vào header:
+```html
+<script src="http://localhost:3001/api/client-scripts/chat-box.js"></script>
+```
+- Bổ sung đoạn HTML code sau vào khu vực muốn hiển thị chat box
+```html
+<div class="chatbox"
+     data-brand-id="63b109ab1d33d74995325a91"
+     data-chat-name="Góc bàn đề"
+     data-channel-id="channel_dai_tien_giang"
+     data-channel-name="Đài Tiền Giang"
+     data-room-id="room_tg_xs_chu_nhat"
+     data-room-name="Xổ số Tiền Giang chủ nhật"
+     data-user-id="12345678"
+     data-user-display-name="Anh Ba Khía"
+     data-timestamp="1675500677057"
+     data-x-nonce="6ac8783d-b4e0-4247-8553-4e7982f8d28b"
+     data-token="aa2c9df716f244bebcf91bedd3685a070c2f254f"
+></div>
+```
+| Name                   | Required | Description                                                                                                                                                  |
+|------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| data-brand-id          | Yes      | ID của Brand                                                                                                                                                 |
+| data-chat-name         | Yes      | Tên của chat box                                                                                                                                             |
+| data-channel-id        | No       | ID của channel. Một channel sẽ có nhiều rooms                                                                                                                |
+| data-channel-name      | No       | Tên của channel                                                                                                                                              |
+| data-room-id           | No       | ID của room                                                                                                                                                  |
+| data-room-name         | No       | Tên của room                                                                                                                                                 |
+| data-user-id           | Yes      | ID của user                                                                                                                                                  |
+| data-user-display-name | Yes      | Tên hiển thị của user trên chat box. Chat box server sẽ sử dụng tên này trong lần đầu sử dụng. Để cập nhật lại thì cần phải gọi API update user brand status |
+| data-timestamp         | Yes      | Timestamp UTC. Là giá trị timestamp thời điểm hiện tại. (UTC 0)                                                                                              |
+| data-x-nonce           | Yes      | Là 1 chuỗi ngẫu nhiên                                                                                                                                        |
+| data-token             | Yes      | Request token                                                                                                                                                |
+
+- Bổ sung đoạn mã sau ở cuối body
+```html
+<script>
+  var initChatboxes = function() {
+    var chatBoxObject = new chatBoxesManagement();
+    chatBoxObject.initChatBoxFromSelector('.chatbox');
+  }
+  document.addEventListener("DOMContentLoaded", function() {
+    initChatboxes();
+  });
+</script>
+```
+
+- `chatBoxObject.initChatBoxFromSelector('.chatbox')`: có thể sử dụng HTMLID  hoặc bất cứ tham số nào của hàm `document.querySelectorAll`
+
+### Sample code
+
+Xem code mẫu tại [Nhiều chat box trên 1 page](example/src/app.controller.ts) hoặc [Cập nhật tên user trên chat box](example/src/simple-chat-box.controller.ts)
 
 ## Frontend App (client-folder)
 
