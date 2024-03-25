@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './config/configuration';
 import { ConfigModule } from '@nestjs/config';
+import { SimpleChatBoxController } from './simple-chat-box.controller';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: ['.env.local', '.env'],
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, SimpleChatBoxController],
   providers: [AppService],
 })
 export class AppModule {}
