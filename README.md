@@ -20,6 +20,15 @@
 - NestJS
 - Refine.dev
 
+### Các module cần cài đặt trên server
+
+- nvm
+- nodejs > 16
+- pm2
+- nginx
+- redis
+- mongodb > 4
+
 ### Các thành phần cần thiết để deploy Chat Box:
 
 - Domain + SSL dành cho các services: Client ChatBox, API server, Admin UI server. --> Nên cân nhắc dùng riêng hay là chung domain cho tất cả các services, Sử dụng port để phân biệt từng services
