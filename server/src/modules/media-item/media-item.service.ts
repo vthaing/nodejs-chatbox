@@ -30,7 +30,7 @@ export class MediaItemService {
     dto.messageId = message.id;
     dto.userId = message.from;
     dto.disk = this.config.get('messageAttachmentDisk');
-    dto.name = file.filename;
+    dto.name = file.originalname;
     dto.size = file.size;
     dto.mimeType = file.mimetype;
 

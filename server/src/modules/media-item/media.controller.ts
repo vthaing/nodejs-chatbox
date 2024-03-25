@@ -11,7 +11,7 @@ export class MediaController {
   @Get(':id/:fileName')
   async findOne(
     @Param('id') id: string,
-    @Res({ passthrough: true }) response: Response,
+    @Res() response: Response,
   ) {
     const mediaItem = await this.mediaItemService.findOne(id);
     if (!mediaItem) {
@@ -23,6 +23,10 @@ export class MediaController {
       'Content-Type': mediaItem.mimeType,
     });
 
-    return this.mediaItemService.getFileFromMediaItem(mediaItem);
+    const fileStream = await this.mediaItemService.getFileFromMediaItem(
+      mediaItem,
+    );
+
+    fileStream.pipe(response);
   }
 }
