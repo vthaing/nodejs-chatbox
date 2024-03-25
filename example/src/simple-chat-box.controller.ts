@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Patch,
   Param,
   Render,
   Body,
@@ -13,7 +12,7 @@ import { randomStringGenerator } from '@nestjs/common/utils/random-string-genera
 import * as crypto from 'crypto';
 import { UpdateUserDto } from './update-user.dto';
 import axios from 'axios';
-import { Response, response } from 'express';
+import { Response } from 'express';
 
 const BRAND_AUTH_HASH_ALGORITHM = 'sha1';
 const BRAND_AUTH_HASH_DIGEST = 'hex';
@@ -79,7 +78,8 @@ export class SimpleChatBoxController {
     @Res() res: Response,
   ) {
     const displayName = updateUserDto.displayName;
-    const status = updateUserDto.status;
+    const status = [1, true, '1', 'true'].includes(updateUserDto.status);
+
 
     const xBrandId = this.configService.get('brandId');
     const secretKey = this.configService.get('chatBoxSecretKey');
@@ -97,7 +97,7 @@ export class SimpleChatBoxController {
         this.configService.get('chatBoxApiBaseUrl') + 'brand-chat/user/' + id,
         {
           displayName: displayName,
-          status: status,
+          enabled: status,
         },
         {
           headers: {
@@ -109,14 +109,14 @@ export class SimpleChatBoxController {
           },
         },
       )
-      .catch((error) => {
-        return error.toJSON();
-      })
       .then((response) => {
         if (response.status !== 200) {
           return res.send(JSON.stringify(response));
         }
         return res.redirect('/simple-chat-box');
+      })
+      .catch((error) => {
+        return res.send(error.toJSON());
       });
   }
 
