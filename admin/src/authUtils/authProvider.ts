@@ -5,22 +5,14 @@ import {API_URL, TOKEN_KEY} from "../constants";
 
 export const authProvider = (axiosInstance: AxiosInstance): AuthProvider => {
     return {
-        login: async ({
-            user,
-        }: {
-            user: { email: string; password: string };
-        }) => {
+        login: async (user) => {
             try {
-                const { data } = await axios.post(`${API_URL}/auth/login`, {
-                    user,
-                });
-
-                localStorage.setItem(TOKEN_KEY, data.user.token);
+                const { data } = await axios.post(`${API_URL}/auth/login`, user);
+                localStorage.setItem(TOKEN_KEY, data.access_token);
+                return Promise.resolve();
             } catch (error) {
                 return Promise.reject(error);
             }
-
-            return Promise.reject();
         },
         logout: (props) => {
             localStorage.removeItem(TOKEN_KEY);
@@ -33,7 +25,7 @@ export const authProvider = (axiosInstance: AxiosInstance): AuthProvider => {
             return Promise.resolve();
         },
         checkAuth: () =>
-            localStorage.getItem("email")
+            localStorage.getItem(TOKEN_KEY)
                 ? Promise.resolve()
                 : Promise.reject(),
         getPermissions: () => Promise.resolve(["admin"]),
