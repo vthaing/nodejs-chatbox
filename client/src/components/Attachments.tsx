@@ -78,6 +78,7 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
             onRemove={onRemove}
             multiple={true}
             onChange={handleChange}
+            accept="image/*"
         >
           {fileList.length >= 8 ? null : uploadButton}
         </Upload>
