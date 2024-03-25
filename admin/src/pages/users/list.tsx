@@ -3,7 +3,6 @@ import {
     IResourceComponentsProps,
     useMany,
     useNavigation,
-    useResourceWithRoute
 } from "@pankod/refine-core";
 
 import {

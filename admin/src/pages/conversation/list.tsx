@@ -1,4 +1,4 @@
-import { IResourceComponentsProps, useMany } from "@pankod/refine-core";
+import {getDefaultFilter, IResourceComponentsProps, useMany, useNavigation} from "@pankod/refine-core";
 
 import {
     List,
@@ -7,20 +7,172 @@ import {
     useTable,
     Space,
     EditButton,
-    ShowButton, TagField,
+    ShowButton, TagField, FilterDropdownProps, FilterDropdown, Select, useSelect,
 } from "@pankod/refine-antd";
 
-import {IConversation, ICategory, IUser} from "interfaces";
+import {IConversation, ICategory, IUser, IBrandRoom, IBrandChannel, IBrand} from "interfaces";
 import dayjs from "dayjs";
+import {Link} from "@pankod/refine-react-router-v6";
+import React from "react";
 
 export const ConversationList: React.FC<IResourceComponentsProps> = () => {
-    const { tableProps } = useTable<IConversation>();
+    const { tableProps, filters } = useTable<IConversation>({
+        syncWithLocation: true,
+    });
+
+    const { editUrl: generateEditUrl } = useNavigation();
+
+    const { selectProps: brandSelectProps } = useSelect<IBrand>({
+        resource: "brands",
+        optionLabel: "name",
+        optionValue: "id",
+        defaultValue: getDefaultFilter("brandId", filters, "in"),
+    });
+
+    const getBrandIds = (): string[] => {
+        let result: string[] = [];
+        tableProps?.dataSource?.map(function (conversationItem: IConversation) {
+            if (conversationItem && conversationItem.brandId && !result.includes(conversationItem.brandId)) {
+                result.push(conversationItem.brandId);
+            }
+        });
+
+        return result;
+    }
+    const brandIds = getBrandIds();
+
+    const { data: brands, isLoading } = useMany<IBrand>({
+        resource: "brands",
+        ids: brandIds,
+        queryOptions: {
+            enabled: brandIds.length > 0,
+        },
+    });
+
+    const getChannelIds = (): string[] => {
+        let result: string[] = [];
+        tableProps?.dataSource?.map(function (conversation: IConversation) {
+            if (conversation.brandChannelId && !result.includes(conversation.brandChannelId)) {
+                result.push(conversation.brandChannelId);
+            }
+        });
+
+        return result;
+    }
+    const channelIds = getChannelIds();
+
+    const { data: brandChannels, isLoading: isBrandChannelLoading } = useMany<IBrandChannel>({
+        resource: "brand-channels",
+        ids: channelIds,
+        queryOptions: {
+            enabled: channelIds.length > 0,
+        },
+    });
+
+
+    const getRoomIds = (): string[] => {
+        let result: string[] = [];
+        tableProps?.dataSource?.map(function (conversation: IConversation) {
+            if (conversation.brandRoomId && !result.includes(conversation.brandRoomId)) {
+                result.push(conversation.brandRoomId);
+            }
+        });
+
+        return result;
+    }
+    const roomIds = getRoomIds();
+
+    const { data: brandRooms, isLoading: isBrandRoomLoading } = useMany<IBrandRoom>({
+        resource: "brand-rooms",
+        ids: roomIds,
+        queryOptions: {
+            enabled: roomIds.length > 0,
+        },
+    });
 
     return (
         <List>
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title="ID" />
                 <Table.Column dataIndex="name" title="Name" />
+                <Table.Column
+                    title="Brand"
+                    dataIndex={'brandId'}
+                    render={(_, record: IUser) => {
+
+                        if (isLoading) {
+                            return <TextField value="Loading..." />;
+                        }
+
+                        return (
+                            <>
+                                {
+                                    record?.brandId &&
+                                    <Link  to={generateEditUrl('brands', record.brandId)}>
+                                        <TagField
+                                            value={
+                                                brands?.data.find(
+                                                    (item) => record.brandId === item.id,
+                                                )?.name
+                                            }
+                                        />
+                                    </Link>
+                                }
+                            </>
+                        );
+                    }}
+                    filterDropdown={(props: FilterDropdownProps) => (
+                        <FilterDropdown
+                            {...props}
+                        >
+                            <Select
+                                style={{ minWidth: 200 }}
+                                {...brandSelectProps}
+                            />
+                        </FilterDropdown>
+                    )}
+                    defaultFilteredValue={getDefaultFilter(
+                        "brandId",
+                        filters,
+                        "in",
+                    )}
+                />
+                <Table.Column
+                    title="Channel"
+                    render={(record) => {
+                        if (isBrandChannelLoading) {
+                            return <TextField value="Loading..." />;
+                        }
+
+                        return (
+                            <TagField
+                                value={
+                                    brandChannels?.data.find(
+                                        (item) => record.brandChannelId === item.id,
+                                    )?.name
+                                }
+                            />
+                        );
+                    }}
+                />
+                <Table.Column
+                    title="Room"
+                    render={(record) => {
+                        if (isBrandRoomLoading) {
+                            return <TextField value="Loading..." />;
+                        }
+
+                        return (
+                            <TagField
+                                value={
+                                    brandRooms?.data.find(
+                                        (item) => record.brandRoomId === item.id,
+                                    )?.name
+                                }
+                            />
+                        );
+                    }}
+                />
                 <Table.Column
                     dataIndex={"memberObjects"}
                     title="Members"
@@ -36,8 +188,7 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                         });
                     }}
                 />
-                <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IConversation) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
-                />
+                <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IConversation) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}/>
                 <Table.Column<IConversation>
                     title="Actions"
                     dataIndex="actions"
