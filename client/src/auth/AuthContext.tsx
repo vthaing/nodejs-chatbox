@@ -22,8 +22,7 @@ export interface IAuthState {
     id: string | null;
     checking: boolean;
     logged: boolean;
-    username: string | null;
-    email: string | null;
+    displayName: string | null;
 }
 
 
@@ -31,15 +30,13 @@ const initialAuthState = {
     id: null,
     checking: true,
     logged: false,
-    username: null,
-    email: null,
+    displayName: null,
 } as IAuthState;
 
 export interface IUser {
     id: string;
     online: boolean;
-    username: string;
-    email: string;
+    displayName: string;
 }
 
 
@@ -80,16 +77,15 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
     const handleLoginResponse = (loginResponse: HttpResponse<LoginResponse>) => {
         if (loginResponse.ok) {
             const { access_token, refresh_token, user } = loginResponse.data as LoginResponse;
-            const { email, id, username } = user;
+            const { id, displayName } = user;
             localStorage.setItem('accessToken', access_token);
             localStorage.setItem('refreshToken', refresh_token);
             setAuth(
                 {
-                    email,
                     checking: false,
                     id,
-                    username,
                     logged: true,
+                    displayName
                 }
             );
         }
@@ -134,15 +130,14 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
             );
             if (refreshResponse.ok) {
                 const { access_token, refresh_token, user } = refreshResponse.data as LoginResponse;
-                const { email, id, username } = user;
+                const { displayName, id } = user;
                 localStorage.setItem('accessToken', access_token);
                 localStorage.setItem('refreshToken', refresh_token);
                 setAuth(
                     {
-                        email,
                         checking: false,
                         id,
-                        username,
+                        displayName,
                         logged: true,
                     }
                 );

@@ -17,7 +17,7 @@ export const IncomingMessage: React.FC<IncomingMessageProps> = ({ message }) => 
                 </div>
                 <div className="received_msg">
                     <div className="received_withd_msg">
-                        <p><strong>{message.senderInfo ? message.senderInfo.username : 'Unknown User'}</strong>: {message.messageContent}</p>
+                        <p><strong>{message.senderInfo ? message.senderInfo.displayName : 'Unknown User'}</strong>: {message.messageContent}</p>
                         <span className="time_date">{horaMes(message.createdAt as string)}</span>
                     </div>
                 </div>

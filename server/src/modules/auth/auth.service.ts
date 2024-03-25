@@ -53,20 +53,30 @@ export class AuthService {
 
   async validateByUsername(
     username: string,
-  ): Promise<Pick<UserDocument, 'online' & 'username' & 'email'> | null> {
+  ): Promise<Pick<UserDocument, 'online' & 'displayName'> | null> {
     const user = await this.userService.findOne({ username });
     if (user && !user.isBanned) {
-      const { online, username, email, id } = user;
-      return { online, username, email, id };
+      const { online, displayName, id } = user;
+      return { online, displayName, id };
+    }
+    return null;
+  }
+
+  async validateByUserId(
+    id: string,
+  ): Promise<Pick<UserDocument, 'online' & 'displayName'> | null> {
+    const user = await this.userService.findOne({ id });
+    if (user && !user.isBanned) {
+      const { online, displayName, id } = user;
+      return { online, displayName, id };
     }
     return null;
   }
 
   async login(user: Omit<UserDocument, 'password'>): Promise<TokenUser> {
     const payload: Partial<UserDocument> = {
-      username: user.username,
       id: user.id,
-      email: user.email,
+      displayName: user.displayName ?? user.username,
     };
     const accessToken = this.jwtService.sign(payload, {
       secret: jwtConstants.secret, // unique refresh secret from environment vars

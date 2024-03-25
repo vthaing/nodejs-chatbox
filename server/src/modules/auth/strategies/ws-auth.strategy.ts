@@ -8,8 +8,8 @@ export class WsAuthStrategy {
   constructor(private authService: AuthService) {}
 
   async validate(payload: Partial<UserDocument>): Promise<any> {
-    const { username } = payload;
-    const user = await this.authService.validateByUsername(username);
+    const { id } = payload;
+    const user = await this.authService.validateByUserId(id);
     if (!user) {
       throw new WsException({ error: 'not authorized' });
     }

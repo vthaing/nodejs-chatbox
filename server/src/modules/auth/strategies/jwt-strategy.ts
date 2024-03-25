@@ -15,8 +15,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate({ username }: Omit<UserDocument, 'password'>) {
-    const user = await this.authService.validateByUsername(username);
+  async validate({ id }: Omit<UserDocument, 'password'>) {
+    const user = await this.authService.validateByUserId(id);
     if (!user) {
       throw new UnauthorizedException();
     }

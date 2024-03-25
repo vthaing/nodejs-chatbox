@@ -13,7 +13,7 @@ export async function validateUserWS(
   console.log(request.headers.authorization);
   try {
     const user = getUserFromWSToken(request);
-    return await authService.validateByUsername(user.username);
+    return await authService.validateByUserId(user.id);
   } catch (error) {
     const isTokenExpired = error instanceof jwt.TokenExpiredError;
     if (isTokenExpired) logger.warn('Expired token for websockets');

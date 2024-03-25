@@ -5,13 +5,13 @@ export const SearchBox: React.FC = () => {
 
     const { auth, logout } = useContext(AuthContext);
 
-    const { username } = auth;
+    const { displayName } = auth;
 
     return (
         <>
             <div className="headind_srch">
                 <div className="recent_heading mt-2">
-                    <h4>{username}</h4>
+                    <h4>{displayName}</h4>
                 </div>
                 <div className="srch_bar">
                     <div className="stylish-input-group">
