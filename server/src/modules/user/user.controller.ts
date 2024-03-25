@@ -35,11 +35,6 @@ export class UserController {
     private readonly pagingService: PagingService,
   ) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
   @Get()
   async index(@Req() req: Request, @Res() res) {
     const pagingOptions = this.pagingService.getPagingOptionsFromRequest(req);

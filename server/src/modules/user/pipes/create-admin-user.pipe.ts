@@ -1,13 +1,13 @@
-import { CreateUserDto } from './../../user/dto/create-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
-import { AuthService } from '../auth.service';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
+import { UserService } from '../user.service';
 
 @Injectable()
-export class RegisterUserValidationPipe implements PipeTransform {
-  constructor(private readonly authService: AuthService) {}
+export class CreateAdminUserPipe implements PipeTransform {
+  constructor(private readonly userService: UserService) {}
 
   async transform(
     newUser: CreateUserDto,
@@ -19,7 +19,7 @@ export class RegisterUserValidationPipe implements PipeTransform {
     const logicErrors: Partial<Omit<CreateUserDto, 'password'>> = {};
     if (hasErrors)
       throw new BadRequestException({ message: 'Invalid data', errors });
-    const existEmail = await this.authService.validateEmail(userDto.email);
+    const existEmail = await this.userService.findOne({ email: userDto.email });
     if (existEmail) {
       logicErrors.email = 'The email has been taken from another user';
     }

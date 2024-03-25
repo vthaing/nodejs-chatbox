@@ -44,26 +44,12 @@ export const AdminUserList: React.FC<IResourceComponentsProps> = () => {
         <List>
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title="ID"  />
-                <Table.Column dataIndex="externalId" title="External ID"
+                <Table.Column dataIndex="displayName" title="Name"
                     filterDropdown={(props: FilterDropdownProps) => (
                       <FilterDropdown
                           {...props}
                       >
-                          <Input placeholder="enter the user external id"/>
-                      </FilterDropdown>
-                    )}
-                      defaultFilteredValue={getDefaultFilter(
-                          "externalId",
-                          filters,
-                          "eq",
-                      )}
-                />
-                <Table.Column dataIndex="displayName" title="Display Name"
-                    filterDropdown={(props: FilterDropdownProps) => (
-                      <FilterDropdown
-                          {...props}
-                      >
-                          <Input placeholder="enter the user display name"/>
+                          <Input placeholder="Enter the user name"/>
                       </FilterDropdown>
                     )}
                     defaultFilteredValue={getDefaultFilter(
@@ -72,18 +58,19 @@ export const AdminUserList: React.FC<IResourceComponentsProps> = () => {
                       "eq",
                     )}
                 />
-                <Table.Column dataIndex="online" title="Is Online"
-                  render={(_, record: IUser) => (record.online ? 'Yes' : 'No')}
-                     filters={[
-                         {text: 'Yes', value: true},
-                         {text: 'No', value: false}
-                     ]}
-                      filterMultiple={false}
-                      defaultFilteredValue={getDefaultFilter(
-                          "online",
-                          filters,
-                          "in",
-                      )}
+                <Table.Column dataIndex="email" title="Email"
+                              filterDropdown={(props: FilterDropdownProps) => (
+                                  <FilterDropdown
+                                      {...props}
+                                  >
+                                      <Input placeholder="Enter the user email"/>
+                                  </FilterDropdown>
+                              )}
+                              defaultFilteredValue={getDefaultFilter(
+                                  "email",
+                                  filters,
+                                  "eq",
+                              )}
                 />
                 <Table.Column dataIndex="isBanned" title="Is Banned"
                       render={(_, record: IUser) => (
@@ -99,21 +86,6 @@ export const AdminUserList: React.FC<IResourceComponentsProps> = () => {
                           filters,
                           "in",
                       )}
-                />
-                <Table.Column dataIndex="brandStatus" title="Status on brand"
-                    render={(_, record: IUser) => (
-                      <TagField color={record.brandStatus ? 'green' : 'red'} value={record.brandStatus ? 'Enabled' : 'Disabled'}/>
-                    )}
-                    filterMultiple={false}
-                    filters={[
-                      {text: 'Enabled', value: true},
-                      {text: 'Disabled', value: false}
-                    ]}
-                    defaultFilteredValue={getDefaultFilter(
-                      "brandStatus",
-                      filters,
-                      "in",
-                    )}
                 />
                 <Table.Column dataIndex="createdAt" title="Created At"
                               render={(_, record: IUser) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}

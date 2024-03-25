@@ -22,6 +22,7 @@ import { Request } from 'express';
 import { PagingService } from '../common/service/paging.service';
 import RoleGuard from '../auth/guards/roles.guard';
 import Role from './role.enum';
+import { CreateAdminUserPipe } from './pipes/create-admin-user.pipe';
 
 @ApiBearerAuth()
 @ApiTags('Admin User')
@@ -36,11 +37,8 @@ export class AdminUserController {
   ) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto).then((user) => {
-      user.roles.add(Role.Admin);
-      return user.save();
-    });
+  create(@Body(CreateAdminUserPipe) createUserDto: CreateUserDto) {
+    return this.userService.createAdminUser(createUserDto);
   }
 
   @Get()

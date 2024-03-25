@@ -16,6 +16,7 @@ import { BrandChatUserDto } from './dto/brand-chat-user.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { UserBanRequestService } from '../user-ban-request/user-ban-request.service';
 import { last } from 'rxjs';
+import Role from "./role.enum";
 
 @Injectable()
 export class UserService {
@@ -27,6 +28,12 @@ export class UserService {
 
   create(createUserDto: CreateUserDto) {
     const createdUser = new this.userModel(createUserDto);
+    return createdUser.save();
+  }
+
+  createAdminUser(createUserDto: CreateUserDto) {
+    const createdUser = new this.userModel(createUserDto);
+    createdUser.roles.push(Role.Admin);
     return createdUser.save();
   }
 

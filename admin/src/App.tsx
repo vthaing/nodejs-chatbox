@@ -24,6 +24,7 @@ import {RestrictedIpEdit, RestrictedIpList} from "./pages/restricted-ip";
 import {BrandCreate} from "./pages/brand/create";
 import {BrandEdit, BrandList, BrandShow} from "./pages/brand";
 import {AdminUserEdit, AdminUserList, AdminUserShow} from "./pages/admin-users";
+import {AdminUserCreate} from "./pages/admin-users/create";
 
 const App: React.FC = () => {
 
@@ -99,6 +100,7 @@ const App: React.FC = () => {
                     list: AdminUserList,
                     edit: AdminUserEdit,
                     show: AdminUserShow,
+                    create: AdminUserCreate
                 },
             ]}
             notificationProvider={notificationProvider}
