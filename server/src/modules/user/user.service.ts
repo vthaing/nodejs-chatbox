@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   FilterQuery,
@@ -16,6 +16,7 @@ import { BrandChatUserDto } from './dto/brand-chat-user.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { UserBanRequestService } from '../user-ban-request/user-ban-request.service';
 import Role from './role.enum';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
 export class UserService {
@@ -69,6 +70,16 @@ export class UserService {
     return this.userModel
       .findByIdAndUpdate(id, updateUserDto, { upsert: false, new: true })
       .exec();
+  }
+
+  updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+    return this.userModel.findById(id).then((user) => {
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      user.password = updatePasswordDto.newPassword;
+      return user.save();
+    });
   }
 
   addUserIpHistory(user: UserDocument, ip: string | null) {

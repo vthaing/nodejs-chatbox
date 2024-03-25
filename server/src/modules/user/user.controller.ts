@@ -10,6 +10,7 @@ import {
   NotFoundException,
   Req,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,6 +23,7 @@ import { Request } from 'express';
 import { PagingService } from '../common/service/paging.service';
 import RoleGuard from '../auth/guards/roles.guard';
 import Role from './role.enum';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -49,6 +51,17 @@ export class UserController {
   @Get('me')
   getMyInfo(@Req() req: any) {
     return req.user;
+  }
+
+  @Patch('me/update-password')
+  updatePassword(
+    @Req() req: any,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ) {
+    if (!req.user) {
+      throw new UnauthorizedException('Unauthorized');
+    }
+    return this.userService.updatePassword(req.user.id, updatePasswordDto);
   }
 
   @Get(':id')

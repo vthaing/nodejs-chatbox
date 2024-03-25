@@ -59,13 +59,20 @@ export const authProvider = (axiosInstance: AxiosInstance): AuthProvider => {
         //     }
         //     return Promise.reject();
         // },
-        // updatePassword: (params) => {
-        //     if (params.newPassword) {
-        //         //we can update password here
-        //         return Promise.resolve();
-        //     }
-        //     return Promise.reject();
-        // },
+        updatePassword: async (params) => {
+            console.log(params);
+            const token = localStorage.getItem(TOKEN_KEY);
+            if (!token) {
+                return Promise.reject();
+            }
+
+            const result = await axiosInstance.patch(`${API_URL}/user/me/update-password`, {newPassword: params.password});
+            if (result.statusText === 'OK') {
+                return Promise.resolve('/');
+            }
+
+            return Promise.reject();
+        },
         // forgotPassword: (params) => {
         //     if (params.email) {
         //         //we can send email with forgot password link here

@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { UserIpEntity } from './user-ip.entity';
-import Role from "../role.enum";
+import Role from '../role.enum';
 
 export type UserDocument = User & Document;
 

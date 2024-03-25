@@ -1,10 +1,10 @@
 import { Refine } from "@pankod/refine-core";
 import {
     notificationProvider,
-    Layout,
     ErrorComponent,
-    AuthPage,
+    AuthPage
 } from "@pankod/refine-antd";
+import { Layout } from "components/layout";
 
 import dataProvider from "@pankod/refine-simple-rest";
 import routerProvider from "@pankod/refine-react-router-v6";
@@ -46,10 +46,10 @@ const App: React.FC = () => {
                     //     path: "/forgot-password",
                     //     element: <AuthPage type="forgotPassword" />,
                     // },
-                    // {
-                    //     path: "/update-password",
-                    //     element: <AuthPage type="updatePassword" />,
-                    // },
+                    {
+                        path: "/update-password",
+                        element: <AuthPage type="updatePassword" />,
+                    },
                 ],
             }}
             DashboardPage={DashboardPage}
