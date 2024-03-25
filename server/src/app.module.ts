@@ -18,9 +18,9 @@ import { IpFilterDenyExceptionFilter } from './exception/ipfilter-exception-filt
 import { UserBanRequestModule } from './modules/user-ban-request/user-ban-request.module';
 import { BrandModule } from './modules/brand/brand.module';
 import { BrandChannelModule } from './modules/brand-channel/brand-channel.module';
-import {BrandRoomModule} from "./modules/brand-room/brand-room.module";
-import {BrandChatModule} from "./modules/brand-chat/brand-chat.module";
-import {ClientScriptModule} from "./modules/client-script/client-script.module";
+import { BrandRoomModule } from './modules/brand-room/brand-room.module';
+import { BrandChatModule } from './modules/brand-chat/brand-chat.module';
+import { ClientScriptModule } from './modules/client-script/client-script.module';
 
 @Module({
   imports: [
