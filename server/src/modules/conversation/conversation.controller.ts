@@ -15,9 +15,12 @@ import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
+import RoleGuard from '../auth/guards/roles.guard';
+import Role from '../user/role.enum';
 
 @ApiBearerAuth()
 @ApiTags('Conversation')
+@UseGuards(RoleGuard(Role.Admin))
 @UseGuards(JwtAuthGuard)
 @Controller('conversations')
 export class ConversationController {

@@ -6,17 +6,21 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards, Req,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { BrandChannelService } from './brand-channel.service';
 import { CreateBrandChannelDto } from './dto/create-brand-channel.dto';
 import { UpdateBrandChannelDto } from './dto/update-brand-channel.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import {Request} from "express";
+import { Request } from 'express';
+import RoleGuard from '../auth/guards/roles.guard';
+import Role from '../user/role.enum';
 
 @ApiBearerAuth()
 @ApiTags('Brand Channel')
+@UseGuards(RoleGuard(Role.Admin))
 @UseGuards(JwtAuthGuard)
 @Controller('brand-channels')
 export class BrandChannelController {

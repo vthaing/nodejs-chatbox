@@ -6,17 +6,21 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards, Req,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { BrandRoomService } from './brand-room.service';
 import { CreateBrandRoomDto } from './dto/create-brand-room.dto';
 import { UpdateBrandRoomDto } from './dto/update-brand-room.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import {Request} from "express";
+import { Request } from 'express';
+import RoleGuard from '../auth/guards/roles.guard';
+import Role from '../user/role.enum';
 
 @ApiBearerAuth()
 @ApiTags('Brand Room')
+@UseGuards(RoleGuard(Role.Admin))
 @UseGuards(JwtAuthGuard)
 @Controller('brand-rooms')
 export class BrandRoomController {

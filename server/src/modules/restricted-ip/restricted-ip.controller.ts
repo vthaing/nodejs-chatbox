@@ -13,10 +13,13 @@ import { CreateRestrictedIpDto } from './dto/create-restricted-ip.dto';
 import { UpdateRestrictedIpDto } from './dto/update-restricted-ip.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import RoleGuard from '../auth/guards/roles.guard';
+import Role from '../user/role.enum';
 
 @Controller('restricted-ips')
 @ApiBearerAuth()
 @ApiTags('Restricted IP')
+@UseGuards(RoleGuard(Role.Admin))
 @UseGuards(JwtAuthGuard)
 export class RestrictedIpController {
   constructor(private readonly restrictedIpService: RestrictedIpService) {}

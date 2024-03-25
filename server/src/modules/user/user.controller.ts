@@ -20,9 +20,12 @@ import { BanUserDto } from './dto/ban-user.dto';
 import { ChatGateway } from '../chat/chat.gateway';
 import { Request } from 'express';
 import { PagingService } from '../common/service/paging.service';
+import RoleGuard from '../auth/guards/roles.guard';
+import Role from './role.enum';
 
 @ApiBearerAuth()
 @ApiTags('User')
+@UseGuards(RoleGuard(Role.Admin))
 @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {

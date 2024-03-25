@@ -15,10 +15,13 @@ import { UpdateUserBanRequestDto } from './dto/update-user-ban-request.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
+import RoleGuard from '../auth/guards/roles.guard';
+import Role from '../user/role.enum';
 
 @Controller('user-ban-requests')
 @ApiBearerAuth()
 @ApiTags('User Ban Request')
+@UseGuards(RoleGuard(Role.Admin))
 @UseGuards(JwtAuthGuard)
 export class UserBanRequestController {
   constructor(private readonly userBanRequestService: UserBanRequestService) {}
