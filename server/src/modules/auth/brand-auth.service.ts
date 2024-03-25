@@ -3,10 +3,11 @@ import { BrandService } from '../brand/brand.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import * as crypto from 'crypto';
-import {UserAuthInterface} from "./UserAuthInterface";
+import { UserAuthInterface } from './UserAuthInterface';
 
 const BRAND_AUTH_HASH_ALGORITHM = 'sha1';
 const BRAND_AUTH_HASH_DIGEST = 'hex';
+const TOKEN_EXPIRED_IN_SECONDS = 5;
 
 @Injectable()
 export class BrandAuthService {
@@ -67,6 +68,10 @@ export class BrandAuthService {
       throw new UnauthorizedException('Invalid Timestamp');
     }
 
+    if (!this.validateTimestamp(timeStamp)) {
+      throw new UnauthorizedException('Token has been expired');
+    }
+
     if (!this.getRequestNonce(req)) {
       throw new UnauthorizedException('Invalid x-nonce');
     }
@@ -116,5 +121,15 @@ export class BrandAuthService {
       .createHmac(BRAND_AUTH_HASH_ALGORITHM, brand.secretKey)
       .update(requestString)
       .digest(BRAND_AUTH_HASH_DIGEST);
+  }
+
+  validateTimestamp(timestamp) {
+    const currentTime = new Date();
+    const subtractResult =
+      currentTime.getTime() - new Date(timestamp).getTime();
+    if (subtractResult > TOKEN_EXPIRED_IN_SECONDS) {
+      return false;
+    }
+    return true;
   }
 }

@@ -2,7 +2,7 @@ import { MessageService } from '../message/message.service';
 import { UserService } from '../user/user.service';
 import { WsAuthStrategy } from 'src/modules/auth/strategies/ws-auth.strategy';
 import { UserDocument } from '../user/entities/user.entity';
-import {Injectable, Logger} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   MessageBody,
   SubscribeMessage,
