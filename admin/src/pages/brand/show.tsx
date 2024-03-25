@@ -84,19 +84,20 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
     return (
         <>
             <Row>
-                <Show isLoading={isLoading}>
-                    <Title level={5}>Id</Title>
-                    <Text>{record?.id}</Text>
+                <Col xl={7} xs={24}>
+                    <Show isLoading={isLoading}>
+                        <Title level={5}>Id</Title>
+                        <Text>{record?.id}</Text>
 
-                    <Title level={5}>Name</Title>
-                    <Text>{record?.name}</Text>
+                        <Title level={5}>Name</Title>
+                        <Text>{record?.name}</Text>
 
-                    <Title level={5}>Secret key</Title>
-                    <Text>{record?.secretKey}</Text>
-                </Show>
-            </Row>
-            <Row>
-                <Col xl={8} xs={24}>
+                        <Title level={5}>Secret key</Title>
+                        <Text>{record?.secretKey}</Text>
+                    </Show>
+                </Col>
+                <Col xl={1}></Col>
+                <Col xl={16} xs={24}>
                     <List
                         title={"Brand Channels"}
                         breadcrumb={false}
@@ -111,6 +112,11 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
                         <Table {...channelTableProps} rowKey="id">
                             <Table.Column
                                 key="id"
+                                dataIndex={'id'}
+                                title={"id"}
+                            />
+                            <Table.Column
+                                key="name"
                                 dataIndex={'name'}
                                 title={"Name"}
                             />
@@ -130,9 +136,9 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
                         </Table>
                     </List>
                 </Col>
-                <Col xl={1}></Col>
-
-                <Col xl={14} xs={24}>
+            </Row>
+            <Row>
+                <Col xl={24} xs={24}>
                     <List
                         title={"Brand Rooms"}
                         breadcrumb={false}
