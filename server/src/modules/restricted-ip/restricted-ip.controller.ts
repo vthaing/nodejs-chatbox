@@ -9,6 +9,7 @@ import {
   UseGuards,
   Req,
   Res,
+  Query,
 } from '@nestjs/common';
 import { RestrictedIpService } from './restricted-ip.service';
 import { CreateRestrictedIpDto } from './dto/create-restricted-ip.dto';
@@ -19,6 +20,7 @@ import RoleGuard from '../auth/guards/roles.guard';
 import Role from '../user/role.enum';
 import { PagingService } from '../common/service/paging.service';
 import { Request } from 'express';
+import { PagingRestrictedIpDto } from './dto/paging-restricted-ip.dto';
 
 @Controller('restricted-ips')
 @ApiBearerAuth()
@@ -37,13 +39,14 @@ export class RestrictedIpController {
   }
 
   @Get()
-  async findAll(@Req() req: Request, @Res() res) {
-    const pagingOptions = this.pagingService.getPagingOptionsFromRequest(req);
-    pagingOptions['sort'] = { ip: 1 };
-    const pagingQuery = this._getPagingQuery(req);
+  async findAll(
+    @Req() req: Request,
+    @Res() res,
+    @Query() query: PagingRestrictedIpDto,
+  ) {
     const pagingResult = await this.restrictedIpService.paginate(
-      pagingQuery,
-      pagingOptions,
+      query.getPagingQuery(),
+      query.getPagingOptions(),
     );
     return this.pagingService.createPaginationResponse(res, pagingResult);
   }
@@ -64,24 +67,5 @@ export class RestrictedIpController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.restrictedIpService.remove(id);
-  }
-
-  _getPagingQuery(req: Request) {
-    const pagingQuery = {};
-
-    if (req.query['ip']) {
-      pagingQuery['ip'] = {
-        $regex: new RegExp(`.*${req.query['ip']}.*`),
-        $options: 'i',
-      };
-    }
-
-    //@TODO should have a mechanism to let this condition doesn't overwrite the above condition
-    if (req.query['ips']) {
-      pagingQuery['ips'] = {
-        $in: req.query['ips'],
-      };
-    }
-    return pagingQuery;
   }
 }

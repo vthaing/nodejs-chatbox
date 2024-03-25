@@ -8,6 +8,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 import mongoose from 'mongoose';
 import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
 mongoose.set('debug', true);
 
 async function bootstrap() {
@@ -18,6 +19,12 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.useWebSocketAdapter(new RedisIoAdapter(app));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
   app.enableCors();
 
   const config = new DocumentBuilder()
