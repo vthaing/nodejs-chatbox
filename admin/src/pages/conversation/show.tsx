@@ -1,9 +1,24 @@
 import { useShow, IResourceComponentsProps } from "@pankod/refine-core";
 
-import {Col, DateField, List, Row, Show, Table, TagField, Typography, useTable} from "@pankod/refine-antd";
+import {
+    Col,
+    DateField, DeleteButton,
+    EditButton,
+    List,
+    Row,
+    Show, ShowButton,
+    Space,
+    Table,
+    TagField,
+    Typography,
+    useTable
+} from "@pankod/refine-antd";
 
 import {IConversation, IMessage, IUserBanRequest} from "../../interfaces";
 import {ButtonCreatePinMessage} from "./button-create-pin-message";
+import {EditOutlined} from "@ant-design/icons";
+import React from "react";
+import {ButtonEditPinMessage} from "./button-edit-pin-message";
 
 const { Title, Text } = Typography;
 
@@ -77,8 +92,6 @@ export const ConversationShow: React.FC<IResourceComponentsProps> = () => {
                         <Table.Column
                             dataIndex={'messageContent'}
                             title={"Message"}
-
-
                         />
 
                         <Table.Column
@@ -86,6 +99,22 @@ export const ConversationShow: React.FC<IResourceComponentsProps> = () => {
                             title={'Time'}
                             render={(value) => (
                                 <DateField value={value} format="LLL" />
+                            )}
+                        />
+                        <Table.Column<IMessage>
+                            title="Actions"
+                            dataIndex="actions"
+                            render={(_, message) => (
+                                <Space>
+                                    <ButtonEditPinMessage message={message}/>
+                                    <DeleteButton
+                                        hideText
+                                        size="small"
+                                        onSuccess={() => window.location.reload()}
+                                        resourceNameOrRouteName={'message'}
+                                        recordItemId={message.id}
+                                    />
+                                </Space>
                             )}
                         />
                     </Table>

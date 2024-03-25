@@ -8,12 +8,13 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
+  Req, Patch,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
+import {UpdateMessageDto} from "./dto/update-message.dto";
 
 @ApiBearerAuth()
 @ApiTags('Messages')
@@ -26,6 +27,11 @@ export class MessageController {
   create(@Req() { user }: any, @Body() createMessageDto: CreateMessageDto) {
     createMessageDto.from = (user as UserDocument).id;
     return this.messageService.create(createMessageDto);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateMessageDto: UpdateMessageDto) {
+    return this.messageService.update(id, updateMessageDto);
   }
 
   @Get('history/:targetUser')
