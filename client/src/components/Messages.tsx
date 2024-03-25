@@ -9,6 +9,7 @@ import { LoadMessages } from '../context/chat/chatReducer'
 import { customFetch } from '../helpers/fetch'
 import { ChatTypes } from '../types/chat.types'
 import { scrollToBottom } from '../helpers/scrollToBottom'
+import {PinnedMessages} from "./PinnedMessages";
 
 
 export const Messages: React.FC = () => {
@@ -17,9 +18,6 @@ export const Messages: React.FC = () => {
     const { chatState, dispatch } = useContext(ChatContext);
 
     const { activeChat } = chatState;
-
-
-
 
     const fetchMessages = useCallback(
 
@@ -64,6 +62,10 @@ export const Messages: React.FC = () => {
             <div
                 className="mesgs"
             >
+                {
+                    (chatState.pinnedMessages.length > 0) &&
+                    <PinnedMessages showFull={false}/>
+                }
                 <div
                     id="messages"
                     className="msg_history"

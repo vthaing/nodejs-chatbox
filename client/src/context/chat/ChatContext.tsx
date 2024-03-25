@@ -10,6 +10,7 @@ export interface IMessage {
     senderInfo: IUser
     messageContent: string;
     from: string;
+    isPinnedMessage: boolean;
     createdAt?: string;
 }
 

@@ -8,6 +8,7 @@ export type ChatState = {
     users: IUser[];
     conversations: IConversation[];
     messages: IMessage[];
+    pinnedMessages: IMessage[];
 };
 
 
@@ -53,6 +54,7 @@ export const initialChatState = {
     users: [],
     conversations: [],
     messages: [],
+    pinnedMessages: []
 } as ChatState;
 
 
@@ -102,12 +104,17 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
                     if (messagesCount > 0 && state.messages[messagesCount -1].id === newMessageAction.payload.id) {
                         return state;
                     }
+                    const pinnedMessages = state.pinnedMessages;
+                    if (newMessageAction.payload.isPinnedMessage) {
+                        pinnedMessages.push(newMessageAction.payload);
+                    }
                     return {
                         ...state,
                         messages: [
                             ...state.messages,
                             newMessageAction.payload,
                         ],
+                        pinnedMessages: pinnedMessages
                     };        
                 } else {
                     return state;
@@ -115,12 +122,14 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
         
         case ChatTypes.loadMessages:
             const loadMessagesAction = (action as LoadMessages);
+            const pinnedMessages = loadMessagesAction.payload.filter((loadedMessage) => loadedMessage.isPinnedMessage === true)
 
             return {
                 ...state,
                 messages: [
                     ...loadMessagesAction.payload,
                 ],
+                pinnedMessages: pinnedMessages
             };
         
         case ChatTypes.clean:
