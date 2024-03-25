@@ -11,7 +11,11 @@ function ChatBoxData (token, brandId, userId, userDisplayName, chatName, channel
     var self = this;
 
     this.isValid = function () {
-        var requiredFields = ['token', 'brandId', 'userId', 'userDisplayName', 'chatName'];
+        var requiredFields = [
+            // @TODO: should require this field
+            //'token',
+            'brandId', 'userId', 'userDisplayName', 'chatName'
+        ];
         var result = {status: true, errors: {}};
         requiredFields.map(function (field) {
             if (!self[field]) {
@@ -36,26 +40,32 @@ function chatBoxesManagement () {
 
     var self = this;
 
+    this.handleSuccessRequestAccessToken = function (data, chatBoxElement) {
+        var jsonData = JSON.parse(data);
+        chatBoxElement.innerhtml = '<iframe src="' + this.getConversationIframeUrl(jsonData.conversation_id) + '"></iframe>';
+    }
+
     /**
      * @param selector
      * @example .chatbox-div #chatbox
      */
     this.initChatBoxFromSelector = function (selector) {
         var elementNodes = document.querySelectorAll(selector);
-        for (var i = 0; i < elementNodes.length; i++) {
-            var chatBoxData = this.createChatBoxDataFromHtmlElement(elementNodes[i]);
-            this.requestAccessToken(
-                chatBoxData,
-                function () {
-                    console.log(this.responseText, 'Get access token requestssss')
-                }
-            );
+
+        for (var elementNode of elementNodes) {
+            var chatBoxData = this.createChatBoxDataFromHtmlElement(elementNode);
+
+            var chatBoxDataValidation = chatBoxData.isValid();
+            if (chatBoxDataValidation.status) {
+                this.requestAccessToken(
+                    chatBoxData,
+                    elementNode
+                );
+            } else {
+                throw Error('The chat box data is invalid', chatBoxDataValidation.errors);
+            }
         }
     }
-
-
-
-
 
     this.createChatBoxDataFromHtmlElement = function (element) {
         return new ChatBoxData(
@@ -73,11 +83,13 @@ function chatBoxesManagement () {
 
     /**
      * @param chatBoxData ChatBoxData
-     * @param callback callback
+     * @param chatBoxElement HTMLElementTagNameMap
      */
-    this.requestAccessToken = function (chatBoxData, callback) {
+    this.requestAccessToken = function (chatBoxData, chatBoxElement) {
         var request = new XMLHttpRequest();
-        request.addEventListener('load', callback)
+        request.addEventListener('load', function () {
+            self.handleSuccessRequestAccessToken(this.responseText, chatBoxElement);
+        })
         request.open('POST', this.getApiInitChatBoxEndpoint());
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
         request.send(JSON.stringify(chatBoxData));
@@ -85,5 +97,9 @@ function chatBoxesManagement () {
 
     this.getApiInitChatBoxEndpoint = function () {
         return 'http://localhost:3001/api/brand-chat/init-chat';
+    }
+
+    this.getConversationIframeUrl = function (conversationId) {
+        return 'http://localhost:3000/conversation/' + conversationId;
     }
 }
