@@ -56,6 +56,7 @@ export class DuplicateMessageFilterFactor
     );
     return this.messageService.findOneBy({
       text: message.text,
+      from: message.from,
       _id: { $ne: message.id },
       createdAt: { $gte: timeCondition },
     });
