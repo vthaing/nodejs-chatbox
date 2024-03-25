@@ -7,17 +7,23 @@ import { MessageModule } from './modules/message/message.module';
 import { UserModule } from './modules/user/user.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { ChannelModule } from './modules/channels/channel.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb://chat_user:12345678@localhost:3007/test?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false',
-      {
-        //@TODO: temporary disable because they are not support
-        // useCreateIndex: true,
-        // useFindAndModify: false,
-      },
-    ),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+      envFilePath: ['.env.local', '.env'],
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('mongoDbUrl'),
+      }),
+      inject: [ConfigService],
+    }),
     UserModule,
     MessageModule,
     AuthModule,

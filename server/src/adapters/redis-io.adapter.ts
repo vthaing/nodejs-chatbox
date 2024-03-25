@@ -4,15 +4,18 @@ import { ServerOptions } from 'socket.io';
 import * as redisIoAdapter from 'socket.io-redis';
 import { getUserFromWSToken } from 'src/modules/auth/utils/validate-user-ws';
 import { WsAuthStrategy } from 'src/modules/auth/strategies/ws-auth.strategy';
+import { ConfigService } from '@nestjs/config';
 
 const redisAdapter: any = redisIoAdapter;
 
 export class RedisIoAdapter extends IoAdapter {
   private wsStrategy: WsAuthStrategy;
+  private configService: ConfigService;
 
   constructor(private app: INestApplicationContext) {
     super(app);
     this.wsStrategy = app.get(WsAuthStrategy);
+    this.configService = app.get<ConfigService>(ConfigService);
   }
 
   createIOServer(port: number, options?: ServerOptions): any {
@@ -28,7 +31,18 @@ export class RedisIoAdapter extends IoAdapter {
       }
     };
     const server = super.createIOServer(port, options);
-    const adapter = redisAdapter({ host: 'localhost', port: 3008 });
+    const redisConfiguration: any = {
+      host: this.configService.get('redisHost'),
+      port: this.configService.get('redisPort'),
+    };
+
+    if (this.configService.get('redisPassword')) {
+      redisConfiguration.password = this.configService.get('redisPassword');
+    }
+
+    console.log(redisConfiguration);
+
+    const adapter = redisAdapter(redisConfiguration);
     server.adapter(adapter);
     return server;
   }
