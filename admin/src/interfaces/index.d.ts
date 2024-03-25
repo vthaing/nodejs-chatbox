@@ -88,3 +88,13 @@ export interface IBrandRoom {
     brandChannelId: string;
     externalBrandChannelId: string;
 }
+
+export interface IMessage {
+    id: string;
+    to?: string;
+    conversation?: string
+    senderInfo: IUser
+    messageContent: string;
+    from: string;
+    createdAt?: string;
+}
