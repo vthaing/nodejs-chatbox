@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {IConversation} from "../../interfaces";
 import {AUTH_USER_DATA_KEY, CHATBOX_LIBRARY_URL} from "../../constants";
+import useScript from "../../hooks/useScript";
 
 type ChatBoxProps = {
     conversation: IConversation
@@ -8,43 +9,28 @@ type ChatBoxProps = {
 
 export const ChatBox: React.FC<ChatBoxProps> = ({conversation}) => {
 
-    const [chatBoxJsLoaded, setChatBoxJsLoaded] = useState<boolean>(false);
     const [chatBoxIframeProps, setChatBoxIframeProps] = useState<any>();
 
-    const loadChatBoxLibraryJs = () => {
-        const chatBoxJs = window.document.getElementById('chat-box-js');
-        if (chatBoxJs) {
-            return;
-        }
-        const chatBoxJsScript = window.document.createElement('script');
-        chatBoxJsScript.src = CHATBOX_LIBRARY_URL;
-        chatBoxJsScript.id = 'chat-box-js';
-        chatBoxJsScript.onload = function () {
-            setChatBoxJsLoaded(true);
-        }
-
-        window.document.body.appendChild(chatBoxJsScript);
-    }
+    const status = useScript(CHATBOX_LIBRARY_URL, {
+        removeOnUnmount: false,
+    })
 
     useEffect(() => {
-        if (!chatBoxJsLoaded) {
-            loadChatBoxLibraryJs();
-            return;
-        }
-
         // @ts-ignore
-        const chatBoxesManager = new chatBoxesManagement();
+        if (typeof chatBoxesManagement !== 'undefined') {
+            // @ts-ignore
+            const chatBoxesManager = new chatBoxesManagement();
 
-        setChatBoxIframeProps({
-            src: chatBoxesManager.getConversationIframeUrl(conversation.id),
-            name: localStorage.getItem(AUTH_USER_DATA_KEY)
-        });
-    }, [chatBoxJsLoaded])
-
+            setChatBoxIframeProps({
+                src: chatBoxesManager.getConversationIframeUrl(conversation.id),
+                name: localStorage.getItem(AUTH_USER_DATA_KEY)
+            });
+        }
+    }, [status])
 
     return (
         <>
-            {chatBoxJsLoaded && chatBoxIframeProps && <iframe height={600} width={600} {...chatBoxIframeProps} />}
+            {chatBoxIframeProps && <iframe height={600} width={600} {...chatBoxIframeProps} />}
         </>
     );
 }

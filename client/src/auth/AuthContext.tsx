@@ -181,7 +181,6 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
             return null;
         }
 
-        console.log(iframeJsonToken, 'sdsdsdsd');
         const accessToken = iframeJsonToken.access_token;
         const refreshToken = iframeJsonToken.refresh_token;
         const { id, displayName } = iframeJsonToken.user ?? {id: null, displayName: null};
