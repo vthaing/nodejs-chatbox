@@ -19,13 +19,17 @@ export class MediaController {
       const fileStream = await this.mediaItemService.getFileFromMediaItem(
         mediaItem,
       );
-      response.set({
-        'Content-Disposition': `inline; filename="${mediaItem.name}"`,
-        'Content-Type': mediaItem.mimeType,
-        'Cache-Control': 'max-age=31536000',
-      });
 
-      fileStream.pipe(response);
+      if (fileStream) {
+        response.set({
+          'Content-Disposition': `inline; filename="${mediaItem.name}"`,
+          'Content-Type': mediaItem.mimeType,
+          'Cache-Control': 'max-age=31536000',
+        });
+        fileStream.pipe(response);
+      } else {
+        throw new NotFoundException('Media not found');
+      }
     } catch (e) {
       throw new NotFoundException('Media not found');
     }

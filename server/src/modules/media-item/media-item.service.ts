@@ -58,9 +58,13 @@ export class MediaItemService {
   }
 
   async getFileFromMediaItem(mediaItem: MediaItemDocument) {
-    return this.storageService
-      .getDisk(mediaItem.disk)
-      .getStream(mediaItem.path);
+    const disk = this.storageService.getDisk(mediaItem.disk);
+    const existedCheck = await disk.exists(mediaItem.path);
+    if (existedCheck.exists) {
+      return disk.getStream(mediaItem.path);
+    }
+
+    return null;
   }
 
   paginate(query: FilterQuery<any>, options: PaginateOptions) {
