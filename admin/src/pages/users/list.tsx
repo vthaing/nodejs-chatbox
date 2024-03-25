@@ -138,6 +138,15 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                       render={(_, record: IUser) => (
                           <TagField color={record.isBanned ? 'red' : 'green'} value={record.isBanned ? 'Banned' : 'No'}/>
                       )}
+                      filters={[
+                          {text: 'Banned', value: true},
+                          {text: 'Not banned', value: false}
+                      ]}
+                      defaultFilteredValue={getDefaultFilter(
+                          "isBanned",
+                          filters,
+                          "in",
+                      )}
                 />
                 <Table.Column dataIndex="brandStatus" title="Status on brand"
                     render={(_, record: IUser) => (
@@ -147,6 +156,11 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                       {text: 'Enabled', value: true},
                       {text: 'Disabled', value: false}
                     ]}
+                    defaultFilteredValue={getDefaultFilter(
+                      "brandStatus",
+                      filters,
+                      "in",
+                    )}
                 />
                 <Table.Column dataIndex="createdAt" title="Created At"
                               render={(_, record: IUser) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
