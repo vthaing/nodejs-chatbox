@@ -25,6 +25,12 @@ export interface IUser {
     bannedFrom: string | null;
     externalId?: string | null
     createdAt: string
+    ipHistory: IUserIp []
+}
+
+export interface IUserIp {
+    ip: string
+    time: string
 }
 
 export interface IConversation {

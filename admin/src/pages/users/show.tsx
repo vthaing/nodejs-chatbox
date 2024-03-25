@@ -15,6 +15,7 @@ import {Link} from "@pankod/refine-react-router-v6";
 import {ButtonBanUser} from "./button-ban-user";
 import {ButtonUnbanUser} from "./button-unban-user";
 import React from "react";
+import {UserIpHistory} from "./ip-history";
 
 
 const { Title, Text } = Typography;
@@ -135,42 +136,50 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
 
 
                 <Col xl={12} xs={24}>
-                    <List
-                        title={"Banned History"}
-                        breadcrumb={false}
-                        headerProps={{
-                            extra: <></>,
-                        }}
-                    >
+                    {
+                        record &&
+                        <Row>
+                            <UserIpHistory user={record}/>
+                        </Row>
+                    }
+                    <Row>
+                        <List
+                            title={"Banned History"}
+                            breadcrumb={false}
+                            headerProps={{
+                                extra: <></>,
+                            }}
+                        >
 
-                        <Table {...tableProps} rowKey="id">
-                            <Table.Column
-                                title={"Type"}
-                                render={(value) => {
-                                    return value.isUnbanned ?
-                                        <TagField color={'green'} value={value.typeLabel}/> :
-                                        <TagField color={'red'} value={value.typeLabel}/>
-                                }}
-                            />
-                            <Table.Column
-                                dataIndex={'reason'}
-                                title={"Reason"}
-                            />
-                            <Table.Column
-                                key="duration"
-                                dataIndex={'duration'}
-                                title={"Duration (Days)"}
-                            />
+                            <Table {...tableProps} rowKey="id">
+                                <Table.Column
+                                    title={"Type"}
+                                    render={(value) => {
+                                        return value.isUnbanned ?
+                                            <TagField color={'green'} value={value.typeLabel}/> :
+                                            <TagField color={'red'} value={value.typeLabel}/>
+                                    }}
+                                />
+                                <Table.Column
+                                    dataIndex={'reason'}
+                                    title={"Reason"}
+                                />
+                                <Table.Column
+                                    key="duration"
+                                    dataIndex={'duration'}
+                                    title={"Duration (Days)"}
+                                />
 
-                            <Table.Column
-                                dataIndex="createdAt"
-                                title={'Time'}
-                                render={(value) => (
-                                    <DateField value={value} format="LLL" />
-                                )}
-                            />
-                        </Table>
-                    </List>
+                                <Table.Column
+                                    dataIndex="createdAt"
+                                    title={'Time'}
+                                    render={(value) => (
+                                        <DateField value={value} format="LLL" />
+                                    )}
+                                />
+                            </Table>
+                        </List>
+                    </Row>
                 </Col>
             </Row>
         </Show>
