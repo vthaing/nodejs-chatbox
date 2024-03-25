@@ -43,6 +43,9 @@ export class Message {
 
   @Prop({ required: true, type: mongoose.Schema.Types.String })
   text: string;
+
+  @Prop({ required: false, type: mongoose.Schema.Types.String })
+  maskedText?: string;
 }
 const MessageSchema = SchemaFactory.createForClass(Message);
 MessageSchema.virtual('senderInfo', {
@@ -50,6 +53,10 @@ MessageSchema.virtual('senderInfo', {
   localField: 'from',
   foreignField: '_id',
   justOne: true,
+});
+
+MessageSchema.virtual('messageContent').get(function () {
+  return this.maskedText ?? this.text;
 });
 
 export { MessageSchema };

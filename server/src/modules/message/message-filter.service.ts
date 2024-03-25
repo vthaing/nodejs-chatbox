@@ -1,28 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { BadWordService } from '../bad-word/bad-word.service';
-import { Message } from './entities/message.entity';
+import { Message, MessageDocument } from './entities/message.entity';
 import { BadWord, BadWordDocument } from '../bad-word/entities/bad-word.entity';
 
 @Injectable()
 export class MessageFilterService {
   constructor(private badWordService: BadWordService) {}
 
-  getProfaneWords(message: Message): Promise<BadWordDocument[]> {
+  getProfaneWords(message: MessageDocument): Promise<BadWordDocument[]> {
     return this.badWordService.findProfane(message.text);
   }
 
-  filterAndHandleViolateMessage(message: Message): Promise<Message> {
+  filterAndHandleViolateMessage(message: MessageDocument): Promise<Message> {
     return this.filterViolateMessage(message);
   }
 
-  filterViolateMessage(message: Message): Promise<Message> {
+  filterViolateMessage(message: MessageDocument): Promise<Message> {
     return this.getProfaneWords(message).then((badWords) => {
       if (badWords.length === 0) {
         return message;
       }
 
-      message.text = this.clean(message.text, badWords);
-      return message;
+      message.maskedText = this.clean(message.text, badWords);
+      return message.save();
     });
   }
 

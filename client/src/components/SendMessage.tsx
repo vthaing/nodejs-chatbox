@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, useContext, useState } from 'react'
 import { AuthContext } from '../auth/AuthContext';
-import {ActiveChatTypesEnum, ChatContext, IMessage} from '../context/chat/ChatContext';
+import {ActiveChatTypesEnum, ChatContext, IMessage, IMessageToSave} from '../context/chat/ChatContext';
 import { SocketContext } from '../context/SocketContext';
 
 export const SendMessage: React.FC = () => {
@@ -28,7 +28,7 @@ export const SendMessage: React.FC = () => {
             to: _getTo(),
             channel: _getChannel(),
             text: message,
-        } as IMessage;
+        } as IMessageToSave;
         // Emit a websocket
         socket?.emit('private-message', messageToSend);
         

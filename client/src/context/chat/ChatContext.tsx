@@ -8,9 +8,17 @@ export interface IMessage {
     to?: string;
     channel?: string
     senderInfo: IUser
+    messageContent: string;
     from: string;
-    text: string;
     createdAt?: string;
+}
+
+export interface IMessageToSave {
+    to?: string;
+    channel?: string
+    senderInfo: IUser
+    text: string;
+    from: string;
 }
 
 export interface IChannel {

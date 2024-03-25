@@ -12,7 +12,7 @@ export const OutgoingMessage: React.FC<OutgoingMessageProps> = ({ message }) => 
         <>
             <div className="outgoing_msg">
                 <div className="sent_msg">
-                    <p>{message.text}</p>
+                    <p>{message.messageContent}</p>
                     <span className="time_date">
                         {horaMes(message.createdAt as string)}
                     </span>
