@@ -115,6 +115,12 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                           <Input placeholder="enter the conversation name"></Input>
                       </FilterDropdown>
                     )}
+                              defaultFilteredValue={getDefaultFilter(
+                                  "name",
+                                  filters,
+                                  "eq",
+                              )}
+
                 />
                 <Table.Column
                     title="Brand"
@@ -155,7 +161,7 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                     defaultFilteredValue={getDefaultFilter(
                         "brandId",
                         filters,
-                        "in",
+                        "eq",
                     )}
                 />
                 <Table.Column
@@ -190,7 +196,7 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                     defaultFilteredValue={getDefaultFilter(
                         "brandChannelId",
                         filters,
-                        "in",
+                        "eq",
                     )}
                 />
                 <Table.Column
@@ -225,7 +231,7 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                     defaultFilteredValue={getDefaultFilter(
                         "brandRoomId",
                         filters,
-                        "in",
+                        "eq",
                     )}
                 />
 

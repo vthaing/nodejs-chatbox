@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {IBrandChannel, IBrandRoom, IConversation, IRestrictedIp, IUser, IUserIp} from "../../interfaces";
+import { IRestrictedIp, IUser, IUserIp} from "../../interfaces";
 import {Checkbox, DateField, DeleteButton, EditButton, List, Table, TagField} from "@pankod/refine-antd";
 import {ButtonAddToRestrictedIp} from "./button-add-to-restricted-ip";
 import {useList, useMany} from "@pankod/refine-core";

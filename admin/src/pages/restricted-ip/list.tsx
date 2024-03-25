@@ -1,4 +1,4 @@
-import { IResourceComponentsProps, useMany } from "@pankod/refine-core";
+import {getDefaultFilter, IResourceComponentsProps, useMany} from "@pankod/refine-core";
 
 import {
     List,
@@ -15,31 +15,37 @@ import dayjs from "dayjs";
 import React from "react";
 
 export const RestrictedIpList: React.FC<IResourceComponentsProps> = () => {
-    const { tableProps } = useTable<IRestrictedIp>({
+    const {tableProps, filters} = useTable<IRestrictedIp>({
         syncWithLocation: true
     });
 
     return (
         <List>
             <Table {...tableProps} rowKey="id">
-                <Table.Column dataIndex="id" title="ID" />
+                <Table.Column dataIndex="id" title="ID"/>
                 <Table.Column dataIndex="ip" title="IP"
-                    filterDropdown={(props: FilterDropdownProps) => (
-                      <FilterDropdown
-                          {...props}
-                      >
-                          <Input placeholder="Enter the IP"></Input>
-                      </FilterDropdown>
-                    )}
+                              filterDropdown={(props: FilterDropdownProps) => (
+                                  <FilterDropdown
+                                      {...props}
+                                  >
+                                      <Input placeholder="Enter the IP"></Input>
+                                  </FilterDropdown>
+                              )}
+                              defaultFilteredValue={getDefaultFilter(
+                                  "ip",
+                                  filters,
+                                  "eq",
+                              )}
                 />
                 <Table.Column dataIndex="enabled" title="Enabled"
-                  render={(_, record: IRestrictedIp) => (record.enabled ?
-                      <TagField color="green" value="Yes"/> :
-                      <TagField color="red" value="No"/>
-                  )}
+                              render={(_, record: IRestrictedIp) => (record.enabled ?
+                                      <TagField color="green" value="Yes"/> :
+                                      <TagField color="red" value="No"/>
+                              )}
                 />
-                <Table.Column dataIndex="notes" title="Notes" />
-                <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IRestrictedIp) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
+                <Table.Column dataIndex="notes" title="Notes"/>
+                <Table.Column dataIndex="createdAt" title="Created At"
+                              render={(_, record: IRestrictedIp) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
                 />
                 <Table.Column<IRestrictedIp>
                     title="Actions"

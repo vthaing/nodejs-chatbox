@@ -14,7 +14,7 @@ import {
     useTable
 } from "@pankod/refine-antd";
 
-import {IConversation, IMessage, IUserBanRequest} from "../../interfaces";
+import {IConversation, IMessage} from "../../interfaces";
 import {ButtonCreatePinMessage} from "./button-create-pin-message";
 import React from "react";
 import {ButtonEditPinMessage} from "./button-edit-pin-message";
