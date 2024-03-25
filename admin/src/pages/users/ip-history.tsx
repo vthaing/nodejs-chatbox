@@ -1,7 +1,8 @@
 import React from "react";
-import {IUser, IUserIp} from "../../interfaces";
-import {DateField, List, Table} from "@pankod/refine-antd";
+import {IBrandChannel, IBrandRoom, IConversation, IRestrictedIp, IUser, IUserIp} from "../../interfaces";
+import {DateField, DeleteButton, EditButton, List, Table, TagField} from "@pankod/refine-antd";
 import {ButtonAddToRestrictedIp} from "./button-add-to-restricted-ip";
+import {useList, useMany} from "@pankod/refine-core";
 
 
 
@@ -12,14 +13,51 @@ type UserIpHistoryProps = {
 
 export const UserIpHistory: React.FC<UserIpHistoryProps> = ({user}) => {
 
+    const getRestrictedIpsText = (): string[] => {
+        let result: string[] = [];
+        user.ipHistory.map(userIp => {
+            if (!result.includes(userIp.ip)) {
+                result.push(userIp.ip);
+            }
+        })
+
+        return result;
+    }
+    const restrictedIpsText = getRestrictedIpsText();
+
+    const { data: restrictedIps, isLoading: isRestrictedIPLoading } = useList<IRestrictedIp>({
+        resource: "restricted-ips",
+        queryOptions: {
+            enabled: restrictedIpsText.length > 0,
+        },
+        config: {
+            hasPagination: false,
+            filters: [
+                {
+                    field: 'ips',
+                    operator:"in",
+                    value: restrictedIpsText
+                }
+            ]
+        }
+    });
+
+
+
     return (
-        <List breadcrumb={false} title={"User IP History"}>
-            <Table dataSource={user.ipHistory} pagination={{
-                defaultPageSize: 6
-            }}>
+        <List breadcrumb={false} title={"User IP History"} >
+            <Table
+               loading={isRestrictedIPLoading && user.ipHistory.length > 0}
+               dataSource={user.ipHistory}
+               pagination={{
+                    defaultPageSize: 6
+                }}
+               rowKey={"time"}
+            >
                 <Table.Column
                     dataIndex={'ip'}
                     title={"IP"}
+                    render={(_, value: IUserIp) => (<TagField value={value.ip}/>)}
                 />
 
                 <Table.Column
@@ -31,9 +69,33 @@ export const UserIpHistory: React.FC<UserIpHistoryProps> = ({user}) => {
                 />
                 <Table.Column
                     title={'Actions'}
-                    render={(_ ,userIp: IUserIp) => (
-                        <ButtonAddToRestrictedIp ip={userIp.ip} user={user}/>
-                    )}
+                    render={(_ ,userIp: IUserIp) => {
+                        const restrictedIp = restrictedIps?.data.find((item) => userIp.ip === item.ip);
+                        if (restrictedIp) {
+                            return  <>
+                                {
+                                    !restrictedIp.enabled && <TagField color={"warning"} value={"The restricted IP was disabled"}/>
+                                }
+                                <EditButton
+                                    target={'_blank'}
+                                    resourceNameOrRouteName={'restricted-ips'}
+                                    recordItemId={restrictedIp.id}
+                                >
+                                    Edit IP
+                                </EditButton>
+                                <DeleteButton
+                                    resourceNameOrRouteName={'restricted-ips'}
+                                    recordItemId={restrictedIp.id}
+                                    confirmOkText={"Allow to access"}
+                                    onSuccess={() => window.location.reload()}
+                                >
+                                    Remove from restricted IPs
+                                </DeleteButton>
+                            </>
+                        } else {
+                            return <ButtonAddToRestrictedIp ip={userIp.ip} user={user}/>
+                        }
+                    }}
                 />
             </Table>
         </List>

@@ -24,6 +24,7 @@ export const RestrictedIpList: React.FC<IResourceComponentsProps> = () => {
                 <Table.Column dataIndex="enabled" title="Enabled"
                   render={(_, record: IRestrictedIp) => (record.enabled ? 'Yes' : 'No')}
                 />
+                <Table.Column dataIndex="notes" title="Notes" />
                 <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IRestrictedIp) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
                 />
                 <Table.Column<IRestrictedIp>

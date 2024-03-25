@@ -1,13 +1,12 @@
-import { IResourceComponentsProps, useMany } from "@pankod/refine-core";
+import { IResourceComponentsProps } from "@pankod/refine-core";
 
 import {
     List,
     Table,
-    TextField,
     useTable,
     Space,
     EditButton,
-    ShowButton, TagField,
+    TagField,
 } from "@pankod/refine-antd";
 
 import {IBadWord, IUser} from "interfaces";

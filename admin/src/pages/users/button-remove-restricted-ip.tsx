@@ -4,13 +4,13 @@ import {Button, Popconfirm} from "antd";
 import {CheckOutlined, StopOutlined} from "@ant-design/icons";
 import {useApiUrl, useCreate, useCustomMutation} from "@pankod/refine-core";
 
-type ButtonAddToRestrictedIpProps = {
+type ButtonRemoveRestrictedIpProps = {
     ip: string
     user?: IUser | null
     onSuccess?: any
 }
 
-export const ButtonAddToRestrictedIp: React.FC<ButtonAddToRestrictedIpProps> = ({ip, user, onSuccess}) => {
+export const ButtonRemoveRestrictedIp: React.FC<ButtonRemoveRestrictedIpProps> = ({ip, user, onSuccess}) => {
 
     const apiUrl = useApiUrl();
 
