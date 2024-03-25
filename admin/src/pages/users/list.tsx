@@ -10,11 +10,32 @@ import {
     ShowButton,
 } from "@pankod/refine-antd";
 
-import { IUser } from "interfaces";
+import {IBrand, IUser} from "interfaces";
 import dayjs from "dayjs";
 
 export const UserList: React.FC<IResourceComponentsProps> = () => {
     const { tableProps } = useTable<IUser>();
+
+    const getBrandIds = (): string[] => {
+        let result: string[] = [];
+        tableProps?.dataSource?.map(function (user: IUser) {
+            if (user.brandId && !result.includes(user.brandId)) {
+                result.push(user.brandId);
+            }
+        });
+
+        return result;
+    }
+    const brandIds = getBrandIds();
+
+    const { data: brands, isLoading } = useMany<IBrand>({
+        resource: "brands",
+        ids: brandIds,
+        queryOptions: {
+            enabled: brandIds.length > 0,
+        },
+    });
+
 
     return (
         <List>
@@ -24,11 +45,24 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                 <Table.Column dataIndex="online" title="Is Online"
                   render={(_, record: IUser) => (record.online ? 'Yes' : 'No')}
                 />
-                <Table.Column dataIndex="brand" title="Brand"
-                    render={(_, record: IUser) => {
-                        return record.brand ?
-                            record.brand.name :
-                            ''
+                <Table.Column
+                    title="Category"
+                    render={(record) => {
+                        if (isLoading) {
+                            return <TextField value="Loading..." />;
+                        }
+
+                        console.log(brands);
+
+                        return (
+                            <TextField
+                                value={
+                                    brands?.data.find(
+                                        (item) => record.brandId === item.id,
+                                    )?.name
+                                }
+                            />
+                        );
                     }}
                 />
                 <Table.Column dataIndex="createdAt" title="Is Online"

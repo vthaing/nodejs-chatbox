@@ -7,12 +7,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { BrandService } from './brand.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { Request } from 'express';
 
 @ApiBearerAuth()
 @ApiTags('Brands')
@@ -27,8 +29,12 @@ export class BrandController {
   }
 
   @Get()
-  findAll() {
-    return this.brandService.findAll();
+  findAll(@Req() req: Request) {
+    const params: any = {};
+    if (req.query.id) {
+      params._id = { $in: req.query.id };
+    }
+    return this.brandService.findAll(params);
   }
 
   @Get(':id')
