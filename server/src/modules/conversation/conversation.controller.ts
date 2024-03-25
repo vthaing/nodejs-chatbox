@@ -95,6 +95,11 @@ export class ConversationController {
         $options: 'i',
       };
     }
+
+    if (req.query.hasOwnProperty('canUploadAttachment')) {
+      pagingQuery['canUploadAttachment'] = req.query.brandStatus;
+    }
+
     return pagingQuery;
   }
 }

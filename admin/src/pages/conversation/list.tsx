@@ -228,6 +228,7 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                         "in",
                     )}
                 />
+
                 <Table.Column
                     dataIndex={"memberObjects"}
                     title="Members"
@@ -242,6 +243,21 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                             );
                         });
                     }}
+                />
+                <Table.Column dataIndex="canUploadAttachment" title="Can Upload Attachment"
+                    render={(_, record: IConversation) => (
+                      <TagField color={record.canUploadAttachment ? 'green' : 'red'} value={record.canUploadAttachment ? 'Yes' : 'No'}/>
+                    )}
+                    filterMultiple={false}
+                    filters={[
+                      {text: 'Yes', value: true},
+                      {text: 'No', value: false}
+                    ]}
+                    defaultFilteredValue={getDefaultFilter(
+                      "canUploadAttachment",
+                      filters,
+                      "in",
+                    )}
                 />
                 <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IConversation) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}/>
                 <Table.Column<IConversation>
