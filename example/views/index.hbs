@@ -40,17 +40,18 @@
   <main role="main">
 
     <div class="container">
-      <div class="row">
+      {{#unless chatBoxData }}
+        <div class="row">
         <div class="row" id="user-info">
-          <form id="user-form">
+          <form id="user-form" method="get">
             <div class="form-group">
               <label for="user-id">User ID</label>
-              <input required type="text" class="form-control" id="user-id" aria-describedby="emailHelp" placeholder="Brand user id">
+              <input required type="text" class="form-control" id="user-id" name="userId" aria-describedby="emailHelp" placeholder="Brand user id">
               <small id="emailHelp" class="form-text text-muted">This is the ID of the user on the brand</small>
             </div>
             <div class="form-group">
               <label for="user-display-name">Display Name</label>
-              <input type="text" required class="form-control" id="user-display-name" aria-describedby="displayNameHelp" placeholder="Tyson">
+              <input type="text" name="userDisplayName" required class="form-control" id="user-display-name" aria-describedby="displayNameHelp" placeholder="Tyson">
               <small id="displayNameHelp" class="form-text text-muted">This is the username will display on the chat box</small>
             </div>
             <div class="form-group">
@@ -59,38 +60,37 @@
           </form>
         </div>
       </div>
+      {{/unless}}
     </div>
     <section class="jumbotron text-center">
-      <div id="chatbox-container" style="display: none" class="container">
+      {{#if chatBoxData }}
+        <div id="chatbox-container" class="container">
         <div class="row">
           <h2>Open new anonymous browser or use another browser to init chats via a new user. The chat box doesn't support multiple users on a browser</h2>
         </div>
         <div  class="row">
-          <div class="col-md-6">
-            <h2>Chat box for channel 1</h2>
-            <div class="chatbox"
-                 data-brand-id="{{brandId}}"
-                 data-chat-name="Example Chat 1"
-                 data-channel-id="C123"
-                 data-channel-name="Channel 1 - Example Chat 1"
-                 data-room-id="R356"
-                 data-room-name="Channel 1 - Room 1 - Example Chat 1"
-            ></div>
-          </div>
-          <div class="col-md-6">
-            <h2>Chat box for channel 2</h2>
-            <div class="chatbox"
-                 data-brand-id="{{brandId}}"
-                 data-chat-name="Example Chat 2"
-                 data-channel-id="C126"
-                 data-channel-name="Channel 2 - Example Chat 2"
-                 data-room-id="R3567"
-                 data-room-name="Channel 2 - Room 2 - Example Chat 2"
-            ></div>
-          </div>
 
+          {{#each chatBoxData as | chatBox|}}
+            <div class="col-md-6">
+              <h2>{{chatBox.chatName}}</h2>
+              <div class="chatbox"
+                   data-brand-id="{{chatBox.brandId}}"
+                   data-chat-name="{{chatBox.chatName}}"
+                   data-channel-id="{{chatBox.channelId}}"
+                   data-channel-name="{{chatBox.channelName}}"
+                   data-room-id="{{chatBox.channelRoomId}}"
+                   data-room-name="{{chatBox.channelRoomName}}"
+                   data-user-id="{{chatBox.userId}}"
+                   data-user-display-name="{{chatBox.userDisplayName}}"
+                   data-timestamp="{{chatBox.timestamp}}"
+                   data-x-nonce="{{chatBox.xNonce}}"
+                   data-token="{{chatBox.token}}"
+              ></div>
+            </div>
+          {{/each}}
         </div>
       </div>
+      {{/if}}
     </section>
 
 
@@ -112,38 +112,13 @@
     var initChatboxes = function() {
       var chatBoxObject = new chatBoxesManagement();
       chatBoxObject.initChatBoxFromSelector('.chatbox');
-      document.getElementById('chatbox-container').style.display = 'block';
-      document.getElementById('user-info').style.display = 'none';
     }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      var userId = localStorage.getItem('userId');
-      var userDisplayName = localStorage.getItem('userDisplayName')
-
-      if (userId && userDisplayName) {
-        var chatBoxes = document.querySelectorAll('.chatbox')
-        for (var chatBox of chatBoxes) {
-          chatBox.dataset.userId = userId;
-          chatBox.dataset.userDisplayName = userDisplayName;
-        }
+    {{#if chatBoxData}}
+      document.addEventListener("DOMContentLoaded", function() {
         initChatboxes();
-      }
-    });
+      });
+    {{/if}}
 
-    document.getElementById('user-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      localStorage.setItem('userId', document.getElementById('user-id').value);
-      localStorage.setItem('userDisplayName', document.getElementById('user-display-name').value)
-
-      var chatBoxes = document.querySelectorAll('.chatbox')
-      for (var chatBox of chatBoxes) {
-        chatBox.dataset.userId = document.getElementById('user-id').value;
-        chatBox.dataset.userDisplayName = document.getElementById('user-display-name').value;
-      }
-
-      initChatboxes();
-
-    })
   </script>
 </body>
 
