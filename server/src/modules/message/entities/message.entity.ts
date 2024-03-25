@@ -3,10 +3,7 @@ import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { User, UserDocument } from '../../user/entities/user.entity';
 import { Conversation } from '../../conversation/entities/conversation.entity';
-import {
-  UserBanRequest,
-  UserBanRequestDocument,
-} from '../../user-ban-request/entities/user-ban-request.entity';
+import { UserBanRequest } from '../../user-ban-request/entities/user-ban-request.entity';
 
 export type MessageDocument = Message & Document;
 
