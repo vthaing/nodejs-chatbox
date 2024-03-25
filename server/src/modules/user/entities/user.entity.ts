@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { UserIpEntity } from './user-ip.entity';
+import Role from "../role.enum";
 
 export type UserDocument = User & Document;
 
@@ -60,6 +61,8 @@ export class User {
   roles: [string];
   @Prop({ type: mongoose.Schema.Types.Array })
   ipHistory?: UserIpEntity[] | null;
+
+  isAdmin: () => boolean;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
@@ -77,6 +80,10 @@ UserSchema.virtual('isBanned').get(function (): boolean {
 
   return this.bannedTo > new Date();
 });
+
+UserSchema.methods.isAdmin = function () {
+  return this.roles.includes(Role.Admin);
+};
 
 UserSchema.virtual('brand', {
   ref: 'Brand',

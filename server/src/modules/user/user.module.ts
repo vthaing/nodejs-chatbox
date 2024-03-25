@@ -7,6 +7,7 @@ import { User } from './entities/user.entity';
 import { UserBanRequestModule } from '../user-ban-request/user-ban-request.module';
 import { ChatModule } from '../chat/chat.module';
 import { CommonModule } from '../common/common.module';
+import { AdminUserController } from './admin-user.controller';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { CommonModule } from '../common/common.module';
     forwardRef(() => ChatModule),
     forwardRef(() => CommonModule),
   ],
-  controllers: [UserController],
+  controllers: [UserController, AdminUserController],
   providers: [UserService],
   exports: [UserService],
 })
