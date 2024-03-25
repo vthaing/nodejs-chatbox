@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {Document, ObjectId, SchemaTypes} from 'mongoose';
+import { Document, ObjectId, SchemaTypes } from 'mongoose';
 
 export type UserDocument = User & Document;
 
@@ -35,7 +35,7 @@ export class User {
   brandId?: string;
   @Prop({ required: false, type: mongoose.Schema.Types.String })
   externalId: string;
-  @Prop({ required: false, type: mongoose.Schema.Types.Boolean })
+  @Prop({ required: false, type: mongoose.Schema.Types.Boolean, default: true })
   brandStatus?: boolean;
 
   @Prop({ required: false, type: mongoose.Schema.Types.String })
