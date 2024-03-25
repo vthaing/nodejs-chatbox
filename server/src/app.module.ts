@@ -8,6 +8,7 @@ import { UserModule } from './modules/user/user.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { ChannelModule } from './modules/channels/channel.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { BadWordModule } from './modules/bad-word/bad-word.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -29,6 +30,7 @@ import configuration from './config/configuration';
     AuthModule,
     ChatModule,
     ChannelModule,
+    BadWordModule,
   ],
   controllers: [AppController],
   providers: [AppService],

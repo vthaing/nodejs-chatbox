@@ -2,7 +2,6 @@ import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import { User } from '../../user/entities/user.entity';
-import { MessageSchema } from '../../message/entities/message.entity';
 
 export type ChannelDocument = Channel & Document;
 @Schema({
