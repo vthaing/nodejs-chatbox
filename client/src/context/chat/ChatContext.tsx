@@ -12,6 +12,7 @@ export interface IMessage {
     from: string;
     isPinnedMessage: boolean;
     attachments?: IAttachmentInfo[];
+    mediaItems?: IMediaItem[];
     createdAt?: string;
 }
 
@@ -58,6 +59,18 @@ export interface IAttachmentInfo {
     type: string,
     uid: string,
     size: number
+}
+
+export interface IMediaItem {
+    id: string;
+    messageId: string;
+    mimeType: string;
+    name: string;
+    size: number;
+    createdAt?: string;
+    updatedAt?: string;
+    url: string
+    userId: string;
 }
 
 

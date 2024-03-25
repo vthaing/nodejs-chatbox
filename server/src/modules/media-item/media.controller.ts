@@ -15,16 +15,19 @@ export class MediaController {
       throw new NotFoundException('The file does not exist');
     }
 
-    response.set({
-      'Content-Disposition': `inline; filename="${mediaItem.name}"`,
-      'Content-Type': mediaItem.mimeType,
-      'Cache-Control': 'max-age=31536000',
-    });
+    try {
+      const fileStream = await this.mediaItemService.getFileFromMediaItem(
+        mediaItem,
+      );
+      response.set({
+        'Content-Disposition': `inline; filename="${mediaItem.name}"`,
+        'Content-Type': mediaItem.mimeType,
+        'Cache-Control': 'max-age=31536000',
+      });
 
-    const fileStream = await this.mediaItemService.getFileFromMediaItem(
-      mediaItem,
-    );
-
-    fileStream.pipe(response);
+      fileStream.pipe(response);
+    } catch (e) {
+      throw new NotFoundException('Media not found');
+    }
   }
 }

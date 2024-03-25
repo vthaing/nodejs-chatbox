@@ -6,6 +6,7 @@ export type MediaItemDocument = MediaItem & Document;
 @Schema({
   timestamps: true,
   toJSON: {
+    virtuals: true,
     getters: true,
     transform: (doc: MediaItemDocument, ret) => {
       delete ret.__v;
@@ -46,6 +47,11 @@ export class MediaItem {
 }
 
 const MediaItemSchema = SchemaFactory.createForClass(MediaItem);
+
+MediaItemSchema.virtual('url').get(function () {
+  return '/media/' + this.id + '/' + this.name;
+});
+
 MediaItemSchema.plugin(mongoosePaginate);
 
 export { MediaItemSchema };

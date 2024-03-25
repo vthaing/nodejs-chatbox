@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 import { User, UserDocument } from '../../user/entities/user.entity';
 import { Conversation } from '../../conversation/entities/conversation.entity';
 import { UserBanRequest } from '../../user-ban-request/entities/user-ban-request.entity';
+import { MediaItem } from '../../media-item/entities/media-item.entity';
 
 export type MessageDocument = Message & Document;
 
@@ -58,6 +59,7 @@ export class Message {
   userBanRequests?: [ObjectId | UserBanRequest];
   userBanRequestDocuments?: [UserBanRequest];
   isViolatedMessage: boolean;
+  mediaItems?: [MediaItem];
 
   bannedReasons?: [string | ObjectId];
 }
@@ -72,6 +74,12 @@ MessageSchema.virtual('senderInfo', {
 MessageSchema.virtual('userBanRequestDocuments', {
   ref: 'UserBanRequest',
   localField: 'userBanRequests',
+  foreignField: '_id',
+});
+
+MessageSchema.virtual('mediaItems', {
+  ref: 'MediaItem',
+  localField: 'mediaItemIds',
   foreignField: '_id',
 });
 

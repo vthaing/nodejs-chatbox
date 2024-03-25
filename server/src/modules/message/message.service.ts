@@ -27,7 +27,7 @@ export class MessageService {
       .find({
         ...params,
       })
-      .populate('senderInfo')
+      .populate(['senderInfo', 'mediaItems'])
       .exec();
   }
 

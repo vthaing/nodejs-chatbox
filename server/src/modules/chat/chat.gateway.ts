@@ -14,7 +14,6 @@ import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { MessageFilterService } from '../message/message-filter.service';
-import { UserIpEntity } from '../user/entities/user-ip.entity';
 
 interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
@@ -90,7 +89,9 @@ export class ChatGateway {
   async handleMessage(@MessageBody() message: CreateMessageDto): Promise<void> {
     const createMessage = await this.messageService
       .create(message)
-      .then((createdMessage) => createdMessage.populate('senderInfo'))
+      .then((createdMessage) =>
+        createdMessage.populate(['senderInfo', 'mediaItems']),
+      )
       .then((createdMessage) =>
         this.messageFilterService.filterAndHandleViolateMessage(createdMessage),
       );

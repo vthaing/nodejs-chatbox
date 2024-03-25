@@ -4,6 +4,7 @@ import { horaMes } from '../helpers/horaMes'
 import {Element as ScrollElement} from 'react-scroll';
 import {UploadFile} from "antd/es/upload/interface";
 import {UploadingAttachments} from "./UploadingAttachment";
+import {MessageMediaItems} from "./MessageMediaItems";
 
 export type OutgoingMessageProps = {
     message: IMessage;
@@ -48,6 +49,10 @@ export const OutgoingMessage: React.FC<OutgoingMessageProps> = ({ message }) => 
                     {
                         (uploadingAttachments.length > 0) &&
                         <UploadingAttachments message={message} attachments={uploadingAttachments}/>
+                    }
+                    {
+                        message.mediaItems && message.mediaItems.length > 0 &&
+                        <MessageMediaItems mediaItems={message.mediaItems}/>
                     }
                 </div>
             </div>
