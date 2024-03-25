@@ -25,7 +25,7 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                     dataIndex={"memberObjects"}
                     title="Members"
                     render={(value) => {
-                        return value.map((item: IUser) => {
+                        return value?.map((item: IUser) => {
                             return (
                                 <TagField
                                     key={item.id}

@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import { User } from '../../user/entities/user.entity';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export type ConversationDocument = Conversation & Document;
 @Schema({
@@ -51,6 +52,7 @@ export class Conversation {
 }
 
 const ConversationSchema = SchemaFactory.createForClass(Conversation);
+ConversationSchema.plugin(mongoosePaginate);
 
 ConversationSchema.virtual('memberObjects', {
   ref: 'User',

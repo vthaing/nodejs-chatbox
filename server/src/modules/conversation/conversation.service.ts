@@ -2,24 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import {FilterQuery, Model, PaginateModel, PaginateOptions} from 'mongoose';
 import {
   Conversation,
   ConversationDocument,
 } from './entities/conversation.entity';
 import { BrandDocument } from '../brand/entities/brand.entity';
-import {
-  BrandChannel,
-  BrandChannelDocument,
-} from '../brand-channel/entities/brand-channel.entity';
+import { BrandChannelDocument } from '../brand-channel/entities/brand-channel.entity';
 import { BrandRoomDocument } from '../brand-room/entities/brand-room.entity';
-import {InitChatDto} from "../brand-chat/dto/init-chat.dto";
+import { InitChatDto } from '../brand-chat/dto/init-chat.dto';
 
 @Injectable()
 export class ConversationService {
   constructor(
     @InjectModel(Conversation.name)
-    private readonly conversationModel: Model<ConversationDocument>,
+    private readonly conversationModel: PaginateModel<ConversationDocument>,
   ) {}
 
   create(createConversationDto: CreateConversationDto) {
@@ -27,6 +24,10 @@ export class ConversationService {
       createConversationDto,
     );
     return createdConversation.save();
+  }
+
+  paginate(query: FilterQuery<any>, options: PaginateOptions) {
+    return this.conversationModel.paginate(query, options);
   }
 
   findAll(

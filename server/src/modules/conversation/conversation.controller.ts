@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
+  Req, Res,
 } from '@nestjs/common';
 import { ConversationService } from './conversation.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
@@ -17,6 +17,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
 import RoleGuard from '../auth/guards/roles.guard';
 import Role from '../user/role.enum';
+import { PagingService } from '../common/service/paging.service';
 
 @ApiBearerAuth()
 @ApiTags('Conversation')
@@ -24,7 +25,10 @@ import Role from '../user/role.enum';
 @UseGuards(JwtAuthGuard)
 @Controller('conversations')
 export class ConversationController {
-  constructor(private readonly conversationService: ConversationService) {}
+  constructor(
+    private readonly conversationService: ConversationService,
+    private readonly pagingService: PagingService,
+  ) {}
 
   @Post()
   create(@Body() createConversationDto: CreateConversationDto) {
@@ -32,15 +36,15 @@ export class ConversationController {
   }
 
   @Get()
-  findAll(@Req() req: Request) {
-    const params: any = {};
-    if (req.query.id) {
-      params._id = { $in: req.query.id };
-    }
-    if (req.query.brandId) {
-      params.brandId = { $in: req.query.brandId };
-    }
-    return this.conversationService.findAll(params);
+  async findAll(@Req() req: Request, @Res() res) {
+    const pagingOptions = this.pagingService.getPagingOptionsFromRequest(req);
+    pagingOptions['populate'] = ['memberObjects'];
+    const pagingQuery = this._getPagingQuery(req);
+    const pagingResult = await this.conversationService.paginate(
+      pagingQuery,
+      pagingOptions,
+    );
+    return this.pagingService.createPaginationResponse(res, pagingResult);
   }
 
   //@TODO: should move this route to the user module. The URL should be: user/:userId/conversation
@@ -65,5 +69,29 @@ export class ConversationController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.conversationService.remove(id);
+  }
+
+  _getPagingQuery(req: Request) {
+    const pagingQuery = {};
+
+    if (req.query['brandId']) {
+      pagingQuery['brandId'] = req.query['brandId'];
+    }
+
+    if (req.query['brandChannelId']) {
+      pagingQuery['brandChannelId'] = req.query['brandChannelId'];
+    }
+
+    if (req.query['brandRoomId']) {
+      pagingQuery['brandRoomId'] = req.query['brandRoomId'];
+    }
+
+    if (req.query['name']) {
+      pagingQuery['name'] = {
+        $regex: new RegExp(`.*${req.query['name']}.*`),
+        $options: 'i',
+      };
+    }
+    return pagingQuery;
   }
 }

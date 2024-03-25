@@ -106,6 +106,13 @@ export class UserController {
       };
     }
 
+    if (req.query['externalId']) {
+      pagingQuery['externalId'] = {
+        $regex: new RegExp(`.*${req.query['externalId']}.*`),
+        $options: 'i',
+      };
+    }
+
     if (req.query.hasOwnProperty('online')) {
       pagingQuery['online'] = req.query.online;
     }
