@@ -2,8 +2,28 @@
 
 ## Kiến trúc hệ thống
 
-- Mô hình hoạt động
+### Mô hình hoạt động
 <img src="documents/screens/chat_box_system_structure.png">
+
+- Client Chatbox: Là 1 server website cung cấp giao diện chat box cho người dùng cuối. Framework: ReactJS
+- API Server: Là server trung tâm cung cấp tất cả các API cần thiết cho hệ thống. Framework: NestJS
+- Admin UI: Là giao diện dành riêng cho admin/ super admin để quản lý hệ thống. Framework: Refine.dev, ReactJS.
+- Redis Adapter: là redis server để hỗ trợ  socket connections.
+- Mongodb: database lưu trữ dữ liệu.
+
+### Technical requirement:
+- NodeJS > 16
+- MongoDB version > 4
+- Redis
+- ReactJS
+- TypeScript
+- 
+
+### Các thành phần cần thiết để deploy Chat Box:
+
+- Domain + SSL dành cho các services: Client ChatBox, API server, Admin UI server. --> Nên cân nhắc dùng riêng hay là chung domain cho tất cả các services, Sử dụng port để phân biệt từng services
+- Redis + Mongodb: có nên cài trên server chứa source code hay là sử dụng services sẵn có của công ty?
+- HDD: Hệ thống có hỗ trợ chức năng upload images. Hiện tại thì đang lưu trữ trên HDD. Nếu upload nhiều hình ảnh thì nên chuyển qua lưu trữ trên S3
 
 ## Tích hợp chat box vào Brand website
 
