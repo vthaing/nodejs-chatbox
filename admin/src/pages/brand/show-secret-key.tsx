@@ -19,7 +19,7 @@ export const ShowSecretKey: React.FC<ShowSecretKeyProps> = ({brand}) => {
 
     return (
         <Show isLoading={isLoading} title={false} breadcrumb={false} headerButtons={[]} goBack={false}>
-            <Text>{data?.data.secretKey}</Text>
+            <Text>{data?.data.secretKey ?? 'Secret Key was not generated'}</Text>
         </Show>
     );
 }

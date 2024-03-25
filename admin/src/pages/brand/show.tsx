@@ -18,6 +18,7 @@ import {IBrand, IBrandChannel, IBrandRoom, IConversation} from "../../interfaces
 import React from "react";
 import dayjs from "dayjs";
 import {ButtonShowSecretKey} from "./button-view-secret-key";
+import {ButtonGenerateSecretKey} from "./button-generate-secret-key";
 
 const { Title, Text } = Typography;
 
@@ -163,6 +164,7 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
                             <>
                                 <Title level={5}>Secret key</Title>
                                 <ButtonShowSecretKey brand={record}/>
+                                <ButtonGenerateSecretKey brand={record} onSuccess={() => window.location.reload()}/>
                             </>
                         }
 

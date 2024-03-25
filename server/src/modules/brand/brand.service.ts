@@ -4,6 +4,7 @@ import { UpdateBrandDto } from './dto/update-brand.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Brand, BrandDocument } from './entities/brand.entity';
 import { FilterQuery, Model } from 'mongoose';
+import { createCipheriv, randomBytes, scrypt } from 'crypto';
 
 @Injectable()
 export class BrandService {
@@ -14,6 +15,7 @@ export class BrandService {
 
   create(createBrandDto: CreateBrandDto) {
     const createdBrand = new this.brandModel(createBrandDto);
+    createdBrand.secretKey = this.generateSecretKey();
     return createdBrand.save();
   }
 
@@ -40,6 +42,10 @@ export class BrandService {
         new: true,
       })
       .exec();
+  }
+
+  generateSecretKey() {
+    return randomBytes(256).toString('base64');
   }
 
   remove(id: string): Promise<BrandDocument> {

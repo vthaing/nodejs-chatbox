@@ -51,9 +51,6 @@ export const ConversationShow: React.FC<IResourceComponentsProps> = () => {
         syncWithLocation: false,
     });
 
-
-
-
     return (
         <>
             <Row>

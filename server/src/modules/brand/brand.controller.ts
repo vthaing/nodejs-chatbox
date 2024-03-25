@@ -53,6 +53,13 @@ export class BrandController {
     }));
   }
 
+  @Patch(':id/generate-secret-key')
+  async generateSecretKey(@Param('id') id: string) {
+    const brand = await this.brandService.findOne(id);
+    brand.secretKey = this.brandService.generateSecretKey();
+    await brand.save();
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBrandDto: UpdateBrandDto) {
     return this.brandService.update(id, updateBrandDto);
