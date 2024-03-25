@@ -1,4 +1,4 @@
-import {IResourceComponentsProps, useMany, useNavigation} from "@pankod/refine-core";
+import {IResourceComponentsProps, useMany, useNavigation, useResourceWithRoute} from "@pankod/refine-core";
 
 import {
     List,
@@ -12,11 +12,15 @@ import {
 import {IBrand, IUser} from "interfaces";
 import dayjs from "dayjs";
 import {Link} from "@pankod/refine-react-router-v6";
+import {StopOutlined} from "@ant-design/icons";
+import {Button} from "antd";
+import React from "react";
+import {ButtonUnbanUser} from "./button-unban-user";
 
 export const UserList: React.FC<IResourceComponentsProps> = () => {
     const { tableProps } = useTable<IUser>();
 
-    const { editUrl: generateEditUrl } = useNavigation();
+    const { editUrl: generateEditUrl, list } = useNavigation();
 
     const getBrandIds = (): string[] => {
         let result: string[] = [];
@@ -79,18 +83,26 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                 <Table.Column<IUser>
                     title="Actions"
                     dataIndex="actions"
-                    render={(_, record) => (
+                    render={(_, record: IUser) => (
                         <Space>
-                            {/*<EditButton*/}
-                            {/*    hideText*/}
-                            {/*    size="small"*/}
-                            {/*    recordItemId={record.id}*/}
-                            {/*/>*/}
                             <ShowButton
                                 hideText
                                 size="small"
                                 recordItemId={record.id}
                             />
+                            {
+                                !record.isBanned &&
+                                <Button
+                                    danger
+                                    icon={<StopOutlined  />}
+                                    title={'Ban user'}
+                                >
+                                </Button>
+                            }
+                            {
+                                record.isBanned && <ButtonUnbanUser onSuccess={() => window.location.reload()} record={record}/>
+
+                            }
                         </Space>
                     )}
                 />

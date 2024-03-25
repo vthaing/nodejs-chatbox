@@ -42,7 +42,7 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
                 value: record?.id,
             },
         ],
-        initialPageSize: 4,
+        initialPageSize: 6,
         queryOptions: {
             enabled: record !== undefined,
         },
