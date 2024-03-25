@@ -7,6 +7,7 @@ export class PagingRestrictedIpDto extends PagingDto {
   @IsOptional()
   ip: string;
   @ApiProperty({ required: false })
+  @IsOptional()
   ips: string[];
 
   getPagingQuery(): any {
