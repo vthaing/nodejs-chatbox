@@ -12,6 +12,7 @@ import {
   Patch,
   UseInterceptors,
   UploadedFile,
+  ParseFilePipeBuilder,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -24,6 +25,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { StorageService } from '@codebrew/nestjs-storage';
 import { MessageAttachmentDto } from './dto/message-attachment.dto';
 import RequestWithUserInterface from '../auth/request-with-user.interface';
+import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
 
 @ApiBearerAuth()
 @ApiTags('Messages')
@@ -91,7 +93,17 @@ export class MessageController {
   })
   @ApiConsumes('multipart/form-data')
   uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'jpg|jpeg|gif|png|pdf',
+        })
+        .addMaxSizeValidator({
+          maxSize: 10000000, //10 MB
+        })
+        .build(),
+    )
+    file: Express.Multer.File,
     @Param('id') id: string,
     @Req() req: RequestWithUserInterface,
   ) {
