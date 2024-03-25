@@ -16,7 +16,10 @@ export class CreateUserBanRequestDto {
   @ApiProperty({ enum: UserBanRequestStatusEnum })
   @IsEnum(UserBanRequestStatusEnum)
   status?: string;
+
+  @ApiProperty()
+  duration: number;
   @ApiProperty()
   @IsArray()
-  params?: [];
+  params?: object;
 }
