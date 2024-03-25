@@ -7,7 +7,7 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 import mongoose from 'mongoose';
-import {ConfigService} from "@nestjs/config";
+import { ConfigService } from '@nestjs/config';
 mongoose.set('debug', true);
 
 async function bootstrap() {
