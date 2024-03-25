@@ -1,11 +1,11 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import {ChatContext} from "../context/chat/ChatContext";
 import {PinnedMessage} from "./PinnedMessage";
 type PinnedMessageProps = {
-    showFull?: boolean,
 }
-export const PinnedMessages: React.FC<PinnedMessageProps> = ({showFull}) => {
-    const { chatState, dispatch } = useContext(ChatContext);
+export const PinnedMessages: React.FC<PinnedMessageProps> = (props) => {
+    const { chatState } = useContext(ChatContext);
+    const [showFull, setShowFull] = useState<boolean>(false);
 
     const { pinnedMessages } = chatState;
 
@@ -14,13 +14,24 @@ export const PinnedMessages: React.FC<PinnedMessageProps> = ({showFull}) => {
             <div className="pinned_messages">
                 {
                     !showFull &&
-                    <>Pinned message({pinnedMessages.length}):<PinnedMessage key={'pin-message-' + pinnedMessages[pinnedMessages.length-1].id} message={pinnedMessages[pinnedMessages.length-1]}/></>
+                    <>
+                        <p>Pinned messages({pinnedMessages.length}) {
+                            (pinnedMessages.length > 1) &&
+                            <button onClick={() => setShowFull(true)}>Show all</button>
+                        }</p>
+                        <PinnedMessage key={'pin-message-' + pinnedMessages[pinnedMessages.length-1].id} message={pinnedMessages[pinnedMessages.length-1]}/>
+                    </>
+
                 }
                 {
                     showFull &&
-                    pinnedMessages.map((message) => <PinnedMessage key={'pin-message-' +message.id} message={message}/>)
+                    <>
+                        <p>Pinned messages <button onClick={() => setShowFull(false)}>Collapse</button></p>
+                        {pinnedMessages.map((message) => <PinnedMessage key={'pin-message-' +message.id} message={message}/>)}
+                    </>
 
                 }
+                <hr/>
             </div>
         </>
     )

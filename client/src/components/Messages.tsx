@@ -64,7 +64,7 @@ export const Messages: React.FC = () => {
             >
                 {
                     (chatState.pinnedMessages.length > 0) &&
-                    <PinnedMessages showFull={false}/>
+                    <PinnedMessages/>
                 }
                 <div
                     id="messages"
