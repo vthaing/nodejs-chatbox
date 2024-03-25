@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { IUser } from '../auth/AuthContext';
-import { ChatContext } from '../context/chat/ChatContext';
+import {ActiveChatTypesEnum, ChatContext, IActiveChatPayload} from '../context/chat/ChatContext';
 import { ActiveChat } from '../context/chat/chatReducer';
 import { ChatTypes } from '../types/chat.types';
 
@@ -19,7 +19,9 @@ export const SideBarChatItem: React.FC<SideBarChatItemProps> = ({ user }: SideBa
 
     const onClick = () => {
         const action: ActiveChat = {
-            payload: user.id,
+            payload: ({
+                type: ActiveChatTypesEnum.DIRECT, activeChatId: user.id
+            } as IActiveChatPayload),
             type: ChatTypes.activeChat,
         };
         dispatch(action);
@@ -52,7 +54,7 @@ export const SideBarChatItem: React.FC<SideBarChatItemProps> = ({ user }: SideBa
         <>
             {/* <!-- start active conversation--> */}
             <div
-                className={`chat_list ${id === activeChat && 'active_chat'}`}
+                className={`chat_list ${id === activeChat.activeChatId && 'active_chat'}`}
                 onClick={onClick}
             >
                 <div className="chat_people">

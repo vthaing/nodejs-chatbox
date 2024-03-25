@@ -21,7 +21,7 @@ export const ChatPage: React.FC = () => {
                 <InboxPeople />
                 {
 
-                    (activeChat) ?
+                    (activeChat.activeChatId) ?
                         <Messages />
                         :
                         <ChatSelect />

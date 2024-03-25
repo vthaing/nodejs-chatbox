@@ -4,7 +4,8 @@ import { ChatAction, chatReducer, ChatState, initialChatState } from './chatRedu
 
 export interface IMessage {
     id: string;
-    to: string;
+    to?: string;
+    channel?: string
     from: string;
     text: string;
     createdAt?: string;
@@ -15,6 +16,16 @@ export interface IChannel {
     name?: string;
     members: [string];
     owner?: string
+}
+
+export enum ActiveChatTypesEnum  {
+    DIRECT = 'direct',
+    CHANNEL = 'channel',
+}
+
+export interface IActiveChatPayload {
+    type?: string;
+    activeChatId?: ActiveChatTypesEnum
 }
 
 export interface IChatContext {

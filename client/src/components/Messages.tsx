@@ -4,7 +4,7 @@ import { SendMessage } from './SendMessage'
 import { OutgoingMessage } from './OutgoingMessage'
 import { IncomingMessage } from './IncomingMessage'
 import { AuthContext } from '../auth/AuthContext'
-import { ChatContext, IMessage } from '../context/chat/ChatContext'
+import {ActiveChatTypesEnum, ChatContext, IMessage} from '../context/chat/ChatContext'
 import { LoadMessages } from '../context/chat/chatReducer'
 import { customFetch } from '../helpers/fetch'
 import { ChatTypes } from '../types/chat.types'
@@ -18,11 +18,19 @@ export const Messages: React.FC = () => {
 
     const { activeChat } = chatState;
 
+
+
+
     const fetchMessages = useCallback(
+
         async () => {
+            const messagesEndpoint = activeChat.type === ActiveChatTypesEnum.DIRECT ?
+                ('message/history/' + activeChat.activeChatId) :
+                ('message/channel/' + activeChat.activeChatId);
+
             const response = await customFetch<IMessage[]>(
                 {
-                    endpoint: `message/history/${activeChat}`,
+                    endpoint: messagesEndpoint,
                     method: 'GET',
                     token: localStorage.getItem('accessToken') ?? '',
                 }

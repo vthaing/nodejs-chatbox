@@ -1,11 +1,10 @@
 import {IUser} from '../../auth/AuthContext';
 import {ChatTypes} from '../../types/chat.types';
-import {IChannel, IMessage} from './ChatContext';
+import {IActiveChatPayload, IChannel, IMessage} from './ChatContext';
 
 export type ChatState = {
     id: string;
-    activeChat: string;
-    activeChatType?: string;
+    activeChat: IActiveChatPayload;
     users: IUser[];
     channels: IChannel[];
     messages: IMessage[];
@@ -14,6 +13,7 @@ export type ChatState = {
 
 export interface ChatAction {
     type: ChatTypes;
+    payload?: any
 }
 
 export interface ListUsers extends ChatAction {
@@ -28,7 +28,7 @@ export interface ListChannels extends ChatAction {
 
 export interface ActiveChat extends ChatAction {
     type: ChatTypes.activeChat;
-    payload: string;
+    payload: IActiveChatPayload;
 }
 
 export interface NewMessage extends ChatAction {
@@ -49,7 +49,7 @@ export interface Clean extends ChatAction {
 
 export const initialChatState = {
     id: '',
-    activeChat: '',
+    activeChat: { } as IActiveChatPayload,
     users: [],
     channels: [],
     messages: [],
@@ -93,8 +93,10 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
         case ChatTypes.newMessage:
             const newMessageAction = (action as NewMessage);
 
-            if (state.activeChat === newMessageAction.payload.from ||
-                state.activeChat === newMessageAction.payload.to
+            if (
+                    state.activeChat.activeChatId === newMessageAction.payload.from ||
+                    state.activeChat.activeChatId === newMessageAction.payload.to ||
+                    state.activeChat.activeChatId === newMessageAction.payload.channel
                 ) {
                     return {
                         ...state,
