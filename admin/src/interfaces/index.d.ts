@@ -43,6 +43,7 @@ export interface IConversation {
     brandChannelId?: string | null;
     brandRoomId?: string | null;
     createdAt: string
+    canUploadAttachment: boolean;
 }
 
 export interface IBadWord {
@@ -65,6 +66,7 @@ export interface IBrand {
     id: string;
     name: string;
     secretKey: string;
+    canUploadAttachment: boolean;
     createdAt: string
 }
 

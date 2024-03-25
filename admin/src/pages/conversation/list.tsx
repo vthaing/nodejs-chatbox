@@ -6,10 +6,10 @@ import {
     TextField,
     useTable,
     Space,
-    ShowButton, TagField, FilterDropdownProps, FilterDropdown, Select, useSelect, Input,
+    ShowButton, TagField, FilterDropdownProps, FilterDropdown, Select, useSelect, Input, EditButton,
 } from "@pankod/refine-antd";
 
-import {IConversation, ICategory, IUser, IBrandRoom, IBrandChannel, IBrand} from "interfaces";
+import {IConversation, IUser, IBrandRoom, IBrandChannel, IBrand} from "interfaces";
 import dayjs from "dayjs";
 import {Link} from "@pankod/refine-react-router-v6";
 import React from "react";
@@ -249,11 +249,11 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                     dataIndex="actions"
                     render={(_, record) => (
                         <Space>
-                            {/*<EditButton*/}
-                            {/*    hideText*/}
-                            {/*    size="small"*/}
-                            {/*    recordItemId={record.id}*/}
-                            {/*/>*/}
+                            <EditButton
+                                hideText
+                                size="small"
+                                recordItemId={record.id}
+                            />
                             <ShowButton
                                 hideText
                                 size="small"

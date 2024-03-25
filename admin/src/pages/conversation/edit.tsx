@@ -2,6 +2,7 @@ import React from "react";
 import { IResourceComponentsProps } from "@pankod/refine-core";
 
 import {
+    Checkbox,
     Edit,
     Form,
     Input, Select,
@@ -32,6 +33,14 @@ export const ConversationEdit: React.FC<IResourceComponentsProps> = () => {
                     ]}
                 >
                     <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Can Upload Attachment"
+                    name="canUploadAttachment"
+                    valuePropName="checked"
+                    help={"The user can upload attachments in a conversation if this field is enabled on both the brand and the conversation."}
+                >
+                    <Checkbox/>
                 </Form.Item>
                 <Form.Item
                     label="Members"

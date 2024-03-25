@@ -22,4 +22,8 @@ export class CreateConversationDto {
   @ApiProperty()
   @IsOptional()
   brandRoomId?: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  canUploadAttachment: boolean;
 }
