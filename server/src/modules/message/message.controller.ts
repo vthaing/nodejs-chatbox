@@ -13,6 +13,7 @@ import {
   UseInterceptors,
   UploadedFile,
   ParseFilePipeBuilder,
+  Query, NotFoundException,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -21,7 +22,6 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOkResponse,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -33,6 +33,7 @@ import { MessageAttachmentDto } from './dto/message-attachment.dto';
 import RequestWithUserInterface from '../auth/request-with-user.interface';
 import { ChatGateway } from '../chat/chat.gateway';
 import { ChatMessage } from './dto/chat-message';
+import { MessagePagingDto } from './dto/message-paging.dto';
 
 @ApiBearerAuth()
 @ApiTags('Messages')
@@ -52,6 +53,9 @@ export class MessageController {
     createMessageDto.from = (user as UserDocument).id;
     return this.messageService
       .create(createMessageDto)
+      .then((message) =>
+        message.populate(this.messageService.getRequiredRelationProperties()),
+      )
       .then((message) => message.transformToChatBoxData());
   }
 
@@ -118,20 +122,32 @@ export class MessageController {
     type: [ChatMessage],
     description: 'Get messages of a conversation',
   })
-  findMessagesByConversation(
+  async findMessagesByConversation(
     @Req() req: Request,
     @Param('conversationId') conversationId: string,
+    @Query() query: MessagePagingDto,
   ) {
     const params: any = {
       conversation: conversationId,
     };
-    if (req.query.brandId) {
+    if (query.brandId) {
       params.brandId = { $in: req.query.brandId };
     }
-    if (req.query.isPinnedMessage) {
+    if (query.isPinnedMessage) {
       params.isPinnedMessage = req.query.isPinnedMessage;
     }
-    return this.messageService.getMessagesForChatBoxClient(params);
+    if (query.beforeMessageId) {
+      const beforeMessage = await this.messageService.findOne(
+        query.beforeMessageId,
+      );
+      if (beforeMessage) {
+        params.createdAt = { $lt: beforeMessage.createdAt };
+        params._id = { $ne: beforeMessage.id };
+      } else {
+        throw new NotFoundException('Message not found');
+      }
+    }
+    return this.messageService.getMessagesForChatBoxClient(params, query.limit);
   }
 
   @UseGuards(RoleGuard(Role.Admin))

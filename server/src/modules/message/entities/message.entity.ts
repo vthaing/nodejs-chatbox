@@ -7,6 +7,7 @@ import { UserBanRequest } from '../../user-ban-request/entities/user-ban-request
 import { MediaItem } from '../../media-item/entities/media-item.entity';
 import { ChatMessage } from '../dto/chat-message';
 import { MessageSenderInfo } from '../dto/message-sender-info';
+export const DEFAULT_CHAT_BOX_MESSAGE_LIMIT = 30;
 
 export type MessageDocument = Message & Document;
 
@@ -65,6 +66,7 @@ export class Message {
 
   bannedReasons?: [string | ObjectId];
   transformToChatBoxData: () => ChatMessage;
+  createdAt?: Date | null;
 }
 const MessageSchema = SchemaFactory.createForClass(Message);
 MessageSchema.virtual('senderInfo', {

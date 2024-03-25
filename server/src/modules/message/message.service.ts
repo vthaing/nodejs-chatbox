@@ -3,9 +3,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
-import { Message, MessageDocument } from './entities/message.entity';
+import {
+  DEFAULT_CHAT_BOX_MESSAGE_LIMIT,
+  Message,
+  MessageDocument,
+} from './entities/message.entity';
 import { MediaItemService } from '../media-item/media-item.service';
-import { CreateMediaItemDto } from '../media-item/dto/create-media-item.dto';
 
 @Injectable()
 export class MessageService {
@@ -31,10 +34,17 @@ export class MessageService {
       .exec();
   }
 
-  getMessagesForChatBoxClient(params: FilterQuery<MessageDocument> = {}) {
-    return this.findAll(params).then((messages) => {
-      return messages.map((message) => message.transformToChatBoxData());
-    });
+  getMessagesForChatBoxClient(
+    params: FilterQuery<MessageDocument> = {},
+    limit = DEFAULT_CHAT_BOX_MESSAGE_LIMIT,
+  ) {
+    return this.messageModel
+      .find(params)
+      .limit(limit)
+      .populate(this.getRequiredRelationProperties())
+      .then((messages) => {
+        return messages.map((message) => message.transformToChatBoxData());
+      });
   }
 
   getRequiredRelationProperties() {
