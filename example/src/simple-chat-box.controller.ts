@@ -13,6 +13,14 @@ export class SimpleChatBoxController {
   @Get('simple-chat-box')
   @Render('simple-chat-box')
   root() {
+
+
+
+
+
+
+
+
     const chatBoxData = this.getChatBoxData();
 
     const requestToken = this.generateToken(
@@ -21,6 +29,8 @@ export class SimpleChatBoxController {
       chatBoxData['xNonce'],
       chatBoxData['timestamp'],
     );
+
+    console.log('requestToken', requestToken);
 
     return {
       chatBoxLibraryUrl: this.configService.get('chatBoxLibraryUrl'),
@@ -44,9 +54,13 @@ export class SimpleChatBoxController {
         accumulator[key] = headerMissingToken[key];
         return accumulator;
       }, {});
+
+    console.log('sortedRequestProperties', sortedRequestProperties);
     const requestString = new URLSearchParams(
       sortedRequestProperties,
     ).toString();
+
+    console.log('requestString', requestString);
 
     return crypto
       .createHmac(BRAND_AUTH_HASH_ALGORITHM, secretKey)

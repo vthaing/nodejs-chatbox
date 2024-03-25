@@ -27,44 +27,73 @@ const BRAND_AUTH_HASH_ALGORITHM = 'sha1';
 const BRAND_AUTH_HASH_DIGEST = 'hex';
 
 const generateToken = (brandId, secretKey, xNonce, xTimestamp) => {
-    const headerMissingToken = {
-      'x-nonce': xNonce,
-      'x-timestamp': xTimestamp,
-      'x-brand-id': brandId,
-    };
+  const headerMissingToken = {
+    'x-nonce': xNonce,
+    'x-timestamp': xTimestamp,
+    'x-brand-id': brandId,
+  };
 
-    const sortedRequestProperties = Object.keys(headerMissingToken)
-      .sort()
-      .reduce((accumulator, key) => {
-        accumulator[key] = headerMissingToken[key];
-        return accumulator;
-      }, {});
-    const requestString = new URLSearchParams(
-      sortedRequestProperties,
-    ).toString();
+  console.log('header missing token', headerMissingToken);
+  console.log('secret key', secretKey);
 
-    return crypto
-      .createHmac(
-        BRAND_AUTH_HASH_ALGORITHM, 
-        secretKey,
-      )
-      .update(requestString)
-      .digest(BRAND_AUTH_HASH_DIGEST);
+  const sortedRequestProperties = Object.keys(headerMissingToken)
+    .sort()
+    .reduce((accumulator, key) => {
+      accumulator[key] = headerMissingToken[key];
+      return accumulator;
+    }, {});
+
+  console.log('sortedRequestProperties', sortedRequestProperties);
+  const requestString = new URLSearchParams(
+    sortedRequestProperties,
+  ).toString();
+
+  console.log('requestString', requestString);
+
+  return crypto
+    .createHmac(BRAND_AUTH_HASH_ALGORITHM, secretKey)
+    .update(requestString)
+    .digest(BRAND_AUTH_HASH_DIGEST);
   }
-  
-  const secretKey = process.env.brandSecretToken;// We should save the secret key in the server environment variable
+
+  // 63b109ab1d33d74995325a91
   const xBrandId = '63b982a370ee0e49ae4ac8fa';
+  
+  // xCmOGVhD1cb8F3exdj2lg75NaoNcgS0dzlN3lu0DnI6ChnDkMneBDvqdpbuaJIqua/S2ZU3IjKB3DLb0n9MzpEUNJjt42YwSPt9WOIJb5Cb+ibCzvANX5MSlCOhgWyXZCRwbohGDl+G9awKy7qERoTkOmGbY5+axlmIzbzCZ75vCszHmAsiqHo8A5c16LJLaC4OdIpZ/F/zTdFF9Xp3a6TMwlc9dIpJn0V02Jk2jN1g5/DhdFbU8QQ2D7oAoq4EZOSbKwzUJcrV9f//BcRolkdFfC1RMyz9Ph1GMRHtmM1f9hW+vhqGprs2Qndq6noQkxxZNg0sya1xCPXzw1kcngQ==
+  const secretKey = process.env.brandSecretToken;// We should save the secret key in the server environment variable
+  
+  // 6bf647c4-f779-4ac8-a332-d0b56cee66a3
   const xNonce = randomStringGenerator();
+  
+  // 1675420858134
   const xTimeStamp = Date.now();// Please Make sure this will return the UTC 0 value
   
-  const secretToken = generateToken(
+  const requestToken = generateToken(
     xBrandId,
     secretKey,
     xNonce,
     xTimeStamp
   );
+  console.log('requestToken', requestToken);
 ```
 
+- Sau đây là log khi chạy đoạn code trên với các giá trị tương ứng:
+
+```composer log
+header missing token {
+  'x-nonce': '6bf647c4-f779-4ac8-a332-d0b56cee66a3',
+  'x-timestamp': 1675420858134,
+  'x-brand-id': '63b109ab1d33d74995325a91'
+}
+secretKey: xCmOGVhD1cb8F3exdj2lg75NaoNcgS0dzlN3lu0DnI6ChnDkMneBDvqdpbuaJIqua/S2ZU3IjKB3DLb0n9MzpEUNJjt42YwSPt9WOIJb5Cb+ibCzvANX5MSlCOhgWyXZCRwbohGDl+G9awKy7qERoTkOmGbY5+axlmIzbzCZ75vCszHmAsiqHo8A5c16LJLaC4OdIpZ/F/zTdFF9Xp3a6TMwlc9dIpJn0V02Jk2jN1g5/DhdFbU8QQ2D7oAoq4EZOSbKwzUJcrV9f//BcRolkdFfC1RMyz9Ph1GMRHtmM1f9hW+vhqGprs2Qndq6noQkxxZNg0sya1xCPXzw1kcngQ==
+sortedRequestProperties {
+  'x-brand-id': '63b109ab1d33d74995325a91',
+  'x-nonce': '6bf647c4-f779-4ac8-a332-d0b56cee66a3',
+  'x-timestamp': 1675420858134
+}
+requestString x-brand-id=63b109ab1d33d74995325a91&x-nonce=6bf647c4-f779-4ac8-a332-d0b56cee66a3&x-timestamp=1675420858134
+requestToken 9c70078a4ffd9d2dc52d9cbd638f77bebd82ea8e
+```
 ## Frontend App (client-folder)
 
 Just install the dependencies and start the app:
