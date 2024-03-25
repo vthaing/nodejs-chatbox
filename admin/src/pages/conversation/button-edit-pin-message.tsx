@@ -48,7 +48,7 @@ export const ButtonEditPinMessage: React.FC<ButtonEditPinMessageProps> = ({messa
 
     return (
         <>
-            <Modal {...modalProps} open={visible} title="Edit PIN message" okText="submit" width={600}>
+            <Modal {...modalProps} title="Edit PIN message" okText="submit" width={600}>
                 <Spin spinning={formLoading}>
                     <>
                         {formResult && <p>Result: {formResult}</p>}
