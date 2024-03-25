@@ -192,13 +192,24 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
         case ChatTypes.loadMessages:
             const loadMessagesAction = (action as LoadMessages);
             const currentMessages = state.messages ?? []
+            const existedIds: any = {};
+            const uniqueMessages: IMessage[] = [];
+            [
+                ...loadMessagesAction.payload,
+                ...currentMessages
+            ].forEach(message => {
+                if (existedIds.hasOwnProperty(message.id)) {
+                    return;
+                }
+                existedIds[message.id] = message.id;
+                uniqueMessages.push(message);
+            });
+
+
 
             return {
                 ...state,
-                messages: [
-                    ...loadMessagesAction.payload,
-                    ...currentMessages
-                ],
+                messages: uniqueMessages,
             };
         case ChatTypes.loadPinMessages:
             return {

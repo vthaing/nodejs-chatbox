@@ -6,6 +6,10 @@ export class MessagePagingDto {
   @ApiProperty({ required: false })
   @IsOptional()
   beforeMessageId: string | null;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  fromMessageId: string | null;
   @ApiProperty({ required: false, default: DEFAULT_CHAT_BOX_MESSAGE_LIMIT })
   @IsOptional()
   limit: number = DEFAULT_CHAT_BOX_MESSAGE_LIMIT;
@@ -15,4 +19,5 @@ export class MessagePagingDto {
   @ApiProperty({ required: false })
   @IsOptional()
   isPinnedMessage: boolean | null;
+
 }

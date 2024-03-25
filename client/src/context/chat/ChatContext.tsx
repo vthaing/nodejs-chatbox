@@ -1,6 +1,7 @@
-import React, { createContext, useReducer } from 'react'
+import React, {createContext, useCallback, useReducer} from 'react'
 import {ChatAction, chatReducer, ChatState, initialChatState} from './chatReducer';
 import {IUser} from "../../auth/AuthContext";
+import {fetchSynchronous} from "../../helpers/fetch";
 
 export const DEFAULT_MESSAGE_LIMIT = 10;
 export interface IMessage {
@@ -52,6 +53,7 @@ export interface IActiveChatPayload {
 
 export interface IChatContext {
     chatState: ChatState;
+    fetchMessages: (options: {}) => Promise<[IMessage]>
     dispatch: React.Dispatch<ChatAction>;
 }
 
@@ -82,7 +84,8 @@ export interface IMediaItem {
 
 const initialChatContext = {
     chatState: initialChatState,
-    dispatch: (action: ChatAction) => { }
+    dispatch: (action: ChatAction) => { },
+    fetchMessages: (options: {}) => {}
 } as IChatContext;
 
 
@@ -93,11 +96,37 @@ export const ChatContext = createContext(initialChatContext);
 export const ChatProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
 
     const [chatState, dispatch] = useReducer(chatReducer, initialChatState);
+    const {activeChat} = chatState;
+
+    const fetchMessages =  useCallback( (options) => {
+        let messagesEndpoint = activeChat.type === ActiveChatTypesEnum.DIRECT ?
+            ('message/history/' + activeChat.activeChatId) :
+            ('message/conversation/' + activeChat.activeChatId);
+        if (options) {
+            const queryString = new URLSearchParams(options).toString();
+            messagesEndpoint = messagesEndpoint + '?' + queryString;
+        }
+
+        return fetchSynchronous(
+            {
+                endpoint: messagesEndpoint,
+                method: 'GET',
+                token: localStorage.getItem('accessToken') ?? '',
+            }
+        ).then(response => {
+            if (response.ok) {
+                return response.data;
+            }
+
+            return [];
+        });
+    }, [activeChat])
 
     return (
         <ChatContext.Provider value={{
             chatState,
             dispatch,
+            fetchMessages
         }}>
             {children}
         </ChatContext.Provider>

@@ -1,12 +1,11 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react'
+import React, { useContext, useEffect, useState} from 'react'
 
 import { SendMessage } from './SendMessage'
 import { OutgoingMessage } from './OutgoingMessage'
 import { IncomingMessage } from './IncomingMessage'
 import { AuthContext } from '../auth/AuthContext'
-import {ActiveChatTypesEnum, ChatContext, DEFAULT_MESSAGE_LIMIT, IMessage} from '../context/chat/ChatContext'
+import { ChatContext, DEFAULT_MESSAGE_LIMIT, IMessage} from '../context/chat/ChatContext'
 import {LoadMessages, LoadPinnedMessages} from '../context/chat/chatReducer'
-import { fetchSynchronous} from '../helpers/fetch'
 import { ChatTypes } from '../types/chat.types'
 import { scrollToBottom } from '../helpers/scrollToBottom'
 import {PinnedMessages} from "./PinnedMessages";
@@ -16,38 +15,9 @@ import {Button, Spin} from "antd";
 export const Messages: React.FC = () => {
 
     const { auth } = useContext(AuthContext);
-    const { chatState, dispatch } = useContext(ChatContext);
+    const { chatState, dispatch, fetchMessages } = useContext(ChatContext);
     const [loadingMessages, setLoadingMessages] = useState<boolean>(true);
     const [dontShowButtonLoadMore, setDontShowButtonLoadMore] = useState<boolean>(false);
-
-    const { activeChat } = chatState;
-
-    const fetchMessages = useCallback(
-        async (options = null) => {
-            let messagesEndpoint = activeChat.type === ActiveChatTypesEnum.DIRECT ?
-                ('message/history/' + activeChat.activeChatId) :
-                ('message/conversation/' + activeChat.activeChatId);
-            if (options) {
-                const queryString = new URLSearchParams(options).toString();
-                messagesEndpoint = messagesEndpoint + '?' + queryString;
-            }
-
-            return fetchSynchronous(
-                {
-                    endpoint: messagesEndpoint,
-                    method: 'GET',
-                    token: localStorage.getItem('accessToken') ?? '',
-                }
-            ).then(response => {
-                if (response.ok) {
-                    return response.data;
-                }
-
-                return [];
-            });
-        },
-        [activeChat],
-    );
 
     const handleClickLoadMore = () => {
         const firstMessage = chatState.messages[0].id ?? null;

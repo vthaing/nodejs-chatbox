@@ -3,11 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
-import {
-  DEFAULT_CHAT_BOX_MESSAGE_LIMIT,
-  Message,
-  MessageDocument,
-} from './entities/message.entity';
+import { Message, MessageDocument } from './entities/message.entity';
 import { MediaItemService } from '../media-item/media-item.service';
 
 @Injectable()
@@ -36,12 +32,15 @@ export class MessageService {
 
   getMessagesForChatBoxClient(
     params: FilterQuery<MessageDocument> = {},
-    limit = DEFAULT_CHAT_BOX_MESSAGE_LIMIT,
+    limit = null,
   ) {
-    return this.messageModel
-      .find(params)
-      .sort({ _id: -1 })
-      .limit(limit)
+    const messagesSearch = this.messageModel.find(params).sort({ _id: -1 });
+
+    if (limit) {
+      messagesSearch.limit(limit);
+    }
+
+    return messagesSearch
       .populate(this.getRequiredRelationProperties())
       .then((messages) => {
         return messages.map((message) => message.transformToChatBoxData());

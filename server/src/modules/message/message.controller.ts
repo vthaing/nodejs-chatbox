@@ -13,7 +13,8 @@ import {
   UseInterceptors,
   UploadedFile,
   ParseFilePipeBuilder,
-  Query, NotFoundException,
+  Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -130,6 +131,8 @@ export class MessageController {
     const params: any = {
       conversation: conversationId,
     };
+    let limit = query.limit;
+
     if (query.brandId) {
       params.brandId = { $in: req.query.brandId };
     }
@@ -144,10 +147,24 @@ export class MessageController {
         params.createdAt = { $lt: beforeMessage.createdAt };
         params._id = { $ne: beforeMessage.id };
       } else {
-        throw new NotFoundException('Message not found');
+        throw new NotFoundException('Before message not found');
       }
     }
-    return this.messageService.getMessagesForChatBoxClient(params, query.limit);
+
+    if (query.fromMessageId) {
+      const fromMessage = await this.messageService.findOne(
+        query.fromMessageId,
+      );
+      if (fromMessage) {
+        params.createdAt = { $gte: fromMessage.createdAt };
+      } else {
+        throw new NotFoundException('From message not found');
+      }
+      if (query.beforeMessageId) {
+        limit = null;
+      }
+    }
+    return this.messageService.getMessagesForChatBoxClient(params, limit);
   }
 
   @UseGuards(RoleGuard(Role.Admin))
