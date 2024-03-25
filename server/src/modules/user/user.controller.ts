@@ -6,13 +6,16 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards, Request,
+  UseGuards,
+  Request,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { BanUserDto } from './dto/ban-user.dto';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -32,10 +35,31 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findById(id);
+  async findOne(@Param('id') id: string) {
+    const user = await this.userService.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
+  @Patch(':id/ban')
+  async ban(@Param('id') id: string, @Body() banUserDto: BanUserDto) {
+    const user = await this.userService.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    await this.userService.banUser(user, banUserDto);
+  }
+
+  @Patch(':id/unban')
+  async unban(@Param('id') id: string) {
+    const user = await this.userService.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    await this.userService.unbanUser(user);
+  }
   @Get('me')
   getMyInfo(@Request() req: any) {
     return req.user;

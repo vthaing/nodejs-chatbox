@@ -1,9 +1,10 @@
 import { userSchemaFactory } from './factories/user.factory.schema';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User } from './entities/user.entity';
+import { UserBanRequestModule } from '../user-ban-request/user-ban-request.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { User } from './entities/user.entity';
         useFactory: userSchemaFactory,
       },
     ]),
+    forwardRef(() => UserBanRequestModule),
   ],
   controllers: [UserController],
   providers: [UserService],

@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import {Document, ObjectId, SchemaTypes} from 'mongoose';
 
 export type UserDocument = User & Document;
 
@@ -48,6 +48,9 @@ export class User {
   bannedTo?: Date | null;
 
   isBanned: boolean;
+
+  @Prop({ ref: 'UserBanRequest', type: [SchemaTypes.ObjectId] })
+  userBanRequestIds: [ObjectId];
 }
 
 const UserSchema = SchemaFactory.createForClass(User);

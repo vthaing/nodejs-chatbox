@@ -12,6 +12,8 @@ import { BadWordDocument } from '../bad-word/entities/bad-word.entity';
 import { UserBanRequestTypeEnum } from './enum/user-ban-request-type.enum';
 import { UserBanRequestStatusEnum } from './enum/user-ban-request-status.enum';
 import { UserBanRequestConfig } from './user-ban-request-config';
+import {User, UserDocument} from "../user/entities/user.entity";
+import {BanUserDto} from "../user/dto/ban-user.dto";
 
 @Injectable()
 export class UserBanRequestService {
@@ -83,6 +85,37 @@ export class UserBanRequestService {
     dto.status = status;
     dto.duration = UserBanRequestConfig.getBanDurationByType(dto.type);
     dto.params = banRequestParams;
+
+    const createdUserBanRequest = new this.userBanRequestModel(dto);
+    return createdUserBanRequest.save();
+  }
+
+  createManualBanRequest(
+    user: UserDocument,
+    banUserDto: BanUserDto,
+    status = UserBanRequestStatusEnum.APPROVED,
+  ): Promise<UserBanRequestDocument | null> {
+    const dto = new CreateUserBanRequestDto();
+    dto.userId = user.id;
+    dto.reason = banUserDto.reason;
+
+    dto.type = UserBanRequestTypeEnum.MANUAL_BAN;
+    dto.status = status;
+    dto.duration = banUserDto.duration;
+
+    const createdUserBanRequest = new this.userBanRequestModel(dto);
+    return createdUserBanRequest.save();
+  }
+
+  createManualUnbanRequest(
+    user: UserDocument,
+    status = UserBanRequestStatusEnum.APPROVED,
+  ) {
+    const dto = new CreateUserBanRequestDto();
+    dto.userId = user.id;
+
+    dto.type = UserBanRequestTypeEnum.MANUAL_UNBAN;
+    dto.status = status;
 
     const createdUserBanRequest = new this.userBanRequestModel(dto);
     return createdUserBanRequest.save();

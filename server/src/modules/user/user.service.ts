@@ -5,14 +5,17 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
 import { UserBanRequestDocument } from '../user-ban-request/entities/user-ban-request.entity';
-import { Brand, BrandDocument } from '../brand/entities/brand.entity';
+import { BrandDocument } from '../brand/entities/brand.entity';
 import { InitChatDto } from '../brand-chat/dto/init-chat.dto';
 import { BrandChatUserDto } from './dto/brand-chat-user.dto';
+import { BanUserDto } from './dto/ban-user.dto';
+import { UserBanRequestService } from '../user-ban-request/user-ban-request.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private readonly userBanRequestService: UserBanRequestService,
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -66,16 +69,48 @@ export class UserService {
         }
       });
 
-      let banUtil = null;
-      if (duration !== null) {
-        banUtil = new Date();
-        banUtil.setDate(banUtil.getDate() + duration);
-      }
+      this.setBanUser(user, duration);
+      userBanRequests.map((userBanRequest) =>
+        user.userBanRequestIds.push(userBanRequest.id),
+      );
 
-      user.bannedFrom = new Date();
-      user.bannedTo = banUtil;
       return user.save();
     });
+  }
+
+  setBanUser(user: UserDocument, duration?: number | null) {
+    let banUtil = null;
+    if (duration !== null) {
+      banUtil = new Date();
+      banUtil.setDate(banUtil.getDate() + duration);
+    }
+
+    user.bannedFrom = new Date();
+    user.bannedTo = banUtil;
+  }
+
+  setUnbanUser(user: UserDocument) {
+    user.bannedFrom = null;
+    user.bannedTo = null;
+  }
+
+  async banUser(user: UserDocument, banUserDto: BanUserDto) {
+    const userBanRequest =
+      await this.userBanRequestService.createManualBanRequest(user, banUserDto);
+
+    user.userBanRequestIds.push(userBanRequest.id);
+    this.setBanUser(user, banUserDto.duration);
+
+    return user.save();
+  }
+
+  async unbanUser(user: UserDocument) {
+    const userBanRequest =
+      await this.userBanRequestService.createManualUnbanRequest(user);
+    user.userBanRequestIds.push(userBanRequest.id);
+    this.setUnbanUser(user);
+
+    return user.save();
   }
 
   async getOrCreateUser(
