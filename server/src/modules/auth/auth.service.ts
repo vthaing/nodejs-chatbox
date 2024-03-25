@@ -30,7 +30,7 @@ export class AuthService {
     password: string,
   ): Promise<UserAuthInterface | null> {
     const user = await this.userService.findOne({ email });
-    if (!user || user.isBanned) {
+    if (!user || user.isBanned || !user.brandStatus) {
       return;
     }
     // compare the password hash
@@ -52,14 +52,14 @@ export class AuthService {
 
   async validateEmail(email: string): Promise<boolean> {
     const user = await this.userService.findOne({ email });
-    return user && !user.isBanned;
+    return user && !user.isBanned && user.brandStatus;
   }
 
   async validateByUsername(
     username: string,
   ): Promise<UserAuthInterface | null> {
     const user = await this.userService.findOne({ username });
-    if (user && !user.isBanned) {
+    if (user && !user.isBanned && user.brandStatus) {
       const { online, displayName, id } = user;
       return { online, displayName, id };
     }
@@ -68,7 +68,7 @@ export class AuthService {
 
   async validateByUserId(id: string): Promise<UserAuthInterface | null> {
     const user = await this.userService.findById(id);
-    if (user && !user.isBanned) {
+    if (user && !user.isBanned && user.brandStatus) {
       const { online, displayName, id } = user;
       return { online, displayName, id };
     }
