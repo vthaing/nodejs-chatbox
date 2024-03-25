@@ -13,6 +13,7 @@ import { CreateBadWordDto } from './dto/create-bad-word.dto';
 import { UpdateBadWordDto } from './dto/update-bad-word.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { badWordCategories } from './bad-word-category.enum';
 
 @Controller('bad-words')
 @ApiBearerAuth()
@@ -29,6 +30,11 @@ export class BadWordController {
   @Get()
   findAll() {
     return this.badWordService.findAll();
+  }
+
+  @Get('categories')
+  categories() {
+    return badWordCategories();
   }
 
   @Get(':id')

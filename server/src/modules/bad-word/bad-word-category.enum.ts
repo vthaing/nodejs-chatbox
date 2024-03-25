@@ -6,3 +6,9 @@ export enum BadWordCategoryEnum {
   racist = 'Racist',
   sexual_harassment = 'Sexual Harassment',
 }
+
+export const badWordCategories = () =>
+  Object.keys(BadWordCategoryEnum).map((key) => ({
+    id: key,
+    label: BadWordCategoryEnum[key],
+  }));

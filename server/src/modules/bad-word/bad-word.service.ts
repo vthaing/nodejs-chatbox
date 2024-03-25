@@ -25,12 +25,11 @@ export class BadWordService {
       .find({
         ...params,
       })
-      .populate('memberObjects')
       .exec();
   }
 
   findOne(id: string): Promise<BadWordDocument> {
-    return this.badWordModel.findById(id).populate('memberObjects').exec();
+    return this.badWordModel.findById(id).exec();
   }
 
   update(

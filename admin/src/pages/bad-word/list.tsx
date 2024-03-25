@@ -22,7 +22,6 @@ export const BadWordList: React.FC<IResourceComponentsProps> = () => {
                 <Table.Column dataIndex="id" title="ID" />
                 <Table.Column dataIndex="term" title="Term" />
                 <Table.Column
-                    dataIndex={"categoriesLabel"}
                     title="Categories"
                     render={(value: IBadWord) => {
                         return value.categories.map((item: string) => {

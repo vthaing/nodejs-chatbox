@@ -69,6 +69,9 @@ const App: React.FC = () => {
                     edit: BadWordEdit,
                     canDelete: true
                 },
+                {
+                    name: "bad-words/categories"
+                }
             ]}
             notificationProvider={notificationProvider}
             LoginPage={() => (

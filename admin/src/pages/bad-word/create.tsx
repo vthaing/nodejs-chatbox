@@ -16,9 +16,9 @@ export const BadWordCreate: React.FC<IResourceComponentsProps> = () => {
     const { formProps, saveButtonProps } = useForm<IBadWord>();
 
 
-    const { selectProps: userSelectProps } = useSelect({
-        resource: "user",
-        optionLabel: "username",
+    const { selectProps: badWordCategoriesProps } = useSelect({
+        resource: "bad-words/categories",
+        optionLabel: "label",
     });
 
     return (
@@ -44,7 +44,7 @@ export const BadWordCreate: React.FC<IResourceComponentsProps> = () => {
                         },
                     ]}
                 >
-                    <Select {...userSelectProps} mode="multiple" />
+                    <Select {...badWordCategoriesProps} mode="multiple" />
                 </Form.Item>
             </Form>
         </Create>

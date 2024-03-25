@@ -14,9 +14,9 @@ import { IBadWord } from "../../interfaces";
 export const BadWordEdit: React.FC<IResourceComponentsProps> = () => {
     const { formProps, saveButtonProps, queryResult } = useForm<IBadWord>({});
 
-    const { selectProps: userSelectProps } = useSelect({
-        resource: "user",
-        optionLabel: "username",
+    const { selectProps: badWordCategoriesProps } = useSelect({
+        resource: "bad-words/categories",
+        optionLabel: "label",
     });
 
     return (
@@ -42,7 +42,7 @@ export const BadWordEdit: React.FC<IResourceComponentsProps> = () => {
                         },
                     ]}
                 >
-                    <Select {...userSelectProps} mode="multiple" />
+                    <Select {...badWordCategoriesProps} mode="multiple" />
                 </Form.Item>
             </Form>
         </Edit>
