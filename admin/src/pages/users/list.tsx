@@ -43,6 +43,7 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
         <List>
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title="ID" />
+                <Table.Column dataIndex="externalId" title="External ID" />
                 <Table.Column dataIndex="displayName" title="Display Name" />
                 <Table.Column dataIndex="online" title="Is Online"
                   render={(_, record: IUser) => (record.online ? 'Yes' : 'No')}

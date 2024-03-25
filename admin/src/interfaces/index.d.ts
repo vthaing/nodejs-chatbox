@@ -20,6 +20,7 @@ export interface IUser {
     brand?: IBrand | null;
     brandId?: string | null;
     isBanned: boolean;
+    externalId?: string | null
     createdAt: string
 }
 

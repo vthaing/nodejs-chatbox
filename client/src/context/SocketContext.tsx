@@ -8,6 +8,7 @@ import { useSocket } from '../hooks/useSocket';
 import { ChatTypes } from '../types/chat.types';
 import {ChatContext, IConversation, IMessage, IServerAlert} from './chat/ChatContext';
 import { ListConversations, ListUsers, NewMessage } from './chat/chatReducer';
+import Swal from "sweetalert2";
 
 
 export interface ISocketContext {
@@ -86,8 +87,11 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
 
     useEffect(() => {
         socket?.on('server-alert', (alertMessage: IServerAlert) => {
-            alert(alertMessage.message + '. Reasons: ' + alertMessage.reasons.join('. ') );
-            console.log(alertMessage);
+            Swal.fire({
+                title: "Alert",
+                text: alertMessage.message + '. Reasons: ' + alertMessage.reasons.join('. '),
+                icon: "warning",
+            })
             if (alertMessage.forceLogout) {
                 logout();
             }
