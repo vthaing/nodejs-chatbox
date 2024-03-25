@@ -7,7 +7,7 @@ import {
     useTable,
     Space,
     EditButton,
-    ShowButton, TagField, FilterDropdownProps, FilterDropdown, Select, useSelect,
+    ShowButton, TagField, FilterDropdownProps, FilterDropdown, Select, useSelect, Input,
 } from "@pankod/refine-antd";
 
 import {IConversation, ICategory, IUser, IBrandRoom, IBrandChannel, IBrand} from "interfaces";
@@ -27,6 +27,20 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
         optionLabel: "name",
         optionValue: "id",
         defaultValue: getDefaultFilter("brandId", filters, "in"),
+    });
+
+    const { selectProps: channelSelectProps } = useSelect<IBrandChannel>({
+        resource: "brand-channels",
+        optionLabel: "name",
+        optionValue: "id",
+        defaultValue: getDefaultFilter("brandChannelId", filters, "in"),
+    });
+
+    const { selectProps: roomSelectProps } = useSelect<IBrandChannel>({
+        resource: "brand-rooms",
+        optionLabel: "name",
+        optionValue: "id",
+        defaultValue: getDefaultFilter("brandRoomId", filters, "in"),
     });
 
     const getBrandIds = (): string[] => {
@@ -94,7 +108,15 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
         <List>
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title="ID" />
-                <Table.Column dataIndex="name" title="Name" />
+                <Table.Column dataIndex="name" title="Name"
+                    filterDropdown={(props: FilterDropdownProps) => (
+                      <FilterDropdown
+                          {...props}
+                      >
+                          <Input placeholder="enter the conversation name"></Input>
+                      </FilterDropdown>
+                    )}
+                />
                 <Table.Column
                     title="Brand"
                     dataIndex={'brandId'}
@@ -139,7 +161,8 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                 />
                 <Table.Column
                     title="Channel"
-                    render={(record) => {
+                    dataIndex={"brandChannelId"}
+                    render={(_, record: IConversation) => {
                         if (isBrandChannelLoading) {
                             return <TextField value="Loading..." />;
                         }
@@ -154,10 +177,27 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                             />
                         );
                     }}
+
+                    filterDropdown={(props: FilterDropdownProps) => (
+                        <FilterDropdown
+                            {...props}
+                        >
+                            <Select
+                                style={{ minWidth: 200 }}
+                                {...channelSelectProps}
+                            />
+                        </FilterDropdown>
+                    )}
+                    defaultFilteredValue={getDefaultFilter(
+                        "brandChannelId",
+                        filters,
+                        "in",
+                    )}
                 />
                 <Table.Column
                     title="Room"
-                    render={(record) => {
+                    dataIndex={"brandRoomId"}
+                    render={(_, record: IConversation) => {
                         if (isBrandRoomLoading) {
                             return <TextField value="Loading..." />;
                         }
@@ -172,6 +212,22 @@ export const ConversationList: React.FC<IResourceComponentsProps> = () => {
                             />
                         );
                     }}
+
+                    filterDropdown={(props: FilterDropdownProps) => (
+                        <FilterDropdown
+                            {...props}
+                        >
+                            <Select
+                                style={{ minWidth: 200 }}
+                                {...roomSelectProps}
+                            />
+                        </FilterDropdown>
+                    )}
+                    defaultFilteredValue={getDefaultFilter(
+                        "brandRoomId",
+                        filters,
+                        "in",
+                    )}
                 />
                 <Table.Column
                     dataIndex={"memberObjects"}
