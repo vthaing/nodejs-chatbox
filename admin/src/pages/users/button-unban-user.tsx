@@ -25,7 +25,6 @@ export const ButtonUnbanUser: React.FC<ButtonBanUserProps> = ({record, onSuccess
             onSuccess: onSuccess
         });
     }
-    //onSuccess={() => list(resource.route ?? resource.name)}
 
     return (
         <Popconfirm
