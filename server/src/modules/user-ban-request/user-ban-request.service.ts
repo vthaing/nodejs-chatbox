@@ -46,7 +46,7 @@ export class UserBanRequestService {
       banRequestParams.badWords.push(badword.term);
     });
 
-    dto.user = message.from.toString();
+    dto.userId = message.from.toString();
     dto.reason =
       'Message contains bad words: "' +
       banRequestParams.badWords.join('; ') +
@@ -74,7 +74,7 @@ export class UserBanRequestService {
       message: message._id,
     };
 
-    dto.user = message.from.toString();
+    dto.userId = message.from.toString();
     dto.reason =
       'Message contains phone numbers: "' +
       banRequestParams.phoneNumbers.join('; ') +

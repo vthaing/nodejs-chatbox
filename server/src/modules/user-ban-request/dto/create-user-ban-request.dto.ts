@@ -6,7 +6,7 @@ import { UserBanRequestStatusEnum } from '../enum/user-ban-request-status.enum';
 export class CreateUserBanRequestDto {
   @ApiProperty()
   @IsNotEmpty()
-  user: string;
+  userId: string;
   @ApiProperty()
   reason?: string;
   @ApiProperty({ enum: UserBanRequestTypeEnum })

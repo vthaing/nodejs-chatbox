@@ -22,7 +22,7 @@ export class UserBanRequest {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   })
-  user: User | string;
+  userId: User | string;
   @Prop({ required: false, type: mongoose.Schema.Types.Number })
   duration?: number;
   @Prop({ required: false, type: mongoose.Schema.Types.String })
