@@ -114,16 +114,16 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
 
                         <Table {...tableProps} rowKey="id">
                             <Table.Column
-                                dataIndex={'reason'}
-                                title={"Reason"}
-                            />
-                            <Table.Column
                                 title={"Type"}
                                 render={(value) => {
                                     return value.isUnbanned ?
                                         <TagField color={'green'} value={value.typeLabel}/> :
                                         <TagField color={'red'} value={value.typeLabel}/>
                                 }}
+                            />
+                            <Table.Column
+                                dataIndex={'reason'}
+                                title={"Reason"}
                             />
                             <Table.Column
                                 key="duration"
