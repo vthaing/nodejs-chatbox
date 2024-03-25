@@ -15,5 +15,7 @@ export class BrandChatService {
     private userService: UserService,
     private conversationService: ConversationService,
   ) {}
-  initChat(initChatDto: InitChatDto) {}
+  initChat(initChatDto: InitChatDto) {
+    return 'Hello';
+  }
 }

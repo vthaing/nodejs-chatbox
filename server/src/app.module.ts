@@ -19,6 +19,7 @@ import { UserBanRequestModule } from './modules/user-ban-request/user-ban-reques
 import { BrandModule } from './modules/brand/brand.module';
 import { BrandChannelModule } from './modules/brand-channel/brand-channel.module';
 import {BrandRoomModule} from "./modules/brand-room/brand-room.module";
+import {BrandChatModule} from "./modules/brand-chat/brand-chat.module";
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import {BrandRoomModule} from "./modules/brand-room/brand-room.module";
     BrandModule,
     BrandChannelModule,
     BrandRoomModule,
+    BrandChatModule,
   ],
   controllers: [AppController],
   providers: [
