@@ -14,8 +14,9 @@ import "@pankod/refine-antd/dist/reset.css";
 
 import { PostList, PostEdit, PostShow } from "pages/posts";
 import { DashboardPage } from "pages/dashboard";
+import {UserList} from "./pages/users";
 
-const API_URL = "https://api.fake-rest.refine.dev";
+const API_URL = "http://localhost:3001/api";
 
 const App: React.FC = () => {
     const authProvider: AuthProvider = {
@@ -132,10 +133,10 @@ const App: React.FC = () => {
             DashboardPage={DashboardPage}
             resources={[
                 {
-                    name: "posts",
-                    list: PostList,
-                    edit: PostEdit,
-                    show: PostShow,
+                    name: "user",
+                    list: UserList,
+                    // edit: PostEdit,
+                    // show: PostShow,
                 },
             ]}
             notificationProvider={notificationProvider}
