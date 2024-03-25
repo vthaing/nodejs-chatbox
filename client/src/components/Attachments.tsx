@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
-import type { RcFile, UploadProps } from 'antd/es/upload';
+import type { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 
 const getBase64 = (file: RcFile): Promise<string> =>
@@ -44,10 +44,6 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
       }
   }, [fileList, onAttachmentsChange]);
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-      setFileList(newFileList);
-  }
-
   const  beforeUpload = (file: UploadFile) => {
       setFileList([...fileList, file]);
 
@@ -73,7 +69,6 @@ export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAtta
             listType="picture-card"
             fileList={fileList}
             onPreview={handlePreview}
-            onChange={handleChange}
             beforeUpload={beforeUpload}
             onRemove={onRemove}
             multiple={true}

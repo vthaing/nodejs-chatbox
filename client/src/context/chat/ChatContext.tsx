@@ -11,7 +11,7 @@ export interface IMessage {
     messageContent: string;
     from: string;
     isPinnedMessage: boolean;
-    attachmentsInfo?: IAttachmentInfo[];
+    attachments?: IAttachmentInfo[];
     createdAt?: string;
 }
 

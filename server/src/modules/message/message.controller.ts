@@ -10,14 +10,17 @@ import {
   UseGuards,
   Req,
   Patch,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UpdateMessageDto } from './dto/update-message.dto';
-import RoleGuard from "../auth/guards/roles.guard";
-import Role from "../user/role.enum";
+import RoleGuard from '../auth/guards/roles.guard';
+import Role from '../user/role.enum';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiBearerAuth()
 @ApiTags('Messages')
@@ -72,5 +75,15 @@ export class MessageController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.messageService.remove(id);
+  }
+
+  @UseInterceptors(FileInterceptor('file'))
+  @Post(':id/upload-attachment')
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file, 'sdsdsdsdhhhohoasidasdsadads');
+    // return {
+    //   file: file.buffer.toString(),
+    // };
+    return 'ok';
   }
 }

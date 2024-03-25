@@ -1,13 +1,39 @@
-import React from 'react'
-import { IMessage } from '../context/chat/ChatContext'
+import React, {useContext, useMemo} from 'react'
+import {ChatContext, IMessage} from '../context/chat/ChatContext'
 import { horaMes } from '../helpers/horaMes'
 import {Element as ScrollElement} from 'react-scroll';
+import {UploadFile} from "antd/es/upload/interface";
+import {UploadingAttachments} from "./UploadingAttachment";
 
 export type OutgoingMessageProps = {
     message: IMessage;
 }
 
 export const OutgoingMessage: React.FC<OutgoingMessageProps> = ({ message }) => {
+
+    const { chatState } = useContext(ChatContext);
+
+    const uploadingAttachments = useMemo((): UploadFile[] => {
+        if (chatState.uploadingAttachments.length === 0) {
+            return [];
+        }
+        const result: UploadFile[] = [];
+
+        message.attachments?.map((attachment) => {
+            const file = chatState.uploadingAttachments
+                .find((uploadingFile: UploadFile) => uploadingFile.uid === attachment.uid);
+            if (file) {
+                result.push(file);
+            }
+            return true;
+        })
+
+        return result;
+    }, [message, chatState.uploadingAttachments])
+
+
+
+
     return (
         <>
             <div className="outgoing_msg">
@@ -19,6 +45,10 @@ export const OutgoingMessage: React.FC<OutgoingMessageProps> = ({ message }) => 
                     <span className="time_date">
                         {horaMes(message.createdAt as string)}
                     </span>
+                    {
+                        (uploadingAttachments.length > 0) &&
+                        <UploadingAttachments message={message} attachments={uploadingAttachments}/>
+                    }
                 </div>
             </div>
         </>
