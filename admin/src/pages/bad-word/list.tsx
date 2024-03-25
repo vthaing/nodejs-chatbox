@@ -1,4 +1,4 @@
-import { IResourceComponentsProps } from "@pankod/refine-core";
+import {getDefaultFilter, IResourceComponentsProps} from "@pankod/refine-core";
 
 import {
     List,
@@ -9,12 +9,12 @@ import {
     TagField, FilterDropdownProps, FilterDropdown, Input,
 } from "@pankod/refine-antd";
 
-import {IBadWord, IUser} from "interfaces";
+import {IBadWord} from "interfaces";
 import dayjs from "dayjs";
 import React from "react";
 
 export const BadWordList: React.FC<IResourceComponentsProps> = () => {
-    const { tableProps } = useTable<IBadWord>({
+    const { tableProps, filters } = useTable<IBadWord>({
         syncWithLocation: true
     });
 
@@ -29,6 +29,12 @@ export const BadWordList: React.FC<IResourceComponentsProps> = () => {
                       >
                           <Input placeholder="Enter the bad word"></Input>
                       </FilterDropdown>
+                  )}
+
+                  defaultFilteredValue={getDefaultFilter(
+                      "term",
+                      filters,
+                      "eq",
                   )}
                 />
                 <Table.Column
