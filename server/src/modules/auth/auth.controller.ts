@@ -18,17 +18,17 @@ import { LoginUserDto } from './dto/login-user.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register-login')
-  async registerAndLogin(
-    @Body(RegisterUserValidationPipe) newUser: CreateUserDto,
-  ): Promise<TokenUser> {
-    try {
-      return await this.authService.registerAndLogin(newUser);
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException({ message: 'Server error' });
-    }
-  }
+  // @Post('register-login')
+  // async registerAndLogin(
+  //   @Body(RegisterUserValidationPipe) newUser: CreateUserDto,
+  // ): Promise<TokenUser> {
+  //   try {
+  //     return await this.authService.registerAndLogin(newUser);
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new InternalServerErrorException({ message: 'Server error' });
+  //   }
+  // }
 
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginUserDto })
