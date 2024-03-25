@@ -116,7 +116,7 @@ export class UserController {
     }
 
     if (req.query.hasOwnProperty('isBanned')) {
-      if (Boolean(req.query.isBanned)) {
+      if (Boolean(req.query.isBanned == 'true')) {
         pagingQuery['bannedFrom'] = { $ne: null };
         pagingQuery['$or'] = [
           { bannedTo: { $gt: new Date() } },
