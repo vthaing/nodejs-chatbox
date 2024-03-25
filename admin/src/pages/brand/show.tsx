@@ -2,7 +2,7 @@ import {useShow, IResourceComponentsProps, useMany} from "@pankod/refine-core";
 
 import {Col, DateField, List, Row, Show, Table, TagField, TextField, Typography, useTable} from "@pankod/refine-antd";
 
-import {IBrand, IBrandChannel, IBrandRoom, IUser, IUserBanRequest} from "../../interfaces";
+import {IBrand, IBrandChannel, IBrandRoom, IConversation, IUser, IUserBanRequest} from "../../interfaces";
 import {Link} from "@pankod/refine-react-router-v6";
 
 const { Title, Text } = Typography;
@@ -60,12 +60,41 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
         syncWithLocation: false,
     });
 
+    const { tableProps: conversationTableProps } = useTable<
+        IConversation
+    >({
+        resource: "conversations",
+        initialSorter: [
+            {
+                field: "createdAt",
+                order: "desc",
+            },
+        ],
+        permanentFilter: [
+            {
+                field: "brandId",
+                operator: "eq",
+                value: record?.id,
+            },
+        ],
+        initialPageSize: 10,
+        queryOptions: {
+            enabled: record !== undefined,
+        },
+        syncWithLocation: false,
+    });
+
 
     const getChannelIds = (): string[] => {
         let result: string[] = [];
         roomTableProps?.dataSource?.map(function (brandRoom: IBrandRoom) {
             if (brandRoom.brandChannelId && !result.includes(brandRoom.brandChannelId)) {
                 result.push(brandRoom.brandChannelId);
+            }
+        });
+        conversationTableProps?.dataSource?.map(function (conversation: IConversation) {
+            if (conversation.brandChannelId && !result.includes(conversation.brandChannelId)) {
+                result.push(conversation.brandChannelId);
             }
         });
 
@@ -80,6 +109,29 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
             enabled: channelIds.length > 0,
         },
     });
+
+
+    const getRoomIds = (): string[] => {
+        let result: string[] = [];
+        conversationTableProps?.dataSource?.map(function (conversation: IConversation) {
+            if (conversation.brandRoomId && !result.includes(conversation.brandRoomId)) {
+                result.push(conversation.brandRoomId);
+            }
+        });
+
+        return result;
+    }
+    const roomIds = getRoomIds();
+
+    const { data: brandRooms, isLoading: isBrandRoomLoading } = useMany<IBrandRoom>({
+        resource: "brand-rooms",
+        ids: roomIds,
+        queryOptions: {
+            enabled: roomIds.length > 0,
+        },
+    });
+
+
 
     return (
         <>
@@ -181,6 +233,74 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
                                                     )?.name
                                                 }
                                             />
+                                    );
+                                }}
+                            />
+                            <Table.Column
+                                key="createdAt"
+                                dataIndex="createdAt"
+                                title={'Created At'}
+                                render={(value) => (
+                                    <DateField value={value} format="LLL" />
+                                )}
+                            />
+                        </Table>
+                    </List>
+                </Col>
+
+            </Row>
+            <Row>
+                <Col xl={24} xs={24}>
+                    <List
+                        title={"Conversations"}
+                        breadcrumb={false}
+                        headerProps={{
+                            extra: <></>,
+                            style: {
+                                marginTop: "2em",
+                            },
+                        }}
+
+                    >
+                        <Table {...conversationTableProps} rowKey="id">
+                            <Table.Column
+                                key="id"
+                                dataIndex={'name'}
+                                title={"Name"}
+                            />
+                            <Table.Column
+                                title="Channel"
+                                render={(record) => {
+                                    if (isBrandChannelLoading) {
+                                        return <TextField value="Loading..." />;
+                                    }
+
+                                    return (
+                                        <TagField
+                                            value={
+                                                brandChannels?.data.find(
+                                                    (item) => record.brandChannelId === item.id,
+                                                )?.name
+                                            }
+                                        />
+                                    );
+                                }}
+                            />
+                            <Table.Column
+                                title="Room"
+                                render={(record) => {
+                                    if (isBrandRoomLoading) {
+                                        return <TextField value="Loading..." />;
+                                    }
+
+                                    return (
+                                        <TagField
+                                            value={
+                                                brandRooms?.data.find(
+                                                    (item) => record.brandRoomId === item.id,
+                                                )?.name
+                                            }
+                                        />
                                     );
                                 }}
                             />

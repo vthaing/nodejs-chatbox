@@ -29,6 +29,8 @@ export interface IConversation {
     members: [string];
     owner?: string
     memberObjects: [IUser],
+    brandChannelId?: string | null;
+    brandRoomId?: string | null;
     createdAt: string
 }
 
