@@ -3,6 +3,8 @@ import { AuthContext } from '../auth/AuthContext';
 import {ActiveChatTypesEnum, ChatContext, IMessageToSave} from '../context/chat/ChatContext';
 import { SocketContext } from '../context/SocketContext';
 
+const MESSAGE_MAX_LENGTH = 164;
+
 export const SendMessage: React.FC = () => {
 
 
@@ -22,6 +24,7 @@ export const SendMessage: React.FC = () => {
     const onSubmit = (ev: FormEvent) => {
         ev.preventDefault();
         if (message.trim().length === 0) { return; }
+        if (message.trim().length > MESSAGE_MAX_LENGTH) {return;}
 
         const messageToSend = {
             from: auth.id,
@@ -60,12 +63,18 @@ export const SendMessage: React.FC = () => {
                         placeholder="Say something..."
                         value={message}
                         onChange={onChange}
+                        maxLength={MESSAGE_MAX_LENGTH}
                     />
+                    {
+                        (message.length >= MESSAGE_MAX_LENGTH)
+                        && <p className={'invalid-feedback'}>The message length should not be greater than {MESSAGE_MAX_LENGTH}</p>
+                    }
                 </div>
                 <div className="col-sm-3 text-center">
                     <button
                         className="msg_send_btn mt-3"
                         type="submit"
+                        disabled={message.length >= MESSAGE_MAX_LENGTH}
                     >
                         Send
                     </button>

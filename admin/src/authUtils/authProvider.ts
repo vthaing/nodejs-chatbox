@@ -37,7 +37,7 @@ export const authProvider = (axiosInstance: AxiosInstance): AuthProvider => {
 
             const userInfo = await axiosInstance.get(`${API_URL}/user/me`);
 
-            return Promise.resolve({...userInfo.data, name: userInfo.data.username});
+            return Promise.resolve({...userInfo.data, name: userInfo.data.displayName});
         },
 
 
