@@ -106,17 +106,8 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
 
     const verifyToken = useCallback(
         async () => {
-            const frameTokenData = getAndDeleteTokenFromIframe();
-            let accessToken;
-            let refreshToken;
-
-            if (frameTokenData) {
-                 accessToken = frameTokenData.accessToken;
-                 refreshToken = frameTokenData.refreshToken;
-            } else {
-                 accessToken = localStorage.getItem('accessToken');
-                 refreshToken = localStorage.getItem('refreshToken');
-            }
+             const accessToken = localStorage.getItem('accessToken');
+             const refreshToken = localStorage.getItem('refreshToken');
 
 
             if (!(accessToken && refreshToken)) {
@@ -174,29 +165,6 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
             }
         );
         dispatch({ type: ChatTypes.clean });
-    }
-
-    const getAndDeleteTokenFromIframe = (): {accessToken: string, refreshToken: string}  |  null => {
-        const frameElement = window.frameElement
-        if (!frameElement) {
-            return null;
-        }
-        const chatBoxData = frameElement.getAttribute('data-chat-box-data');
-        frameElement.removeAttribute('data-chat-box-data');
-        if (!chatBoxData) {
-            return null;
-        }
-        const {access_token, refresh_token} = JSON.parse(chatBoxData);
-        if (access_token && refresh_token) {
-            localStorage.setItem('accessToken', access_token);
-            localStorage.setItem('refreshToken', refresh_token);
-            return {
-                accessToken: access_token,
-                refreshToken: refresh_token
-            };
-        }
-
-        return null;
     }
 
     const context = {

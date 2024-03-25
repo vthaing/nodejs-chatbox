@@ -32,23 +32,16 @@ function ChatBoxData (token, brandId, userId, userDisplayName, chatName, channel
 }
 
 function chatBoxesManagement () {
-    this.chatBoxInstances = [];
-
-    this.createNewChatBox = function (chatBoxObject) {
-
-    }
-
     var self = this;
 
     this.handleSuccessRequestAccessToken = function (data, chatBoxElement) {
         var jsonData = JSON.parse(data);
-        console.log(chatBoxElement);
         var iframe = document.createElement('iframe');
-        iframe.src = this.getConversationIframeUrl(jsonData.conversation_id);
-        iframe.dataset.chatBoxData = data;
+        iframe.src = this.getConversationIframeUrl(jsonData);
         iframe.width = '600px';
         iframe.height = '600px';
         chatBoxElement.append(iframe);
+
     }
 
     /**
@@ -101,11 +94,17 @@ function chatBoxesManagement () {
         request.send(JSON.stringify(chatBoxData));
     }
 
+    //@TODO: should config
     this.getApiInitChatBoxEndpoint = function () {
         return 'http://localhost:3001/api/brand-chat/init-chat';
     }
 
-    this.getConversationIframeUrl = function (conversationId) {
-        return 'http://localhost:3000/conversation/' + conversationId;
+    //@TODO: should config
+    this.getConversationIframeUrl = function (jsonData) {
+        return 'http://localhost:3000/conversation/'
+            + jsonData.conversation_id + '?'
+            + 'access_token=' + jsonData.access_token + '&'
+            + 'refresh_token=' + jsonData.refresh_token
+            ;
     }
 }
