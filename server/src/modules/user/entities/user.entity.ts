@@ -16,14 +16,26 @@ export type UserDocument = User & Document;
   },
 })
 export class User {
-  @Prop({ required: true, type: mongoose.Schema.Types.String })
+  @Prop({ type: mongoose.Schema.Types.String })
   username: string;
 
-  @Prop({ required: true, unique: true, type: mongoose.Schema.Types.String })
+  @Prop({ type: mongoose.Schema.Types.String })
   email: string;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.String })
+  @Prop({ type: mongoose.Schema.Types.String })
   password: string;
+
+  @Prop({
+    required: false,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Brand',
+  })
+  brandId?: string;
+  @Prop({ required: false, type: mongoose.Schema.Types.String })
+  externalId: string;
+
+  @Prop({ required: false, type: mongoose.Schema.Types.String })
+  displayName?: string;
 
   @Prop({ type: mongoose.Schema.Types.Boolean, default: false })
   online: boolean;

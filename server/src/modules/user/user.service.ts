@@ -78,10 +78,17 @@ export class UserService {
     brand: BrandDocument,
     initChatDto: InitChatDto,
   ): Promise<UserDocument> {
+    console.log({
+      brandId: brand.id,
+      externalId: initChatDto.userId,
+    }, 'Finding conditionssss');
+
     let user = await this.userModel.findOne({
       brandId: brand.id,
       externalId: initChatDto.userId,
     });
+
+    console.log(user, 'Finding result');
 
     if (!user) {
       const userDto = new BrandChatUserDto();
