@@ -17,8 +17,8 @@ export const AdminUserEdit: React.FC<IResourceComponentsProps> = () => {
         <Edit saveButtonProps={saveButtonProps}>
             <Form {...formProps} layout="vertical">
                 <Form.Item
-                    label="Username"
-                    name="username"
+                    label="Name"
+                    name="displayName"
                     rules={[
                         {
                             required: true,

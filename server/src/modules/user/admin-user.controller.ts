@@ -23,6 +23,7 @@ import { PagingService } from '../common/service/paging.service';
 import RoleGuard from '../auth/guards/roles.guard';
 import Role from './role.enum';
 import { CreateAdminUserPipe } from './pipes/create-admin-user.pipe';
+import { UpdateAdminUserPipe } from './pipes/update-admin-user.pipe';
 
 @ApiBearerAuth()
 @ApiTags('Admin User')
@@ -84,7 +85,10 @@ export class AdminUserController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Param('id') id: string,
+    @Body(UpdateAdminUserPipe) updateUserDto: UpdateUserDto,
+  ) {
     const user = await this.userService.findById(id);
     if (!user || !user.isAdmin()) {
       throw new NotFoundException('User not found');
