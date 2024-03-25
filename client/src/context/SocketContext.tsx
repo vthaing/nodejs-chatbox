@@ -1,13 +1,19 @@
-import { createContext, useContext, useEffect } from 'react';
+import {createContext, useContext, useEffect} from 'react';
 
-import { Socket } from 'socket.io-client';
-import {AuthContext, IUser, } from '../auth/AuthContext';
-import { scrollToBottomAnimated } from '../helpers/scrollToBottom';
+import {Socket} from 'socket.io-client';
+import {AuthContext, IUser,} from '../auth/AuthContext';
+import {scrollToBottomAnimated} from '../helpers/scrollToBottom';
 
-import { useSocket } from '../hooks/useSocket';
-import { ChatTypes } from '../types/chat.types';
+import {useSocket} from '../hooks/useSocket';
+import {ChatTypes} from '../types/chat.types';
 import {ChatContext, IConversation, IMediaItem, IMessage, IServerAlert} from './chat/ChatContext';
-import {AttachmentUploaded, ListConversations, ListUsers, NewMessage} from './chat/chatReducer';
+import {
+    AttachmentUploaded, ChangePinMessageStatus,
+    DeleteMessage,
+    ListConversations,
+    ListUsers,
+    NewMessage
+} from './chat/chatReducer';
 import Swal from "sweetalert2";
 
 
@@ -47,19 +53,6 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
         }
     }, [auth, disconnectSocket]);
 
-    // listen  connected users
-    useEffect(() => {
-        socket?.on('online-users', (users: IUser[]) => {
-            dispatch(
-                {
-                    type: ChatTypes.listUsers,
-                    payload: users,
-                } as ListUsers,
-            );
-        });
-    }, [socket, dispatch]);
-
-    // listen  connected users
     useEffect(() => {
         socket?.on('user-conversations', (conversations: IConversation[]) => {
             dispatch(
@@ -69,11 +62,17 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
                 } as ListConversations,
             );
         });
-    }, [socket, dispatch]);
 
-    useEffect(() => {
+        socket?.on('online-users', (users: IUser[]) => {
+            dispatch(
+                {
+                    type: ChatTypes.listUsers,
+                    payload: users,
+                } as ListUsers,
+            );
+        });
+
         socket?.on('private-message', (message: IMessage) => {
-
             const newMessage = {
                 type: ChatTypes.newMessage,
                 payload: message,
@@ -83,9 +82,7 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
             // Move scroll to final
             scrollToBottomAnimated('messages');
         });
-    }, [socket, dispatch]);
 
-    useEffect(() => {
         socket?.on('attachment-uploaded', (mediaItem: IMediaItem) => {
             const attachmentUploadedAction = {
                 type: ChatTypes.attachmentUploaded,
@@ -93,6 +90,21 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
             } as AttachmentUploaded;
 
             dispatch(attachmentUploadedAction);
+        });
+
+        socket?.on('pin-message-status-changed', (message: IMessage) => {
+            dispatch({
+                type: ChatTypes.changePinMessageStatus,
+                payload: message
+            } as ChangePinMessageStatus)
+        });
+
+
+        socket?.on('message-deleted', (message: IMessage) => {
+            dispatch({
+                type: ChatTypes.deleteMessage,
+                payload: message
+            } as DeleteMessage)
         });
     }, [socket, dispatch]);
 

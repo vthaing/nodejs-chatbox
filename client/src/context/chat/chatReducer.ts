@@ -1,8 +1,6 @@
 import {IUser} from '../../auth/AuthContext';
 import {ChatTypes} from '../../types/chat.types';
 import {
-    ChangePinMessageStatusPayload,
-    ChangePinMessageStatusType,
     IActiveChatPayload,
     IConversation,
     IMediaItem,
@@ -35,7 +33,7 @@ export interface ListUsers extends ChatAction {
 
 export interface ChangePinMessageStatus extends ChatAction {
     type: ChatTypes.changePinMessageStatus
-    payload: ChangePinMessageStatusPayload
+    payload: IMessage
 }
 
 export interface ListConversations extends ChatAction {
@@ -90,9 +88,7 @@ export const initialChatState = {
 } as ChatState;
 
 const handlePinMessageChange = (state: ChatState, action: ChangePinMessageStatus) => {
-    const updatedMessage = action.payload.message;
-    updatedMessage.isPinnedMessage = action.payload.type === ChangePinMessageStatusType.pin;
-
+    const updatedMessage = action.payload;
     const messages = state.messages;
     for (const i in messages) {
         if (messages[i].id === updatedMessage.id) {
@@ -102,7 +98,7 @@ const handlePinMessageChange = (state: ChatState, action: ChangePinMessageStatus
     }
 
     let pinnedMessages = state.pinnedMessages;
-    if (action.payload.type === ChangePinMessageStatusType.pin) {
+    if (updatedMessage.isPinnedMessage) {
         pinnedMessages.push(updatedMessage);
     } else {
         pinnedMessages = pinnedMessages.filter(message => message.id !== updatedMessage.id);

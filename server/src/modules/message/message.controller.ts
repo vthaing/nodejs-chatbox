@@ -51,19 +51,25 @@ export class MessageController {
   @UseGuards(RoleGuard(Role.Admin))
   @Patch(':id/pin')
   pin(@Param('id') id: string) {
-    return this.messageService.findOne(id).then((message) => {
-      message.isPinnedMessage = true;
-      return message.save();
-    });
+    return this.messageService
+      .findOne(id)
+      .then((message) => {
+        message.isPinnedMessage = true;
+        return message.save();
+      })
+      .then((message) => this.chatGateway.emitPinMessageChanged(message));
   }
 
   @UseGuards(RoleGuard(Role.Admin))
   @Patch(':id/unpin')
   unpin(@Param('id') id: string) {
-    return this.messageService.findOne(id).then((message) => {
-      message.isPinnedMessage = false;
-      return message.save();
-    });
+    return this.messageService
+      .findOne(id)
+      .then((message) => {
+        message.isPinnedMessage = false;
+        return message.save();
+      })
+      .then((message) => this.chatGateway.emitPinMessageChanged(message));
   }
 
   @Get('history/:targetUser')
@@ -99,7 +105,9 @@ export class MessageController {
   @UseGuards(RoleGuard(Role.Admin))
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.messageService.remove(id);
+    return this.messageService
+      .remove(id)
+      .then((message) => this.chatGateway.emitMessageDeleted(message));
   }
 
   @UseInterceptors(FileInterceptor('file'))

@@ -16,6 +16,7 @@ import { ConversationService } from '../conversation/conversation.service';
 import { MessageFilterService } from '../message/message-filter.service';
 import { MediaItem } from '../media-item/entities/media-item.entity';
 import { IpFilterGuard } from '../ip-filter/ipfilter.guard';
+import { MessageDocument } from '../message/entities/message.entity';
 
 interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
@@ -93,7 +94,9 @@ export class ChatGateway {
     const createMessage = await this.messageService
       .create(message)
       .then((createdMessage) =>
-        createdMessage.populate(['senderInfo', 'mediaItems']),
+        createdMessage.populate(
+          this.messageService.getRequiredRelationProperties(),
+        ),
       )
       .then((createdMessage) =>
         this.messageFilterService.filterAndHandleViolateMessage(createdMessage),
@@ -132,5 +135,19 @@ export class ChatGateway {
     const message = await this.messageService.findOne(mediaItem.messageId);
     const roomId = message.to?.toString() ?? message.conversation.toString();
     this.server.to(roomId).emit('attachment-uploaded', mediaItem);
+  }
+
+  async emitPinMessageChanged(message: MessageDocument) {
+    await message.populate(this.messageService.getRequiredRelationProperties());
+    const roomId = message.to?.toString() ?? message.conversation.toString();
+    this.server.to(roomId).emit('pin-message-status-changed', message);
+    return message;
+  }
+
+  async emitMessageDeleted(message: MessageDocument) {
+    await message.populate(this.messageService.getRequiredRelationProperties());
+    const roomId = message.to?.toString() ?? message.conversation.toString();
+    this.server.to(roomId).emit('message-deleted', message);
+    return message;
   }
 }

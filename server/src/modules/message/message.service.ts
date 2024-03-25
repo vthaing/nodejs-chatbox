@@ -27,8 +27,12 @@ export class MessageService {
       .find({
         ...params,
       })
-      .populate(['senderInfo', 'mediaItems'])
+      .populate(this.getRequiredRelationProperties())
       .exec();
+  }
+
+  getRequiredRelationProperties() {
+    return ['senderInfo', 'mediaItems'];
   }
 
   findOne(id: string): Promise<MessageDocument> {
