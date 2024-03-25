@@ -131,9 +131,6 @@ export class BrandAuthService {
     }
     const subtractResult = currentTime.getTime() - requestTime.getTime();
 
-    if (subtractResult > TOKEN_EXPIRED_IN_SECONDS * 1000) {
-      return false;
-    }
-    return true;
+    return subtractResult <= TOKEN_EXPIRED_IN_SECONDS * 1000;
   }
 }
