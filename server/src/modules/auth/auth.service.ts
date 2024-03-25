@@ -80,6 +80,7 @@ export class AuthService {
     const payload: Partial<UserDocument> = {
       id: user.id,
       displayName: user.displayName ?? user.username,
+      roles: user.roles,
     };
     const accessToken = this.jwtService.sign(payload, {
       secret: jwtConstants.secret, // unique refresh secret from environment vars

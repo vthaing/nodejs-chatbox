@@ -29,7 +29,17 @@ export const authProvider = (axiosInstance: AxiosInstance): AuthProvider => {
             localStorage.getItem(TOKEN_KEY)
                 ? Promise.resolve()
                 : Promise.reject(),
-        getPermissions: () => Promise.resolve(["admin"]),
+        getPermissions: () => {
+            const auth = localStorage.getItem(AUTH_USER_DATA_KEY);
+            if (auth) {
+                const parsedAuth = JSON.parse(auth);
+                if (!parsedAuth.user) {
+                    return Promise.reject();
+                }
+                return Promise.resolve(parsedAuth.user.roles);
+            }
+            return Promise.reject();
+        },
         getUserIdentity: async () => {
             const token = localStorage.getItem(TOKEN_KEY);
             if (!token) {
