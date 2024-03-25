@@ -106,6 +106,7 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
 
     const verifyToken = useCallback(
         async () => {
+            loadAndSetTokenFromIframe();
              const accessToken = localStorage.getItem('accessToken');
              const refreshToken = localStorage.getItem('refreshToken');
 
@@ -165,6 +166,38 @@ export const AuthProvider: React.FC<AuthPropviderProps> = ({ children }) => {
             }
         );
         dispatch({ type: ChatTypes.clean });
+    }
+
+    const loadAndSetTokenFromIframe = () => {
+        const iframeToken = window.name;
+        if (!iframeToken) {
+            return;
+        }
+        let iframeJsonToken = null;
+        try {
+            iframeJsonToken = JSON.parse(iframeToken);
+        } catch (e) {
+            console.warn('Invalid Json frame token' + e.message)
+            return null;
+        }
+
+        console.log(iframeJsonToken, 'sdsdsdsd');
+        const accessToken = iframeJsonToken.access_token;
+        const refreshToken = iframeJsonToken.refresh_token;
+        const { id, displayName } = iframeJsonToken.user ?? {id: null, displayName: null};
+
+        if (accessToken && refreshToken && id && displayName) {
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
+            setAuth(
+                {
+                    checking: false,
+                    id,
+                    displayName,
+                    logged: true,
+                }
+            );
+        }
     }
 
     const context = {

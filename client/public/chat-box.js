@@ -40,6 +40,9 @@ function chatBoxesManagement () {
         iframe.src = this.getConversationIframeUrl(jsonData);
         iframe.width = '600px';
         iframe.height = '600px';
+        // A tips to transfer the data from parent to iframe
+        // @todo: should consider to change the solution
+        iframe.name = data;
         chatBoxElement.append(iframe);
 
     }
