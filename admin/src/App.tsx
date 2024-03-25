@@ -1,4 +1,4 @@
-import { Refine, AuthProvider } from "@pankod/refine-core";
+import { Refine } from "@pankod/refine-core";
 import {
     notificationProvider,
     Layout,
@@ -12,7 +12,7 @@ import routerProvider from "@pankod/refine-react-router-v6";
 import "@pankod/refine-antd/dist/reset.css";
 
 import { DashboardPage } from "pages/dashboard";
-import {UserEdit, UserList, UserShow} from "./pages/users";
+import {UserList, UserShow} from "./pages/users";
 import {API_URL} from "./constants";
 import {authProvider} from "./authUtils/authProvider";
 import {axiosInstance} from "./authUtils/axiosInstance";
@@ -23,6 +23,7 @@ import {RestrictedIpCreate} from "./pages/restricted-ip/create";
 import {RestrictedIpEdit, RestrictedIpList} from "./pages/restricted-ip";
 import {BrandCreate} from "./pages/brand/create";
 import {BrandEdit, BrandList, BrandShow} from "./pages/brand";
+import {AdminUserEdit, AdminUserList, AdminUserShow} from "./pages/admin-users";
 
 const App: React.FC = () => {
 
@@ -92,7 +93,13 @@ const App: React.FC = () => {
                 },
                 {
                     name: 'user-ban-requests'
-                }
+                },
+                {
+                    name: "admin-user",
+                    list: AdminUserList,
+                    edit: AdminUserEdit,
+                    show: AdminUserShow,
+                },
             ]}
             notificationProvider={notificationProvider}
             LoginPage={() => (
