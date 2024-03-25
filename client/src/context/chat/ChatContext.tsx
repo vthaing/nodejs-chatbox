@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react'
 import {ChatAction, chatReducer, ChatState, initialChatState} from './chatReducer';
 import {IUser} from "../../auth/AuthContext";
 
-export const DEFAULT_MESSAGE_LIMIT = 30;
+export const DEFAULT_MESSAGE_LIMIT = 10;
 export interface IMessage {
     id: string;
     to?: string;

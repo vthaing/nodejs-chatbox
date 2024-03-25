@@ -1,11 +1,6 @@
 import {IUser} from '../../auth/AuthContext';
 import {ChatTypes} from '../../types/chat.types';
-import {
-    IActiveChatPayload,
-    IConversation,
-    IMediaItem,
-    IMessage
-} from './ChatContext';
+import {IActiveChatPayload, IConversation, IMediaItem, IMessage} from './ChatContext';
 import {UploadFile} from "antd/es/upload/interface";
 
 export type ChatState = {
@@ -63,6 +58,11 @@ export interface AttachmentUploaded extends ChatAction {
 
 export interface LoadMessages extends ChatAction {
     type: ChatTypes.loadMessages;
+    payload: IMessage[];
+}
+
+export interface LoadPinnedMessages extends ChatAction {
+    type: ChatTypes.loadPinMessages;
     payload: IMessage[];
 }
 
@@ -192,7 +192,6 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
         case ChatTypes.loadMessages:
             const loadMessagesAction = (action as LoadMessages);
             const currentMessages = state.messages ?? []
-            const pinnedMessages = loadMessagesAction.payload.filter((loadedMessage) => loadedMessage.isPinnedMessage)
 
             return {
                 ...state,
@@ -200,8 +199,12 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
                     ...loadMessagesAction.payload,
                     ...currentMessages
                 ],
-                pinnedMessages: pinnedMessages
             };
+        case ChatTypes.loadPinMessages:
+            return {
+                ...state,
+                pinnedMessages: (action as LoadPinnedMessages).payload
+            }
         case ChatTypes.attachmentUploaded:
             const mediaItem = (action as AttachmentUploaded).payload;
 

@@ -5,19 +5,19 @@ import { OutgoingMessage } from './OutgoingMessage'
 import { IncomingMessage } from './IncomingMessage'
 import { AuthContext } from '../auth/AuthContext'
 import {ActiveChatTypesEnum, ChatContext, DEFAULT_MESSAGE_LIMIT, IMessage} from '../context/chat/ChatContext'
-import { LoadMessages } from '../context/chat/chatReducer'
-import { customFetch } from '../helpers/fetch'
+import {LoadMessages, LoadPinnedMessages} from '../context/chat/chatReducer'
+import { fetchSynchronous} from '../helpers/fetch'
 import { ChatTypes } from '../types/chat.types'
 import { scrollToBottom } from '../helpers/scrollToBottom'
 import {PinnedMessages} from "./PinnedMessages";
-import {Button} from "antd";
+import {Button, Spin} from "antd";
 
 
 export const Messages: React.FC = () => {
 
     const { auth } = useContext(AuthContext);
     const { chatState, dispatch } = useContext(ChatContext);
-    const [loadingMoreMessages, setLoadingMoreMessages] = useState<boolean>(false);
+    const [loadingMessages, setLoadingMessages] = useState<boolean>(true);
     const [dontShowButtonLoadMore, setDontShowButtonLoadMore] = useState<boolean>(false);
 
     const { activeChat } = chatState;
@@ -32,28 +32,21 @@ export const Messages: React.FC = () => {
                 messagesEndpoint = messagesEndpoint + '?' + queryString;
             }
 
-            const response = await customFetch<IMessage[]>(
+            return fetchSynchronous(
                 {
                     endpoint: messagesEndpoint,
                     method: 'GET',
                     token: localStorage.getItem('accessToken') ?? '',
                 }
-            );
+            ).then(response => {
+                if (response.ok) {
+                    return response.data;
+                }
 
-            const { ok, data } = response;
-            if (ok) {
-
-                const loadAction = {
-                    type: ChatTypes.loadMessages,
-                    payload: data ?? [],
-                } as LoadMessages;
-
-                dispatch(loadAction);
-            }
-
-            return data ?? [];
+                return [];
+            });
         },
-        [activeChat, dispatch],
+        [activeChat],
     );
 
     const handleClickLoadMore = () => {
@@ -65,19 +58,41 @@ export const Messages: React.FC = () => {
             beforeMessageId: firstMessage,
             limit: DEFAULT_MESSAGE_LIMIT
         }
-        setLoadingMoreMessages(true);
+        setLoadingMessages(true);
         fetchMessages(options).then((messages) => {
+            dispatch({
+                type: ChatTypes.loadMessages,
+                payload: messages,
+            } as LoadMessages);
+
             if (messages.length < DEFAULT_MESSAGE_LIMIT) {
                 setDontShowButtonLoadMore(true);
             }
-            setLoadingMoreMessages(false);
+            setLoadingMessages(false);
         });
     }
 
 
     useEffect(() => {
-        fetchMessages({limit: DEFAULT_MESSAGE_LIMIT}).then(() => scrollToBottom('messages'));
-    }, [fetchMessages]);
+        fetchMessages({limit: DEFAULT_MESSAGE_LIMIT})
+            .then((messages: [IMessage]) => {
+                dispatch({
+                    type: ChatTypes.loadMessages,
+                    payload: messages,
+                } as LoadMessages);
+            })
+            .then(() => fetchMessages({isPinnedMessage: true}))
+            .then((pinnedMessages: [IMessage]) => {
+                dispatch({
+                    type: ChatTypes.loadPinMessages,
+                    payload: pinnedMessages,
+                } as LoadPinnedMessages)
+            })
+            .then(() => {
+                setLoadingMessages(false);
+                scrollToBottom('messages');
+            });
+    }, [fetchMessages, dispatch]);
 
 
     return (
@@ -96,7 +111,12 @@ export const Messages: React.FC = () => {
                     {
                         !dontShowButtonLoadMore &&
                         chatState.messages.length >= DEFAULT_MESSAGE_LIMIT &&
-                        <p style={{textAlign: "center"}}><Button disabled={loadingMoreMessages} loading={loadingMoreMessages} onClick={handleClickLoadMore}>Load more message</Button></p>
+                        <div key={'button-load-more'} style={{textAlign: "center"}}><Button disabled={loadingMessages} loading={loadingMessages} onClick={handleClickLoadMore}>Load more message</Button></div>
+                    }
+                    {
+                        chatState.messages.length === 0
+                        && loadingMessages
+                        && <div key={'loading-spinner'} style={{textAlign: "center"}}><Spin/></div>
                     }
                     {
                         chatState.messages.map(

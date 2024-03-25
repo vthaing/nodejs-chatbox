@@ -62,5 +62,41 @@ export const customFetch = async<T = any>(
 };
 
 
+export const fetchSynchronous = (options: FetchOptions) => {
+    const {endpoint, method, data, token} = options;
+    const url = `${baseUrl}/${endpoint}`;
+    const init = {
+        method,
+    } as RequestInit;
+    if (method === 'POST' || method === 'PUT' || method === 'PATCH' ){
+        init.headers =  {
+            'Content-type': 'application/json',
+        };
+    }
+    if (token){
+        init.headers = {
+            ...init.headers,
+            'Authorization': `Bearer ${token}`,
+        };
+    }
+    init.body = JSON.stringify(data);
+    return fetch(url, init).then(response => {
+        if (response.status >= 210) {
+            return {
+                ok: false
+            }
+        }
+        return  response.json();
+    }).then(response => {
+        if (response.hasOwnProperty('ok')) {
+            return response;
+        }
+
+        return {
+            ok: true,
+            data: response
+        }
+    });
+}
 
 
