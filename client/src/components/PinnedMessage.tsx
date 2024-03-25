@@ -3,7 +3,7 @@ import {ChatContext, IMessage} from '../context/chat/ChatContext'
 import {scrollToMessage} from "../helpers/scrollToBottom";
 import {ChatTypes} from "../types/chat.types";
 import {LoadMessages} from "../context/chat/chatReducer";
-import {Button, Spin} from "antd";
+import {Button} from "antd";
 
 export type PinMessageProps = {
     message: IMessage;
