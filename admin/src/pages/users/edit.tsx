@@ -11,24 +11,17 @@ import {
 } from "@pankod/refine-antd";
 
 import MDEditor from "@uiw/react-md-editor";
+import {IUser} from "../../interfaces";
 
-import { IPost, ICategory } from "../../interfaces";
-
-export const PostEdit: React.FC<IResourceComponentsProps> = () => {
-    const { formProps, saveButtonProps, queryResult } = useForm<IPost>();
-
-    const postData = queryResult?.data?.data;
-    const { selectProps: categorySelectProps } = useSelect<ICategory>({
-        resource: "categories",
-        defaultValue: postData?.category.id,
-    });
+export const UserEdit: React.FC<IResourceComponentsProps> = () => {
+    const { formProps, saveButtonProps, queryResult } = useForm<IUser>();
 
     return (
         <Edit saveButtonProps={saveButtonProps}>
             <Form {...formProps} layout="vertical">
                 <Form.Item
-                    label="Title"
-                    name="title"
+                    label="Username"
+                    name="username"
                     rules={[
                         {
                             required: true,
@@ -37,53 +30,18 @@ export const PostEdit: React.FC<IResourceComponentsProps> = () => {
                 >
                     <Input />
                 </Form.Item>
+            </Form>
+            <Form {...formProps} layout="vertical">
                 <Form.Item
-                    label="Category"
-                    name={["category", "id"]}
+                    label="Email"
+                    name="email"
                     rules={[
                         {
                             required: true,
                         },
                     ]}
                 >
-                    <Select {...categorySelectProps} />
-                </Form.Item>
-                <Form.Item
-                    label="Status"
-                    name="status"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                >
-                    <Select
-                        options={[
-                            {
-                                label: "Published",
-                                value: "published",
-                            },
-                            {
-                                label: "Draft",
-                                value: "draft",
-                            },
-                            {
-                                label: "Rejected",
-                                value: "rejected",
-                            },
-                        ]}
-                    />
-                </Form.Item>
-                <Form.Item
-                    label="Content"
-                    name="content"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                >
-                    <MDEditor data-color-mode="light" />
+                    <Input type={'email'} />
                 </Form.Item>
             </Form>
         </Edit>

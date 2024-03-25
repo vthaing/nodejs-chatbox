@@ -1,40 +1,29 @@
 import { useShow, IResourceComponentsProps, useOne } from "@pankod/refine-core";
 
 import { Show, Typography, MarkdownField } from "@pankod/refine-antd";
+import {IUser} from "../../interfaces";
 
-import { IPost, ICategory } from "../../interfaces";
 
 const { Title, Text } = Typography;
 
 export const UserShow: React.FC<IResourceComponentsProps> = () => {
-    const { queryResult } = useShow<IPost>();
+    const { queryResult } = useShow<IUser>();
     const { data, isLoading } = queryResult;
     const record = data?.data;
-
-    const { data: categoryData, isLoading: categoryIsLoading } =
-        useOne<ICategory>({
-            resource: "categories",
-            id: record?.category.id || "",
-            queryOptions: {
-                enabled: !!record,
-            },
-        });
 
     return (
         <Show isLoading={isLoading}>
             <Title level={5}>Id</Title>
             <Text>{record?.id}</Text>
 
-            <Title level={5}>Title</Title>
-            <Text>{record?.title}</Text>
+            <Title level={5}>Username</Title>
+            <Text>{record?.username}</Text>
 
-            <Title level={5}>Category</Title>
-            <Text>
-                {categoryIsLoading ? "Loading..." : categoryData?.data.title}
-            </Text>
+            <Title level={5}>Email</Title>
+            <Text>{record?.email}</Text>
 
-            <Title level={5}>Content</Title>
-            <MarkdownField value={record?.content} />
+            <Title level={5}>Is Online</Title>
+            <Text>{record && (record.online ? 'Yes' : 'No')}</Text>
         </Show>
     );
 };

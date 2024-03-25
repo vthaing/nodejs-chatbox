@@ -14,7 +14,7 @@ import "@pankod/refine-antd/dist/reset.css";
 
 import { PostList, PostEdit, PostShow } from "pages/posts";
 import { DashboardPage } from "pages/dashboard";
-import {UserList} from "./pages/users";
+import {UserEdit, UserList, UserShow} from "./pages/users";
 
 const API_URL = "http://localhost:3001/api";
 
@@ -135,8 +135,8 @@ const App: React.FC = () => {
                 {
                     name: "user",
                     list: UserList,
-                    // edit: PostEdit,
-                    // show: PostShow,
+                    edit: UserEdit,
+                    show: UserShow,
                 },
             ]}
             notificationProvider={notificationProvider}
