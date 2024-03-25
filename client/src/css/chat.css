@@ -150,14 +150,14 @@ img {
 }
 
 .received_withd_msg {
-    width: 57%;
+    /*width: 57%;*/
 }
 
 .mesgs {
     float: left;
     padding: 30px 15px 0 25px;
-    width: 60%;
-    height: 100vh;
+    /*width: 60%;*/
+    height: 80vh;
 }
 
 .sent_msg p {
@@ -177,7 +177,7 @@ img {
 
 .sent_msg {
     float: right;
-    width: 46%;
+    width: 80%;
 }
 
 .input_msg_write input {
