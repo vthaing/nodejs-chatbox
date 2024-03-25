@@ -36,11 +36,6 @@ export const BadWordEdit: React.FC<IResourceComponentsProps> = () => {
                 <Form.Item
                     label="Categories"
                     name={["categories"]}
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
                 >
                     <Select {...badWordCategoriesProps} mode="multiple" />
                 </Form.Item>
