@@ -38,9 +38,13 @@ export class UserController {
   }
 
   @Get()
-  async findAll(@Req() req: Request, @Res() res) {
+  async index(@Req() req: Request, @Res() res) {
     const pagingOptions = this.pagingService.getPagingOptionsFromRequest(req);
-    const pagingResult = await this.userService.paginate({}, pagingOptions);
+    const pagingQuery = this._getPagingQuery(req);
+    const pagingResult = await this.userService.paginate(
+      pagingQuery,
+      pagingOptions,
+    );
     return this.pagingService.createPaginationResponse(res, pagingResult);
   }
 
@@ -88,5 +92,41 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
+  }
+
+  _getPagingQuery(req: Request) {
+    const pagingQuery = {};
+    if (req.query['displayName']) {
+      pagingQuery['displayName'] = {
+        $regex: new RegExp(`.*${req.query['displayName']}.*`),
+        $options: 'i',
+      };
+    }
+
+    if (req.query.hasOwnProperty('online')) {
+      pagingQuery['online'] = req.query.online;
+    }
+
+    if (req.query['brandId']) {
+      pagingQuery['brandId'] = req.query['brandId'];
+    }
+
+    if (req.query.hasOwnProperty('brandStatus')) {
+      pagingQuery['brandStatus'] = req.query.brandStatus;
+    }
+
+    if (req.query.hasOwnProperty('isBanned')) {
+      if (Boolean(req.query.isBanned)) {
+        pagingQuery['bannedFrom'] = { $ne: null };
+        pagingQuery['$or'] = [
+          { bannedTo: { $gt: new Date() } },
+          { bannedTo: { $eq: null } },
+        ];
+      } else {
+        pagingQuery['bannedFrom'] = { $eq: null };
+      }
+    }
+
+    return pagingQuery;
   }
 }

@@ -86,6 +86,7 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                          {text: 'Yes', value: true},
                          {text: 'No', value: false}
                      ]}
+                      filterMultiple={false}
                       defaultFilteredValue={getDefaultFilter(
                           "online",
                           filters,
@@ -138,6 +139,7 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                       render={(_, record: IUser) => (
                           <TagField color={record.isBanned ? 'red' : 'green'} value={record.isBanned ? 'Banned' : 'No'}/>
                       )}
+                      filterMultiple={false}
                       filters={[
                           {text: 'Banned', value: true},
                           {text: 'Not banned', value: false}
@@ -152,6 +154,7 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                     render={(_, record: IUser) => (
                       <TagField color={record.brandStatus ? 'green' : 'red'} value={record.brandStatus ? 'Enabled' : 'Disabled'}/>
                     )}
+                    filterMultiple={false}
                     filters={[
                       {text: 'Enabled', value: true},
                       {text: 'Disabled', value: false}

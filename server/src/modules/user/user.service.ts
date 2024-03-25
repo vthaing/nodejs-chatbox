@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {FilterQuery, ObjectId, PaginateModel, PaginateOptions} from 'mongoose';
+import {
+  FilterQuery,
+  ObjectId,
+  PaginateModel,
+  PaginateOptions,
+} from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
@@ -10,8 +15,6 @@ import { InitChatDto } from '../brand-chat/dto/init-chat.dto';
 import { BrandChatUserDto } from './dto/brand-chat-user.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { UserBanRequestService } from '../user-ban-request/user-ban-request.service';
-import { Request } from 'express';
-import { PaginationParameters } from 'mongoose-paginate-v2';
 
 @Injectable()
 export class UserService {
