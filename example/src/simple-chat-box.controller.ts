@@ -73,7 +73,7 @@ export class SimpleChatBoxController {
   }
 
   @Post('update-brand-user/:id')
-  async updateUser(
+  updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
     @Res() res: Response,
@@ -92,24 +92,32 @@ export class SimpleChatBoxController {
       xTimeStamp,
     );
 
-    const result = await axios.patch(
-      this.configService.get('chatBoxApiBaseUrl') + 'brand-chat/user/' + id,
-      {
-        displayName: displayName,
-        status: status,
-      },
-      {
-        headers: {
-          'x-brand-id': xBrandId,
-          'x-timestamp': xTimeStamp,
-          'x-nonce': xNonce,
-          'x-token': requestToken,
-          'Content-Type': 'application/json',
+    return axios
+      .patch(
+        this.configService.get('chatBoxApiBaseUrl') + 'brand-chat/user/' + id,
+        {
+          displayName: displayName,
+          status: status,
         },
-      },
-    );
-
-    return res.redirect('/simple-chat-box');
+        {
+          headers: {
+            'x-brand-id': xBrandId,
+            'x-timestamp': xTimeStamp,
+            'x-nonce': xNonce,
+            'x-token': requestToken,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .catch((error) => {
+        return error.toJSON();
+      })
+      .then((response) => {
+        if (response.status !== 200) {
+          return res.send(JSON.stringify(response));
+        }
+        return res.redirect('/simple-chat-box');
+      });
   }
 
   getChatBoxData() {
