@@ -7,6 +7,7 @@ import { BrandChannelModule } from '../brand-channel/brand-channel.module';
 import { BrandRoomModule } from '../brand-room/brand-room.module';
 import { ConversationModule } from '../conversation/conversation.module';
 import { BrandChatService } from './brand-chat.service';
+import { ChatModule } from '../chat/chat.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { BrandChatService } from './brand-chat.service';
     forwardRef(() => BrandChannelModule),
     forwardRef(() => BrandRoomModule),
     forwardRef(() => ConversationModule),
+    forwardRef(() => ChatModule),
   ],
   controllers: [BrandChatController],
   providers: [BrandChatService],

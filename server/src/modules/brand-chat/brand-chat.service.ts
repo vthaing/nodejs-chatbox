@@ -6,8 +6,9 @@ import { UserService } from '../user/user.service';
 import { ConversationService } from '../conversation/conversation.service';
 import { BrandService } from '../brand/brand.service';
 import { AuthService } from '../auth/auth.service';
-import { UpdateUserStatusDto } from './dto/update-user-status.dto';
+import { UpdateBrandUserDto } from './dto/update-brand-user.dto';
 import { UserAuthInterface } from '../auth/UserAuthInterface';
+import { ChatGateway } from '../chat/chat.gateway';
 
 @Injectable()
 export class BrandChatService {
@@ -18,6 +19,7 @@ export class BrandChatService {
     private userService: UserService,
     private conversationService: ConversationService,
     private authService: AuthService,
+    private chatGateway: ChatGateway,
   ) {}
   async initChat(initChatDto: InitChatDto) {
     const { conversation, user } = await this.getOrCreateBrandChatDependencies(
@@ -77,18 +79,27 @@ export class BrandChatService {
     };
   }
 
-  async updateBrandUserStatus(
-    updateUserStatusDto: UpdateUserStatusDto,
+  async updateBrandUser(
     brand: UserAuthInterface,
+    externalUserId: string,
+    updateUserStatusDto: UpdateBrandUserDto,
   ) {
     const user = await this.userService.findOne({
-      externalId: updateUserStatusDto.userId,
+      externalId: externalUserId,
       brandId: brand.id,
     });
     if (!user) {
       throw new NotFoundException("The given user doesn't exist");
     }
     user.brandStatus = updateUserStatusDto.enabled;
-    return !!user.save();
+    user.displayName = updateUserStatusDto.displayName;
+
+    user.save();
+    if (!user.brandStatus) {
+      this.chatGateway.sendServerAlert(user.id, {
+        message: 'Your account has been deactivated from chat box',
+        forceLogout: true,
+      });
+    }
   }
 }

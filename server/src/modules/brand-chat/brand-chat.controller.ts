@@ -1,9 +1,17 @@
-import { Controller, Post, Body, UseGuards, Patch, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Patch,
+  Req,
+  Param,
+} from '@nestjs/common';
 import { ApiHeaders, ApiParam, ApiTags } from '@nestjs/swagger';
 import { InitChatDto } from './dto/init-chat.dto';
 import { BrandChatService } from './brand-chat.service';
 import { BrandAuthGuard } from '../auth/guards/brand-auth.guard';
-import { UpdateUserStatusDto } from './dto/update-user-status.dto';
+import { UpdateBrandUserDto } from './dto/update-brand-user.dto';
 
 @ApiTags('Brand Chat')
 @ApiHeaders([
@@ -30,14 +38,16 @@ export class BrandChatController {
   initChat(@Body() initChatDto: InitChatDto) {
     return this.brandChatService.initChat(initChatDto);
   }
-  @Patch('update-user-status')
+  @Patch('user/:id')
   updateUserStatus(
-    @Body() updateUserStatusDto: UpdateUserStatusDto,
+    @Body() updateUserStatusDto: UpdateBrandUserDto,
     @Req() req,
+    @Param('id') id: string,
   ) {
-    return this.brandChatService.updateBrandUserStatus(
-      updateUserStatusDto,
+    return this.brandChatService.updateBrandUser(
       req.user,
+      id,
+      updateUserStatusDto,
     );
   }
 }
