@@ -7,8 +7,9 @@ export class CreateBrandDto {
   name: string;
   @ApiProperty({ required: true })
   @IsNotEmpty()
-  secretKey: string;
-  @ApiProperty({ required: true })
-  @IsNotEmpty()
   enabled: boolean;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  canUploadAttachment: boolean;
 }

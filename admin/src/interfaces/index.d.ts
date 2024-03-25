@@ -65,8 +65,8 @@ export interface IRestrictedIp {
 export interface IBrand {
     id: string;
     name: string;
-    secretKey: string;
     canUploadAttachment: boolean;
+    enabled: boolean;
     createdAt: string
 }
 

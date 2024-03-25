@@ -1,4 +1,4 @@
-import { IResourceComponentsProps, useMany } from "@pankod/refine-core";
+import {getDefaultFilter, IResourceComponentsProps, useMany} from "@pankod/refine-core";
 
 import {
     List,
@@ -10,8 +10,9 @@ import {
     ShowButton, TagField,
 } from "@pankod/refine-antd";
 
-import {IBrand, ICategory, IUser} from "interfaces";
+import {IBrand} from "interfaces";
 import dayjs from "dayjs";
+import React from "react";
 
 export const BrandList: React.FC<IResourceComponentsProps> = () => {
     const { tableProps } = useTable<IBrand>();
@@ -21,9 +22,17 @@ export const BrandList: React.FC<IResourceComponentsProps> = () => {
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title="ID" />
                 <Table.Column dataIndex="name" title="Name" />
-                
-                <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IBrand) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
+                <Table.Column dataIndex="enabled" title="Enabled"
+                    render={(_, record: IBrand) => (
+                      <TagField color={record.enabled ? 'green' : 'red'} value={record.enabled ? 'Yes' : 'No'}/>
+                    )}
                 />
+                <Table.Column dataIndex="canUploadAttachment" title="Can Upload Attachment"
+                    render={(_, record: IBrand) => (
+                      <TagField color={record.canUploadAttachment ? 'green' : 'red'} value={record.canUploadAttachment ? 'Yes' : 'No'}/>
+                    )}
+                />
+                <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IBrand) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}/>
                 <Table.Column<IBrand>
                     title="Actions"
                     dataIndex="actions"

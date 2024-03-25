@@ -15,6 +15,10 @@ import {
 } from "@pankod/refine-antd";
 
 import {IBrand, IBrandChannel, IBrandRoom, IConversation} from "../../interfaces";
+import {Button} from "antd";
+import {EyeOutlined} from "@ant-design/icons";
+import React from "react";
+import dayjs from "dayjs";
 
 const { Title, Text } = Typography;
 
@@ -156,7 +160,14 @@ export const BrandShow: React.FC<IResourceComponentsProps> = () => {
                         <Text>{record?.name}</Text>
 
                         <Title level={5}>Secret key</Title>
-                        <Text>{record?.secretKey}</Text>
+                        <Text>*********</Text>
+                        <Button icon={<EyeOutlined />}>View Secret key</Button>
+
+                        <Title level={5}>Enabled</Title>
+                        <Text>{record && (record.enabled ? 'Yes' : 'No')}</Text>
+
+                        <Title level={5}>Created At</Title>
+                        <Text>{dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY')}</Text>
                     </Show>
                 </Col>
                 <Col xl={1}></Col>
