@@ -7,6 +7,8 @@ import {
   BrandChannel,
   BrandChannelDocument,
 } from './entities/brand-channel.entity';
+import { BrandDocument } from '../brand/entities/brand.entity';
+import { InitChatDto } from '../brand-chat/dto/init-chat.dto';
 
 @Injectable()
 export class BrandChannelService {
@@ -15,7 +17,9 @@ export class BrandChannelService {
     private readonly brandChannelModel: Model<BrandChannelDocument>,
   ) {}
 
-  create(createBrandChannelDto: CreateBrandChannelDto) {
+  create(
+    createBrandChannelDto: CreateBrandChannelDto,
+  ): Promise<BrandChannelDocument> {
     const createdBrandChannel = new this.brandChannelModel(
       createBrandChannelDto,
     );
@@ -50,5 +54,32 @@ export class BrandChannelService {
 
   remove(id: string): Promise<BrandChannelDocument> {
     return this.brandChannelModel.findByIdAndDelete(id).exec();
+  }
+
+  async getOrCreateBrandChannel(
+    brand: BrandDocument,
+    initChatDto: InitChatDto,
+  ): Promise<BrandChannelDocument | null> {
+    if (!initChatDto.channelId) {
+      return null;
+    }
+    const brandChannel = await this.brandChannelModel
+      .findOne({
+        externalId: initChatDto.channelId,
+        brandId: brand.id,
+      })
+      .then((found) => found);
+
+    if (brandChannel) {
+      return brandChannel;
+    }
+
+    const brandChannelDto = new CreateBrandChannelDto();
+
+    brandChannelDto.brandId = brand.id;
+    brandChannelDto.name = initChatDto.channelName;
+    brandChannelDto.externalId = initChatDto.channelId;
+
+    return this.create(brandChannelDto);
   }
 }

@@ -27,9 +27,6 @@ export class BrandChannel {
 
   @Prop({ required: true, type: mongoose.Schema.Types.String })
   externalId: string;
-
-  @Prop({ required: false, type: mongoose.Schema.Types.String })
-  externalBrandId: string;
 }
 
 const BrandChannelSchema = SchemaFactory.createForClass(BrandChannel);
