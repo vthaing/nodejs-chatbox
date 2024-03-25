@@ -12,7 +12,7 @@ import {
     TextField,
     useTable,
     Space,
-    ShowButton, TagField, useSelect, FilterDropdownProps, FilterDropdown, Select,
+    ShowButton, TagField, useSelect, FilterDropdownProps, FilterDropdown, Select, Input,
 } from "@pankod/refine-antd";
 
 import {IBrand, IUser} from "interfaces";
@@ -62,10 +62,35 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
         <List>
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title="ID"  />
-                <Table.Column dataIndex="externalId" title="External ID" />
-                <Table.Column dataIndex="displayName" title="Display Name" />
+                <Table.Column dataIndex="externalId" title="External ID"
+                    filterDropdown={(props: FilterDropdownProps) => (
+                      <FilterDropdown
+                          {...props}
+                      >
+                          <Input placeholder="enter the user external id"></Input>
+                      </FilterDropdown>
+                    )}
+                />
+                <Table.Column dataIndex="displayName" title="Display Name"
+                    filterDropdown={(props: FilterDropdownProps) => (
+                      <FilterDropdown
+                          {...props}
+                      >
+                          <Input placeholder="enter the user display name"></Input>
+                      </FilterDropdown>
+                    )}
+                />
                 <Table.Column dataIndex="online" title="Is Online"
                   render={(_, record: IUser) => (record.online ? 'Yes' : 'No')}
+                     filters={[
+                         {text: 'Yes', value: true},
+                         {text: 'No', value: false}
+                     ]}
+                      defaultFilteredValue={getDefaultFilter(
+                          "online",
+                          filters,
+                          "eq",
+                      )}
                 />
                 <Table.Column
                     title="Brand"
@@ -115,9 +140,13 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
                       )}
                 />
                 <Table.Column dataIndex="brandStatus" title="Status on brand"
-                              render={(_, record: IUser) => (
-                                  <TagField color={record.brandStatus ? 'green' : 'red'} value={record.brandStatus ? 'Enabled' : 'Disabled'}/>
-                              )}
+                    render={(_, record: IUser) => (
+                      <TagField color={record.brandStatus ? 'green' : 'red'} value={record.brandStatus ? 'Enabled' : 'Disabled'}/>
+                    )}
+                    filters={[
+                      {text: 'Enabled', value: true},
+                      {text: 'Disabled', value: false}
+                    ]}
                 />
                 <Table.Column dataIndex="createdAt" title="Created At"
                               render={(_, record: IUser) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
