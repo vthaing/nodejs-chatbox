@@ -103,6 +103,45 @@ requestToken 9c70078a4ffd9d2dc52d9cbd638f77bebd82ea8e
   - `x-brand-id`: là id của brand. Sẽ được admin cấp cho. Mã này là duy nhất và không bao giờ đổi được.
   - `x-token`: là token được tạo từ các thành phần trên.
 - Sau đây là sample code để gởi gởi request cập nhật trạng thái của user trên brand
+```javascript
+    const xBrandId = this.configService.get('brandId');
+    const secretKey = this.configService.get('chatBoxSecretKey');
+    const xNonce = randomStringGenerator();
+    const xTimeStamp = Date.now();
+    const requestToken = this.generateToken(
+      xBrandId,
+      secretKey,
+      xNonce,
+      xTimeStamp,
+    );
+
+    return axios
+      .patch(
+        this.configService.get('chatBoxApiBaseUrl') + 'brand-chat/user/' + id,
+        {
+          displayName: displayName,
+          enabled: status,
+        },
+        {
+          headers: {
+            'x-brand-id': xBrandId,
+            'x-timestamp': xTimeStamp,
+            'x-nonce': xNonce,
+            'x-token': requestToken,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then((response) => {
+        if (response.status !== 200) {
+          return res.send(JSON.stringify(response));
+        }
+        return res.redirect('/simple-chat-box');
+      })
+      .catch((error) => {
+        return res.send(error.toJSON());
+      });
+```
 
 
 ## Frontend App (client-folder)
