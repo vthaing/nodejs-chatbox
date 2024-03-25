@@ -32,6 +32,8 @@ export class User {
   bannedFrom?: Date | null;
   @Prop({ type: mongoose.Schema.Types.Date })
   bannedTo?: Date | null;
+
+  isBanned: boolean;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
