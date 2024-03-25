@@ -6,8 +6,8 @@ import { scrollToBottomAnimated } from '../helpers/scrollToBottom';
 
 import { useSocket } from '../hooks/useSocket';
 import { ChatTypes } from '../types/chat.types';
-import {ChatContext, IChannel, IMessage, IServerAlert} from './chat/ChatContext';
-import { ListChannels, ListUsers, NewMessage } from './chat/chatReducer';
+import {ChatContext, IConversation, IMessage, IServerAlert} from './chat/ChatContext';
+import { ListConversations, ListUsers, NewMessage } from './chat/chatReducer';
 
 
 export interface ISocketContext {
@@ -60,12 +60,12 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
 
     // listen  connected users
     useEffect(() => {
-        socket?.on('user-channels', (channels: IChannel[]) => {
+        socket?.on('user-conversations', (conversations: IConversation[]) => {
             dispatch(
                 {
-                    type: ChatTypes.listChannels,
-                    payload: channels,
-                } as ListChannels,
+                    type: ChatTypes.listConversations,
+                    payload: conversations,
+                } as ListConversations,
             );
         });
     }, [socket, dispatch]);

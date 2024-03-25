@@ -6,7 +6,7 @@ import {IUser} from "../../auth/AuthContext";
 export interface IMessage {
     id: string;
     to?: string;
-    channel?: string
+    conversation?: string
     senderInfo: IUser
     messageContent: string;
     from: string;
@@ -15,7 +15,7 @@ export interface IMessage {
 
 export interface IMessageToSave {
     to?: string;
-    channel?: string
+    conversation?: string
     senderInfo: IUser
     text: string;
     from: string;
@@ -27,7 +27,7 @@ export interface IServerAlert {
     forceLogout: boolean,
 }
 
-export interface IChannel {
+export interface IConversation {
     id: string;
     name?: string;
     members: [string];
@@ -36,7 +36,7 @@ export interface IChannel {
 
 export enum ActiveChatTypesEnum  {
     DIRECT = 'direct',
-    CHANNEL = 'channel',
+    CHANNEL = 'conversation',
 }
 
 export interface IActiveChatPayload {

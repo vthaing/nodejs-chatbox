@@ -1,6 +1,6 @@
 export enum ChatTypes {
     listUsers = '[Chat] list users',
-    listChannels = '[Chat] list channels',
+    listConversations = '[Chat] list conversations',
     activeChat = '[Chat] Active Chat', 
     newMessage = '[Chat] New Message', 
     loadMessages = '[Chat] Load Messages',

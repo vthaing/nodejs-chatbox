@@ -1,12 +1,12 @@
 import {IUser} from '../../auth/AuthContext';
 import {ChatTypes} from '../../types/chat.types';
-import {IActiveChatPayload, IChannel, IMessage} from './ChatContext';
+import {IActiveChatPayload, IConversation, IMessage} from './ChatContext';
 
 export type ChatState = {
     id: string;
     activeChat: IActiveChatPayload;
     users: IUser[];
-    channels: IChannel[];
+    conversations: IConversation[];
     messages: IMessage[];
 };
 
@@ -21,9 +21,9 @@ export interface ListUsers extends ChatAction {
     payload: IUser[];
 }
 
-export interface ListChannels extends ChatAction {
-    type: ChatTypes.listChannels;
-    payload: IChannel[];
+export interface ListConversations extends ChatAction {
+    type: ChatTypes.listConversations;
+    payload: IConversation[];
 }
 
 export interface ActiveChat extends ChatAction {
@@ -51,7 +51,7 @@ export const initialChatState = {
     id: '',
     activeChat: { } as IActiveChatPayload,
     users: [],
-    channels: [],
+    conversations: [],
     messages: [],
 } as ChatState;
 
@@ -69,11 +69,11 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
                     ...(action as ListUsers).payload,
                 ],
             };
-        case ChatTypes.listChannels:
+        case ChatTypes.listConversations:
             return {
                 ...state,
-                channels: [
-                    ...(action as ListChannels).payload,
+                conversations: [
+                    ...(action as ListConversations).payload,
                 ],
             };
         case ChatTypes.activeChat:
@@ -96,7 +96,7 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
             if (
                     state.activeChat.activeChatId === newMessageAction.payload.from ||
                     state.activeChat.activeChatId === newMessageAction.payload.to ||
-                    state.activeChat.activeChatId === newMessageAction.payload.channel
+                    state.activeChat.activeChatId === newMessageAction.payload.conversation
                 ) {
                     return {
                         ...state,

@@ -48,15 +48,14 @@ export class ChatGateway {
       logger.verbose('Client connected to chat');
       // retrieve connected users
       const connectedUsers = await this.userService.findAll();
-      const userConversations = await this.conversationService.findUserConversations(
-        userFromSocket.id,
-      );
+      const userConversations =
+        await this.conversationService.findUserConversations(userFromSocket.id);
       // join user to a chat room (private)
       socket.join(updatedUser.id);
 
       console.log(userFromSocket.id);
       this.server.emit('online-users', connectedUsers);
-      this.server.emit('user-conversation', userConversations);
+      this.server.emit('user-conversations', userConversations);
     } catch (e) {
       logger.error(
         'Socket disconnected within handleConnection() in AppGateway:',

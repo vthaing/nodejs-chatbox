@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { AuthContext } from '../auth/AuthContext';
 import { ChatContext } from '../context/chat/ChatContext';
 import { SideBarChatItem } from './SideBarChatItem'
-import {SideBarChannelItem} from "./SideBarChannelItem";
+import {SideBarConversationItem} from "./SideBarConversationItem";
 
 export const SideBar: React.FC = () => {
 
@@ -14,14 +14,14 @@ export const SideBar: React.FC = () => {
     return (
         <>
 
-            <div className="channel_chat">
+            <div className="conversation_chat">
                 {
                     chatState
-                        .channels
-                        .map(channel => (
-                            <SideBarChannelItem
-                                key={channel.id}
-                                channel={channel}
+                        .conversations
+                        .map(conversation => (
+                            <SideBarConversationItem
+                                key={conversation.id}
+                                conversation={conversation}
                             />
                         ))
                 }

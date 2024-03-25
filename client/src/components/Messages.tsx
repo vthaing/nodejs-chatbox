@@ -26,7 +26,7 @@ export const Messages: React.FC = () => {
         async () => {
             const messagesEndpoint = activeChat.type === ActiveChatTypesEnum.DIRECT ?
                 ('message/history/' + activeChat.activeChatId) :
-                ('message/channel/' + activeChat.activeChatId);
+                ('message/conversation/' + activeChat.activeChatId);
 
             const response = await customFetch<IMessage[]>(
                 {

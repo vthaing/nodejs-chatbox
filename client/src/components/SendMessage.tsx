@@ -26,7 +26,7 @@ export const SendMessage: React.FC = () => {
         const messageToSend = {
             from: auth.id,
             to: _getTo(),
-            channel: _getChannel(),
+            conversation: _getConversation(),
             text: message,
         } as IMessageToSave;
         // Emit a websocket
@@ -41,7 +41,7 @@ export const SendMessage: React.FC = () => {
             null;
     }
 
-    const _getChannel = () => {
+    const _getConversation = () => {
         return (chatState.activeChat.type === ActiveChatTypesEnum.CHANNEL) ?
             chatState.activeChat.activeChatId :
             null;

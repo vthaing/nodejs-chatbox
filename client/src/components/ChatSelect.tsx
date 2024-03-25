@@ -5,7 +5,7 @@ export const ChatSelect: React.FC = () => {
         <div className="middle-screen">
             <div className="alert alert-info">
                 <hr />
-                <h3>Select a Person or a Channel</h3>
+                <h3>Select a Person or a Conversation</h3>
                 <span>
                     To start a talk
                 </span>

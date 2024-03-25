@@ -3,7 +3,10 @@ import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
-import { Conversation, ConversationDocument } from './entities/conversation.entity';
+import {
+  Conversation,
+  ConversationDocument,
+} from './entities/conversation.entity';
 
 @Injectable()
 export class ConversationService {
@@ -13,7 +16,9 @@ export class ConversationService {
   ) {}
 
   create(createConversationDto: CreateConversationDto) {
-    const createdConversation = new this.conversationModel(createConversationDto);
+    const createdConversation = new this.conversationModel(
+      createConversationDto,
+    );
     return createdConversation.save();
   }
 

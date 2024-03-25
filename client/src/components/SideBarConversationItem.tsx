@@ -1,17 +1,17 @@
 import React, { useContext } from 'react'
-import {ActiveChatTypesEnum, ChatContext, IActiveChatPayload, IChannel} from '../context/chat/ChatContext';
+import {ActiveChatTypesEnum, ChatContext, IActiveChatPayload, IConversation} from '../context/chat/ChatContext';
 import { ActiveChat } from '../context/chat/chatReducer';
 import { ChatTypes } from '../types/chat.types';
 import {SocketContext} from "../context/SocketContext";
 
-export type SideBarChannelItemProps = {
-    channel: IChannel;
+export type SideBarConversationItemProps = {
+    conversation: IConversation;
 };
 
 
-export const SideBarChannelItem: React.FC<SideBarChannelItemProps> = ({ channel }: SideBarChannelItemProps) => {
+export const SideBarConversationItem: React.FC<SideBarConversationItemProps> = ({ conversation }: SideBarConversationItemProps) => {
 
-    const { name, id } = channel;
+    const { name, id } = conversation;
 
     const { chatState, dispatch } = useContext(ChatContext);
 
@@ -22,12 +22,12 @@ export const SideBarChannelItem: React.FC<SideBarChannelItemProps> = ({ channel 
     const onClick = () => {
         const action: ActiveChat = {
             payload: ({
-                    type: ActiveChatTypesEnum.CHANNEL, activeChatId: channel.id
+                    type: ActiveChatTypesEnum.CHANNEL, activeChatId: conversation.id
                 } as IActiveChatPayload),
             type: ChatTypes.activeChat,
         };
         dispatch(action);
-        socket?.emit('open-channel-chat', {channel: channel.id})
+        socket?.emit('open-conversation-chat', {conversation: conversation.id})
     }
 
 
@@ -43,7 +43,7 @@ export const SideBarChannelItem: React.FC<SideBarChannelItemProps> = ({ channel 
                         <img style={{maxHeight: '40px'}} src="/avatar/icons8-user-groups-80.png" alt="sun" />
                     </div>
                     <div className="chat_ib">
-                        <h5>Channel: {name}</h5>
+                        <h5>Conversation: {name}</h5>
                     </div>
                 </div>
             </div>
