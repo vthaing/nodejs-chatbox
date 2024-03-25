@@ -1,33 +1,22 @@
 import React, {useEffect, useState} from 'react'
 import {IMediaItem} from "../context/chat/ChatContext";
-import UploadList from "antd/es/upload/UploadList";
-import {UploadFile} from "antd/es/upload/interface";
+import { Image } from 'antd';
 
 export type MessageMediaItemsProps = {
     mediaItems: IMediaItem[]
 }
 export const MessageMediaItems: React.FC<MessageMediaItemsProps> = ({mediaItems}) => {
 
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
-
-    useEffect(() => {
-        setFileList(
-            mediaItems.map((mediaItem) => ({
-                uid: mediaItem.id,
-                size: mediaItem.size,
-                name: mediaItem.name,
-                thumbUrl: process.env.REACT_APP_API_URL + mediaItem.url,
-                fileName: mediaItem.name,
-                url: process.env.REACT_APP_API_URL + mediaItem.url,
-                status: "done",
-                type: mediaItem.mimeType
-            } as UploadFile))
-        );
-    }, [mediaItems])
-
     return (
-        <>
-            <UploadList isImageUrl={(file) => true} showRemoveIcon={false} locale={{}} items={fileList} listType={'picture-card'}/>
-        </>
+        <Image.PreviewGroup>
+            {mediaItems.map((mediaItem) => (
+                <Image src={process.env.REACT_APP_API_URL + mediaItem.url}
+                   style={{
+                       maxHeight: 100, maxWidth: 100, margin: 2, padding: 3,
+                       border: "1px solid #d9d9d9", borderRadius: 5
+                    }}
+                />
+            ))}
+        </Image.PreviewGroup>
     )
 }
