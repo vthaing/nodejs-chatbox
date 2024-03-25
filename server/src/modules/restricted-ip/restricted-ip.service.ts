@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateRestrictedIpDto } from './dto/create-restricted-ip.dto';
 import { UpdateRestrictedIpDto } from './dto/update-restricted-ip.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   RestrictedIp,
   RestrictedIpDocument,
@@ -12,7 +12,7 @@ import {
 export class RestrictedIpService {
   constructor(
     @InjectModel(RestrictedIp.name)
-    private readonly restrictedIpModel: Model<RestrictedIpDocument>,
+    private readonly restrictedIpModel: PaginateModel<RestrictedIpDocument>,
   ) {}
 
   create(createRestrictedIpDto: CreateRestrictedIpDto) {
@@ -20,6 +20,10 @@ export class RestrictedIpService {
       createRestrictedIpDto,
     );
     return createdRestrictedIp.save();
+  }
+
+  paginate(query: FilterQuery<any>, options: PaginateOptions) {
+    return this.restrictedIpModel.paginate(query, options);
   }
 
   findAll(

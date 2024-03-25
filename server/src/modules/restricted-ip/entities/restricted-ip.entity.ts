@@ -1,5 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export type RestrictedIpDocument = RestrictedIp & Document;
 @Schema({
@@ -24,4 +25,7 @@ export class RestrictedIp {
   notes?: string;
 }
 
-export const RestrictedIpSchema = SchemaFactory.createForClass(RestrictedIp);
+const RestrictedIpSchema = SchemaFactory.createForClass(RestrictedIp);
+RestrictedIpSchema.plugin(mongoosePaginate);
+
+export { RestrictedIpSchema };
