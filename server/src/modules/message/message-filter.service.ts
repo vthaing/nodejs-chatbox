@@ -37,24 +37,23 @@ export class MessageFilterService {
    * Evaluate a string for profanity and return an edited version.
    */
   clean(text: string, badWords: BadWord[]): string {
-    let badWord, keyReplacement, lowerText;
+    let keyReplacement, lowerText;
 
     lowerText = text.toLowerCase();
     // loop through each key in the dictionary and search for matches
     // (seems like it'd be faster to indexOf on all keys and run replace on matches, rather than replace all)
-    for (badWord in badWords) {
-      let index = lowerText.indexOf(badWord.term);
-      console.log(index, 'Index found');
+    for (const badWordIndex in badWords) {
+      let index = lowerText.indexOf(badWords[badWordIndex].term);
+
       while (index !== -1) {
-        keyReplacement = this.stars(badWord.term);
+        keyReplacement = this.stars(badWords[badWordIndex].term);
 
         text =
           text.substring(0, index) +
           keyReplacement +
-          text.substring(index + badWord.term.length);
+          text.substring(index + badWords[badWordIndex].term.length);
         lowerText = text.toLowerCase();
-        index = lowerText.indexOf(badWord.term);
-        return text; // break early to avoid external loop to finish, since we have a result
+        index = lowerText.indexOf(badWords[badWordIndex].term);
       }
       return text;
     }
