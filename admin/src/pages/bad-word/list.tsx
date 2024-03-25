@@ -6,20 +6,31 @@ import {
     useTable,
     Space,
     EditButton,
-    TagField,
+    TagField, FilterDropdownProps, FilterDropdown, Input,
 } from "@pankod/refine-antd";
 
 import {IBadWord, IUser} from "interfaces";
 import dayjs from "dayjs";
+import React from "react";
 
 export const BadWordList: React.FC<IResourceComponentsProps> = () => {
-    const { tableProps } = useTable<IBadWord>();
+    const { tableProps } = useTable<IBadWord>({
+        syncWithLocation: true
+    });
 
     return (
         <List>
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title="ID" />
-                <Table.Column dataIndex="term" title="Term" />
+                <Table.Column dataIndex="term" title="Term"
+                  filterDropdown={(props: FilterDropdownProps) => (
+                      <FilterDropdown
+                          {...props}
+                      >
+                          <Input placeholder="Enter the bad word"></Input>
+                      </FilterDropdown>
+                  )}
+                />
                 <Table.Column
                     title="Categories"
                     render={(value: IBadWord) => {
