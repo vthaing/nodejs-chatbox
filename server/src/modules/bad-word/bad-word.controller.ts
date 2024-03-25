@@ -14,11 +14,14 @@ import { UpdateBadWordDto } from './dto/update-bad-word.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { badWordCategories } from './bad-word-category.enum';
+import RoleGuard from '../auth/guards/roles.guard';
+import Role from '../user/role.enum';
 
 @Controller('bad-words')
 @ApiBearerAuth()
 @ApiTags('Bad Words')
 @UseGuards(JwtAuthGuard)
+@UseGuards(RoleGuard(Role.Admin))
 export class BadWordController {
   constructor(private readonly badWordService: BadWordService) {}
 

@@ -15,10 +15,14 @@ import { UpdateBrandDto } from './dto/update-brand.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
+import RoleGuard from '../auth/guards/roles.guard';
+import Role from '../user/role.enum';
 
 @ApiBearerAuth()
 @ApiTags('Brands')
 @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
+@UseGuards(RoleGuard(Role.Admin))
 @Controller('brands')
 export class BrandController {
   constructor(private readonly brandService: BrandService) {}

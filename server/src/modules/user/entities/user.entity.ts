@@ -54,6 +54,9 @@ export class User {
 
   @Prop({ ref: 'UserBanRequest', type: [SchemaTypes.ObjectId] })
   userBanRequestIds: [ObjectId];
+
+  @Prop({ type: mongoose.Schema.Types.Array })
+  roles: [string];
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
