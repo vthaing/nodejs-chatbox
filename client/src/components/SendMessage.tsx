@@ -29,7 +29,6 @@ export const SendMessage: React.FC = () => {
     const [attachmentInputKey, setAttachmentInputKey] = useState(Math.random());
 
     const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-        console.log(chatState);
         setMessage(target.value);
     }
 

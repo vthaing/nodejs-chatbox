@@ -1,6 +1,6 @@
 import {IUser} from '../../auth/AuthContext';
 import {ChatTypes} from '../../types/chat.types';
-import {IActiveChatPayload, IAttachmentInfo, IConversation, IMediaItem, IMessage} from './ChatContext';
+import {IActiveChatPayload, IConversation, IMediaItem, IMessage} from './ChatContext';
 import {UploadFile} from "antd/es/upload/interface";
 
 export type ChatState = {
