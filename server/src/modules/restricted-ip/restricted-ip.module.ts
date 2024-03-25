@@ -20,5 +20,6 @@ import {
   ],
   controllers: [RestrictedIpController],
   providers: [RestrictedIpService],
+  exports: [RestrictedIpService],
 })
 export class RestrictedIpModule {}

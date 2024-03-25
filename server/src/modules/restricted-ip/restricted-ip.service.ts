@@ -32,6 +32,12 @@ export class RestrictedIpService {
       .exec();
   }
 
+  getAllRestrictedIps(): Promise<string[]> {
+    return this.restrictedIpModel
+      .find({ enabled: true })
+      .then((ips) => ips.map((ip) => ip.ip));
+  }
+
   findOne(id: string): Promise<RestrictedIpDocument> {
     return this.restrictedIpModel.findById(id).exec();
   }

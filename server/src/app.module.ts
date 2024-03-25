@@ -11,6 +11,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BadWordModule } from './modules/bad-word/bad-word.module';
 import { RestrictedIpModule } from './modules/restricted-ip/restricted-ip.module';
 import configuration from './config/configuration';
+import { IpFilter } from 'nestjs-ip-filter';
+import { RestrictedIpService } from './modules/restricted-ip/restricted-ip.service';
+import { APP_FILTER } from '@nestjs/core';
+import { IpFilterDenyExceptionFilter } from './exception/ipfilter-exception-filter.exception';
 
 @Module({
   imports: [
@@ -26,6 +30,14 @@ import configuration from './config/configuration';
       }),
       inject: [ConfigService],
     }),
+    IpFilter.registerAsync({
+      imports: [RestrictedIpModule],
+      inject: [RestrictedIpService],
+      useFactory: async (restrictedIpService: RestrictedIpService) => ({
+        blacklist: await restrictedIpService.getAllRestrictedIps(),
+        useDenyException: true,
+      }),
+    }),
     UserModule,
     MessageModule,
     AuthModule,
@@ -35,6 +47,12 @@ import configuration from './config/configuration';
     RestrictedIpModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: IpFilterDenyExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
