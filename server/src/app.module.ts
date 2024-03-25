@@ -23,6 +23,7 @@ import { BrandChatModule } from './modules/brand-chat/brand-chat.module';
 import { ClientScriptModule } from './modules/client-script/client-script.module';
 import { MediaModule } from './modules/media-item/media.module';
 import { DriverType, StorageModule } from '@codebrew/nestjs-storage';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { DriverType, StorageModule } from '@codebrew/nestjs-storage';
     BrandChatModule,
     ClientScriptModule,
     MediaModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [

@@ -7,10 +7,12 @@ import {
   RestrictedIp,
   RestrictedIpDocument,
 } from './entities/restricted-ip.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class RestrictedIpService {
   constructor(
+    private eventEmitter: EventEmitter2,
     @InjectModel(RestrictedIp.name)
     private readonly restrictedIpModel: PaginateModel<RestrictedIpDocument>,
   ) {}
@@ -19,7 +21,10 @@ export class RestrictedIpService {
     const createdRestrictedIp = new this.restrictedIpModel(
       createRestrictedIpDto,
     );
-    return createdRestrictedIp.save();
+    return createdRestrictedIp.save().then((restrictedIp) => {
+      this.eventEmitter.emit('restricted-ip-changed');
+      return restrictedIp;
+    });
   }
 
   paginate(query: FilterQuery<any>, options: PaginateOptions) {
@@ -59,10 +64,20 @@ export class RestrictedIpService {
         upsert: false,
         new: true,
       })
-      .exec();
+      .exec()
+      .then((restrictedIp) => {
+        this.eventEmitter.emit('restricted-ip-changed');
+        return restrictedIp;
+      });
   }
 
   remove(id: string): Promise<RestrictedIpDocument> {
-    return this.restrictedIpModel.findByIdAndDelete(id).exec();
+    return this.restrictedIpModel
+      .findByIdAndDelete(id)
+      .exec()
+      .then((restrictedIp) => {
+        this.eventEmitter.emit('restricted-ip-changed');
+        return restrictedIp;
+      });
   }
 }
