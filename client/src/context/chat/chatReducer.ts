@@ -98,8 +98,16 @@ const handlePinMessageChange = (state: ChatState, action: ChangePinMessageStatus
     }
 
     let pinnedMessages = state.pinnedMessages;
+    const ativeChat = state.activeChat;
     if (updatedMessage.isPinnedMessage) {
-        if (!pinnedMessages.find(message => message.id === updatedMessage.id)) {
+        if (
+            !pinnedMessages.find(message => message.id === updatedMessage.id)
+            && (
+                ativeChat.activeChatId === updatedMessage.to
+                || ativeChat.activeChatId === updatedMessage.conversation
+
+            )
+        ) {
             pinnedMessages.push(updatedMessage);
         }
     } else {

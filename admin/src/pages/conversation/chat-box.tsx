@@ -17,7 +17,7 @@ export const ChatBox: React.FC<ChatBoxProps> = ({conversation}) => {
 
     useEffect(() => {
         // @ts-ignore
-        if (typeof chatBoxesManagement !== 'undefined') {
+        if (typeof ChatBoxesManagement !== 'undefined') {
             // @ts-ignore
             const chatBoxesManager = new ChatBoxesManagement();
 
