@@ -17,5 +17,6 @@ import { AuthModule } from '../auth/auth.module';
   ],
   controllers: [BadWordController],
   providers: [BadWordService],
+  exports: [BadWordService],
 })
 export class BadWordModule {}

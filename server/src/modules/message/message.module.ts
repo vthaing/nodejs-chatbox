@@ -1,9 +1,11 @@
 import { MongooseModule } from '@nestjs/mongoose';
-import { Module } from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 import { MessageService } from './message.service';
 import { MessageController } from './message.controller';
 import { Message, MessageSchema } from './entities/message.entity';
 import { AuthModule } from '../auth/auth.module';
+import { MessageFilterService } from './message-filter.service';
+import { BadWordModule } from '../bad-word/bad-word.module';
 
 @Module({
   imports: [
@@ -14,9 +16,10 @@ import { AuthModule } from '../auth/auth.module';
       },
     ]),
     AuthModule,
+    forwardRef(() => BadWordModule),
   ],
   controllers: [MessageController],
-  providers: [MessageService],
-  exports: [MessageService],
+  providers: [MessageService, MessageFilterService],
+  exports: [MessageService, MessageFilterService],
 })
 export class MessageModule {}
