@@ -38,8 +38,9 @@ export const RestrictedIpEdit: React.FC<IResourceComponentsProps> = () => {
                     <Form.Item
                         label="Enabled"
                         name="enabled"
+                        valuePropName="checked"
                     >
-                        <Checkbox />
+                        <Checkbox/>
                     </Form.Item>
                     <Form.Item
                         label="Notes"

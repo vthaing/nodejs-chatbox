@@ -39,8 +39,9 @@ export const RestrictedIpCreate: React.FC<IResourceComponentsProps> = () => {
                 <Form.Item
                     label="Enabled"
                     name="enabled"
+                    valuePropName="checked"
                 >
-                    <Checkbox />
+                    <Checkbox defaultChecked={true} />
                 </Form.Item>
                 <Form.Item
                     label="Notes"
