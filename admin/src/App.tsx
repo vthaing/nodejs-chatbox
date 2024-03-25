@@ -21,18 +21,6 @@ const API_URL = "http://localhost:3001/api";
 const App: React.FC = () => {
     const authProvider: AuthProvider = {
         login: async ({ email, providerName }) => {
-            if (providerName === "google") {
-                window.location.href =
-                    "https://accounts.google.com/o/oauth2/v2/auth";
-                return Promise.resolve(false);
-            }
-
-            if (providerName === "github") {
-                window.location.href =
-                    "https://github.com/login/oauth/authorize";
-                return Promise.resolve(false);
-            }
-
             if (email) {
                 localStorage.setItem("email", email);
                 return Promise.resolve();
@@ -89,35 +77,7 @@ const App: React.FC = () => {
                     {
                         path: "/register",
                         element: (
-                            <AuthPage
-                                type="register"
-                                providers={[
-                                    {
-                                        name: "google",
-                                        label: "Sign in with Google",
-                                        icon: (
-                                            <GoogleOutlined
-                                                style={{
-                                                    fontSize: 24,
-                                                    lineHeight: 0,
-                                                }}
-                                            />
-                                        ),
-                                    },
-                                    {
-                                        name: "github",
-                                        label: "Sign in with GitHub",
-                                        icon: (
-                                            <GithubOutlined
-                                                style={{
-                                                    fontSize: 24,
-                                                    lineHeight: 0,
-                                                }}
-                                            />
-                                        ),
-                                    },
-                                ]}
-                            />
+                            <AuthPage type="register"/>
                         ),
                     },
                     {
@@ -142,28 +102,7 @@ const App: React.FC = () => {
             ]}
             notificationProvider={notificationProvider}
             LoginPage={() => (
-                <AuthPage
-                    providers={[
-                        {
-                            name: "google",
-                            label: "Sign in with Google",
-                            icon: (
-                                <GoogleOutlined
-                                    style={{ fontSize: 24, lineHeight: 0 }}
-                                />
-                            ),
-                        },
-                        {
-                            name: "github",
-                            label: "Sign in with GitHub",
-                            icon: (
-                                <GithubOutlined
-                                    style={{ fontSize: 24, lineHeight: 0 }}
-                                />
-                            ),
-                        },
-                    ]}
-                />
+                <AuthPage/>
             )}
             Layout={Layout}
             catchAll={<ErrorComponent />}
