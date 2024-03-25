@@ -7,9 +7,9 @@ export class CreateBrandChannelDto {
   @ApiProperty({ required: true })
   brandId: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: true })
   externalId: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: true })
   externalBrandId: string;
 }
