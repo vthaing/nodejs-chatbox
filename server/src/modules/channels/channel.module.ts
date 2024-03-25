@@ -22,4 +22,4 @@ import { AuthModule } from '../auth/auth.module';
   providers: [ChannelsService],
   exports: [ChannelsService],
 })
-export class ChannelsModule {}
+export class ChannelModule {}
