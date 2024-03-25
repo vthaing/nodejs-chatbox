@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {PlusSquareOutlined} from "@ant-design/icons";
 import {useModalForm} from 'sunflower-antd';
 import {Modal, Input, Button, Form, Spin} from 'antd';
+import { useCreate, useGetIdentity } from "@pankod/refine-core";
 
 
 type ButtonCreatePinMessageProps = {
@@ -13,6 +14,11 @@ type ButtonCreatePinMessageProps = {
 export const ButtonCreatePinMessage: React.FC<ButtonCreatePinMessageProps> = ({conversationId, onSuccess}) => {
 
     const [form] = Form.useForm();
+
+
+
+    const { data: userIdentity } = useGetIdentity();
+    const { mutate } = useCreate();
     const {
         modalProps,
         formProps,
@@ -23,9 +29,16 @@ export const ButtonCreatePinMessage: React.FC<ButtonCreatePinMessageProps> = ({c
         defaultVisible: false,
         autoSubmitClose: true,
         autoResetForm: true,
-        async submit({messageContent}) {
-            await new Promise(r => setTimeout(r, 1000));
-            return 'ok';
+        async submit({text}) {
+            mutate({
+                resource: "message",
+                values: {
+                    text: text,
+                    from: userIdentity.id,
+                    conversation: conversationId,
+                    isPinnedMessage: true
+                },
+            });
         },
         form,
     });
@@ -40,7 +53,7 @@ export const ButtonCreatePinMessage: React.FC<ButtonCreatePinMessageProps> = ({c
                         <Form layout="vertical" {...formProps}>
                             <Form.Item
                                 label="Message Content"
-                                name="messageContent"
+                                name="text"
                                 rules={[{required: true, message: 'Please enter the message content'}]}
                             >
                                 <Input placeholder="Message content"/>

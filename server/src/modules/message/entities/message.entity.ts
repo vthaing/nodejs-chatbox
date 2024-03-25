@@ -47,6 +47,8 @@ export class Message {
 
   @Prop({ required: false, type: mongoose.Schema.Types.String })
   maskedText?: string;
+  @Prop({ required: false, type: mongoose.Schema.Types.Boolean })
+  isPinnedMessage: boolean;
 
   @Prop({ ref: 'UserBanRequest', type: [SchemaTypes.ObjectId] })
   userBanRequests?: [ObjectId | UserBanRequest];
