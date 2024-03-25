@@ -9,6 +9,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import mongoose from 'mongoose';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+import {BrandChatModule} from "./modules/brand-chat/brand-chat.module";
 mongoose.set('debug', true);
 
 async function bootstrap() {
@@ -37,6 +38,21 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('openapi', app, document);
+
+  const brandChatApiConfig = new DocumentBuilder()
+    .setTitle('Brand Chat')
+    .setDescription('The Brand chat API description')
+    .setVersion('1.0')
+    .addTag('Brand Chat')
+    .addBearerAuth()
+    .build();
+
+  const brandDocuments = SwaggerModule.createDocument(app, brandChatApiConfig, {
+    include: [BrandChatModule],
+  });
+
+  SwaggerModule.setup('brand-chat-api', app, brandDocuments);
+
   const configService = app.get<ConfigService>(ConfigService);
 
   await app.listen(configService.get('port'));
