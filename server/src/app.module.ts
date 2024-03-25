@@ -35,6 +35,7 @@ import { IpFilterDenyExceptionFilter } from './exception/ipfilter-exception-filt
       inject: [RestrictedIpService],
       useFactory: async (restrictedIpService: RestrictedIpService) => ({
         blacklist: await restrictedIpService.getAllRestrictedIps(),
+        whitelist: ['.*'],
         useDenyException: true,
       }),
     }),
