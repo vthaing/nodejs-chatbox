@@ -26,8 +26,6 @@ if (rawUserData) {
 
 export const accessControlProvider = {
     can: ({ resource, action, params }: CanParams): Promise<CanReturnType> => {
-        console.log(userIdentity, 'userIdentity')
-        console.log(resource);
         if (!userIdentity) {
             return Promise.resolve({ can: false, reason: 'Unauthorized' });
         }
