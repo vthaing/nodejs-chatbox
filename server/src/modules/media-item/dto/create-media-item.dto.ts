@@ -23,4 +23,8 @@ export class CreateMediaItemDto {
   @ApiProperty()
   @IsNotEmpty()
   path;
+
+  @ApiProperty()
+  @IsOptional()
+  params?: any;
 }

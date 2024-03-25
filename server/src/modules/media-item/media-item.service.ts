@@ -7,6 +7,7 @@ import { MediaItem, MediaItemDocument } from './entities/media-item.entity';
 import { MessageDocument } from '../message/entities/message.entity';
 import { ConfigService } from '@nestjs/config';
 import { StorageService } from '@codebrew/nestjs-storage';
+import sizeOf from 'image-size';
 
 @Injectable()
 export class MediaItemService {
@@ -33,6 +34,7 @@ export class MediaItemService {
     dto.name = file.originalname;
     dto.size = file.size;
     dto.mimeType = file.mimetype;
+    dto.params = sizeOf(file.buffer);
 
     const mediaItem = await this.create(dto);
     message.mediaItemIds.push(mediaItem.id);

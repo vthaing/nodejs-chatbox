@@ -44,12 +44,26 @@ export class MediaItem {
     ref: 'Message',
   })
   messageId;
+
+  @Prop({ required: false, type: mongoose.Schema.Types.Mixed })
+  params?: any | null;
+
+  width: number | null;
+  height: number | null;
 }
 
 const MediaItemSchema = SchemaFactory.createForClass(MediaItem);
 
 MediaItemSchema.virtual('url').get(function () {
   return '/media/' + this.id + '/' + this.name;
+});
+
+MediaItemSchema.virtual('imageWidth').get(function () {
+  return this.params?.width ?? null;
+});
+
+MediaItemSchema.virtual('imageHeight').get(function () {
+  return this.params?.height ?? null;
 });
 
 MediaItemSchema.plugin(mongoosePaginate);

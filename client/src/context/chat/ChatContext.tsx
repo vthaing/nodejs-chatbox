@@ -71,6 +71,8 @@ export interface IMediaItem {
     updatedAt?: string;
     url: string
     userId: string;
+    imageWidth: number | null;
+    imageHeight: number | null
 }
 
 
