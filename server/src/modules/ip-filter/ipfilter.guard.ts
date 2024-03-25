@@ -9,6 +9,7 @@ import * as requestIp from '@supercharge/request-ip';
 import { IpFilterService } from './ipfilter.service';
 import { IPFILTER_TOKEN } from './ipfilter.constants';
 import { IpFilterDenyException } from './ipfilter-deny.exception';
+import { IpFilterWsDenyException } from './ipfilter-ws-deny.exception';
 
 @Injectable()
 export class IpFilterGuard implements CanActivate {
@@ -39,14 +40,18 @@ export class IpFilterGuard implements CanActivate {
     }
 
     if (!approved && this.ipFilterService.useDenyException) {
-      throw new IpFilterDenyException(
-        {
-          clientIp: ipAddress,
-          whitelist: whitelist,
-          blacklist: blacklist,
-        },
-        403,
-      );
+      if (context.getType() === 'ws') {
+        throw new IpFilterWsDenyException('Client IP has been block');
+      } else {
+        throw new IpFilterDenyException(
+          {
+            clientIp: ipAddress,
+            whitelist: whitelist,
+            blacklist: blacklist,
+          },
+          403,
+        );
+      }
     }
 
     return approved;

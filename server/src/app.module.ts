@@ -23,7 +23,7 @@ import { ClientScriptModule } from './modules/client-script/client-script.module
 import { MediaModule } from './modules/media-item/media.module';
 import { DriverType, StorageModule } from '@codebrew/nestjs-storage';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import {IpFilter} from "./modules/ip-filter/ipfilter.module";
+import { IpFilter } from './modules/ip-filter/ipfilter.module';
 
 @Module({
   imports: [
