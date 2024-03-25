@@ -16,13 +16,14 @@ type AttachmentsProps = {
     refButtonUpload?: any;
     onAttachmentsChange?: any
     autoUpload?: boolean
+    attachments?: UploadFile[]
 }
 
-export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAttachmentsChange, autoUpload = true}) => {
+export const Attachments: React.FC<AttachmentsProps> = ({refButtonUpload, onAttachmentsChange, autoUpload = true, attachments = []}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>(attachments);
   const [showAttachment, setShowAttachment] = useState(false);
 
   const handleCancel = () => setPreviewOpen(false);

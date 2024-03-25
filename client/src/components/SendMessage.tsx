@@ -25,7 +25,7 @@ export const SendMessage: React.FC = () => {
     const { socket } = useContext(SocketContext);
     const buttonUploadRef = useRef();
     const [attachments, setAttachments] = useState<UploadFile[]>([]);
-
+    const [attachmentInputKey, setAttachmentInputKey] = useState(Math.random());
 
     const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         setMessage(target.value);
@@ -54,6 +54,8 @@ export const SendMessage: React.FC = () => {
                 payload: attachments
             }
             dispatch(action);
+            setAttachments([]);
+            setAttachmentInputKey(Math.random());
         }
     }
 
@@ -123,6 +125,8 @@ export const SendMessage: React.FC = () => {
                     refButtonUpload={buttonUploadRef}
                     autoUpload={false}
                     onAttachmentsChange={handleOnAttachmentsChange}
+                    attachments={attachments}
+                    key={attachmentInputKey}
                 />
         </form>
     )
