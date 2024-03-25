@@ -16,8 +16,8 @@ import {UserEdit, UserList, UserShow} from "./pages/users";
 import {API_URL} from "./constants";
 import {authProvider} from "./authUtils/authProvider";
 import {axiosInstance} from "./authUtils/axiosInstance";
-import {ChannelEdit, ChannelList, ChannelShow} from "./pages/channel";
-import {ChannelCreate} from "./pages/channel/create";
+import {ConversationEdit, ConversationList, ConversationShow} from "./pages/conversation";
+import {ConversationCreate} from "./pages/conversation/create";
 import {BadWordCreate} from "./pages/bad-word/create";
 import {BadWordEdit, BadWordList} from "./pages/bad-word";
 import {RestrictedIpCreate} from "./pages/restricted-ip/create";
@@ -57,11 +57,11 @@ const App: React.FC = () => {
                     show: UserShow,
                 },
                 {
-                    name: "channels",
-                    create: ChannelCreate,
-                    list: ChannelList,
-                    edit: ChannelEdit,
-                    show: ChannelShow,
+                    name: "conversations",
+                    create: ConversationCreate,
+                    list: ConversationList,
+                    edit: ConversationEdit,
+                    show: ConversationShow,
                     canDelete: true
                 },
                 {

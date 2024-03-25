@@ -1,18 +1,21 @@
-import React from "react";
 import { IResourceComponentsProps } from "@pankod/refine-core";
 
 import {
-    Edit,
+    Create,
     Form,
-    Input, Select,
-    useForm, useSelect,
+    Input,
+    Select,
+    useForm,
+    useSelect,
+    DatePicker,
 } from "@pankod/refine-antd";
 
+import { IConversation } from "interfaces";
+import React from "react";
 
-import { IChannel } from "../../interfaces";
+export const ConversationCreate: React.FC<IResourceComponentsProps> = () => {
+    const { formProps, saveButtonProps } = useForm<IConversation>();
 
-export const ChannelEdit: React.FC<IResourceComponentsProps> = () => {
-    const { formProps, saveButtonProps, queryResult } = useForm<IChannel>({});
 
     const { selectProps: userSelectProps } = useSelect({
         resource: "user",
@@ -20,7 +23,7 @@ export const ChannelEdit: React.FC<IResourceComponentsProps> = () => {
     });
 
     return (
-        <Edit saveButtonProps={saveButtonProps}>
+        <Create saveButtonProps={saveButtonProps}>
             <Form {...formProps} layout="vertical">
                 <Form.Item
                     label="Name"
@@ -45,6 +48,6 @@ export const ChannelEdit: React.FC<IResourceComponentsProps> = () => {
                     <Select {...userSelectProps} mode="multiple" />
                 </Form.Item>
             </Form>
-        </Edit>
+        </Create>
     );
 };

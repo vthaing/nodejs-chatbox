@@ -10,11 +10,11 @@ import {
     ShowButton, TagField,
 } from "@pankod/refine-antd";
 
-import {IChannel, ICategory, IUser} from "interfaces";
+import {IConversation, ICategory, IUser} from "interfaces";
 import dayjs from "dayjs";
 
-export const ChannelList: React.FC<IResourceComponentsProps> = () => {
-    const { tableProps } = useTable<IChannel>();
+export const ConversationList: React.FC<IResourceComponentsProps> = () => {
+    const { tableProps } = useTable<IConversation>();
 
     return (
         <List>
@@ -36,9 +36,9 @@ export const ChannelList: React.FC<IResourceComponentsProps> = () => {
                         });
                     }}
                 />
-                <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IChannel) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
+                <Table.Column dataIndex="createdAt" title="Created At" render={(_, record: IConversation) => (dayjs(record?.createdAt).format('H:mm:ss MMM DD, YYYY'))}
                 />
-                <Table.Column<IChannel>
+                <Table.Column<IConversation>
                     title="Actions"
                     dataIndex="actions"
                     render={(_, record) => (

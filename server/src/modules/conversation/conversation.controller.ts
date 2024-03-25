@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 @ApiBearerAuth()
 @ApiTags('Conversation')
 @UseGuards(JwtAuthGuard)
-@Controller('conversation')
+@Controller('conversations')
 export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
 

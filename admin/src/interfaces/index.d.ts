@@ -19,7 +19,7 @@ export interface IUser {
     createdAt: string
 }
 
-export interface IChannel {
+export interface IConversation {
     id: string;
     name?: string;
     members: [string];

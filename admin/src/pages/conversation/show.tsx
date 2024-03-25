@@ -2,12 +2,12 @@ import { useShow, IResourceComponentsProps } from "@pankod/refine-core";
 
 import { Show, Typography } from "@pankod/refine-antd";
 
-import { IChannel } from "../../interfaces";
+import { IConversation } from "../../interfaces";
 
 const { Title, Text } = Typography;
 
-export const ChannelShow: React.FC<IResourceComponentsProps> = () => {
-    const { queryResult } = useShow<IChannel>();
+export const ConversationShow: React.FC<IResourceComponentsProps> = () => {
+    const { queryResult } = useShow<IConversation>();
     const { data, isLoading } = queryResult;
     const record = data?.data;
 
