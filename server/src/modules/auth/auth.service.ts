@@ -40,6 +40,7 @@ export class AuthService {
         online: user.online,
         id: user.id,
         displayName: user.displayName,
+        roles: user.roles,
       } as UserAuthInterface;
     }
     return null;

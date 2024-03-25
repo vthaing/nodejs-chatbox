@@ -20,9 +20,8 @@ import Role from '../user/role.enum';
 
 @ApiBearerAuth()
 @ApiTags('Brands')
-@UseGuards(JwtAuthGuard)
-@UseGuards(JwtAuthGuard)
 @UseGuards(RoleGuard(Role.Admin))
+@UseGuards(JwtAuthGuard)
 @Controller('brands')
 export class BrandController {
   constructor(private readonly brandService: BrandService) {}

@@ -20,8 +20,8 @@ import Role from '../user/role.enum';
 @Controller('bad-words')
 @ApiBearerAuth()
 @ApiTags('Bad Words')
-@UseGuards(JwtAuthGuard)
 @UseGuards(RoleGuard(Role.Admin))
+@UseGuards(JwtAuthGuard)
 export class BadWordController {
   constructor(private readonly badWordService: BadWordService) {}
 
