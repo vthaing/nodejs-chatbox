@@ -125,9 +125,13 @@ export class BrandAuthService {
 
   validateTimestamp(timestamp) {
     const currentTime = new Date();
-    const subtractResult =
-      currentTime.getTime() - new Date(timestamp).getTime();
-    if (subtractResult > TOKEN_EXPIRED_IN_SECONDS) {
+    const requestTime = new Date(parseInt(timestamp));
+    if (currentTime.getTime() < requestTime.getTime()) {
+      return false;
+    }
+    const subtractResult = currentTime.getTime() - requestTime.getTime();
+
+    if (subtractResult > TOKEN_EXPIRED_IN_SECONDS * 1000) {
       return false;
     }
     return true;
