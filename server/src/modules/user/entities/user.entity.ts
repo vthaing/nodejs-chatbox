@@ -27,20 +27,30 @@ export class User {
 
   @Prop({ type: mongoose.Schema.Types.Boolean, default: false })
   online: boolean;
+
+  @Prop({ type: mongoose.Schema.Types.Date })
+  bannedFrom?: Date | null;
+  @Prop({ type: mongoose.Schema.Types.Date })
+  bannedTo?: Date | null;
+
+  ban(startDate = new Date(), endDate?: Date): void {
+    this.bannedFrom = startDate;
+    this.bannedTo = endDate;
+  }
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
 
-// UserSchema.pre(['save', 'updateOne'], function (next: () => void) {
-//   const user = this as UserDocument;
-//   if (!user.isModified('password')) return next();
-//   const salt = bcrypt.genSaltSync();
-//   user.password = bcrypt.hashSync(user.password, salt);
-//   next();
-// });
+UserSchema.virtual('isBanned').get(function (): boolean {
+  if (!this.bannedFrom) {
+    return false;
+  }
+  // Banned forever
+  if (!this.bannedTo) {
+    return true;
+  }
 
-// UserSchema.pre('updateOne', function (next: () => void) {
-//   const user = this as UserDocument;
-//   const salt = bcrypt.genSaltSync();
-//   user.password = bcrypt.hashSync(user.password, salt);
-// });
+  return this.bannedTo > new Date();
+});
+
+export { UserSchema };

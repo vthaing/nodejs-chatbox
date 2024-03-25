@@ -30,6 +30,10 @@ export class UserBanRequest {
   type: string;
   @Prop({ required: false, type: mongoose.Schema.Types.Mixed })
   params: object;
+
+  isBannedForever = () => {
+    return this.duration === null;
+  };
 }
 
 const UserBanRequestSchema = SchemaFactory.createForClass(UserBanRequest);

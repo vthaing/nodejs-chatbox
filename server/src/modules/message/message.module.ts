@@ -9,6 +9,8 @@ import { BadWordModule } from '../bad-word/bad-word.module';
 import { BadWordMessageFilterFactor } from './message-filter-factor/bad-word-message-filter-factor';
 import { PhoneNumberMessageFilterFactor } from './message-filter-factor/phone-number-message-filter-factor';
 import { UserBanRequestModule } from '../user-ban-request/user-ban-request.module';
+import {UserService} from "../user/user.service";
+import {UserModule} from "../user/user.module";
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { UserBanRequestModule } from '../user-ban-request/user-ban-request.modul
     AuthModule,
     forwardRef(() => UserBanRequestModule),
     forwardRef(() => BadWordModule),
+    forwardRef(() => UserModule),
   ],
   controllers: [MessageController],
   providers: [
