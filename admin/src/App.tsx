@@ -1,4 +1,4 @@
-import { Refine } from "@pankod/refine-core";
+import {Refine} from "@pankod/refine-core";
 import {
     notificationProvider,
     ErrorComponent,
@@ -13,7 +13,7 @@ import "@pankod/refine-antd/dist/reset.css";
 
 import { DashboardPage } from "pages/dashboard";
 import {UserList, UserShow} from "./pages/users";
-import {API_URL} from "./constants";
+import {API_URL, AUTH_USER_DATA_KEY} from "./constants";
 import {authProvider} from "./authUtils/authProvider";
 import {axiosInstance} from "./authUtils/axiosInstance";
 import {ConversationEdit, ConversationList, ConversationShow} from "./pages/conversation";
@@ -25,27 +25,19 @@ import {BrandCreate} from "./pages/brand/create";
 import {BrandEdit, BrandList, BrandShow} from "./pages/brand";
 import {AdminUserEdit, AdminUserList, AdminUserShow} from "./pages/admin-users";
 import {AdminUserCreate} from "./pages/admin-users/create";
+import {accessControlProvider} from "./authUtils/accessControlProvider";
 
+const currentUser = localStorage.getItem(AUTH_USER_DATA_KEY)
 const App: React.FC = () => {
 
     return (
         <Refine
             authProvider={ authProvider(axiosInstance) }
             dataProvider={dataProvider(API_URL, axiosInstance)}
-
+            accessControlProvider={accessControlProvider}
             routerProvider={{
                 ...routerProvider,
                 routes: [
-                    // {
-                    //     path: "/register",
-                    //     element: (
-                    //         <AuthPage type="register"/>
-                    //     ),
-                    // },
-                    // {
-                    //     path: "/forgot-password",
-                    //     element: <AuthPage type="forgotPassword" />,
-                    // },
                     {
                         path: "/update-password",
                         element: <AuthPage type="updatePassword" />,

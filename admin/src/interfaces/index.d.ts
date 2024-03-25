@@ -26,6 +26,7 @@ export interface IUser {
     externalId?: string | null
     createdAt: string
     ipHistory: IUserIp []
+    roles: [string]
 }
 
 export interface IUserIp {
