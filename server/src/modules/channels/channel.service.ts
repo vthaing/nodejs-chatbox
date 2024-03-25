@@ -27,6 +27,10 @@ export class ChannelService {
       .exec();
   }
 
+  findUserChannels(userId: string): Promise<ChannelDocument[]> {
+    return this.channelModel.find({ members: { $all: [userId] } }).exec();
+  }
+
   findOne(id: string): Promise<ChannelDocument> {
     return this.channelModel.findById(id).exec();
   }

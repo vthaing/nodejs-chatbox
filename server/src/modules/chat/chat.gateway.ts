@@ -12,6 +12,7 @@ import {
 import { getUserFromWSToken } from '../auth/utils/validate-user-ws';
 import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
+import { ChannelService } from '../channels/channel.service';
 
 interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
@@ -26,6 +27,7 @@ export class ChatGateway {
     private readonly wsAuthStrategy: WsAuthStrategy,
     private readonly userService: UserService,
     private readonly messageService: MessageService,
+    private readonly channelService: ChannelService,
   ) {}
 
   async handleConnection(socket: SocketWithUserData): Promise<void> {
@@ -44,9 +46,15 @@ export class ChatGateway {
       logger.verbose('Client connected to chat');
       // retrieve connected users
       const connectedUsers = await this.userService.findAll();
+      const userChannels = await this.channelService.findUserChannels(
+        userFromSocket.id,
+      );
       // join user to a chat room (private)
       socket.join(updatedUser.id);
+
+      console.log(userFromSocket.id);
       this.server.emit('online-users', connectedUsers);
+      this.server.emit('user-channels', userChannels);
     } catch (e) {
       logger.error(
         'Socket disconnected within handleConnection() in AppGateway:',
@@ -68,6 +76,7 @@ export class ChatGateway {
       // retrieve connected users
       const connectedUsers = await this.userService.findAll();
       this.server.emit('online-users', connectedUsers);
+
       logger.warn('Client disconnected: chat');
     } catch (error) {
       logger.error('Disconnection with errors');

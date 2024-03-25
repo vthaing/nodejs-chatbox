@@ -1,11 +1,12 @@
-import { IUser } from '../../auth/AuthContext';
-import { ChatTypes } from '../../types/chat.types';
-import { IMessage } from './ChatContext';
+import {IChannel, IUser} from '../../auth/AuthContext';
+import {ChatTypes} from '../../types/chat.types';
+import {IMessage} from './ChatContext';
 
 export type ChatState = {
     id: string;
     activeChat: string;
     users: IUser[];
+    channels: IChannel[];
     messages: IMessage[];
 };
 
@@ -17,6 +18,11 @@ export interface ChatAction {
 export interface ListUsers extends ChatAction {
     type: ChatTypes.listUsers; 
     payload: IUser[];
+}
+
+export interface ListChannels extends ChatAction {
+    type: ChatTypes.listChannels;
+    payload: IChannel[];
 }
 
 export interface ActiveChat extends ChatAction {
@@ -44,6 +50,7 @@ export const initialChatState = {
     id: '',
     activeChat: '',
     users: [],
+    channels: [],
     messages: [],
 } as ChatState;
 
@@ -59,6 +66,13 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
                 ...state,
                 users: [
                     ...(action as ListUsers).payload,
+                ],
+            };
+        case ChatTypes.listChannels:
+            return {
+                ...state,
+                channels: [
+                    ...(action as ListChannels).payload,
                 ],
             };
         case ChatTypes.activeChat:

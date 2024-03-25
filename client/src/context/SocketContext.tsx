@@ -1,13 +1,13 @@
 import { createContext, useContext, useEffect } from 'react';
 
 import { Socket } from 'socket.io-client';
-import { AuthContext, IUser } from '../auth/AuthContext';
+import {AuthContext, IChannel, IUser} from '../auth/AuthContext';
 import { scrollToBottomAnimated } from '../helpers/scrollToBottom';
 
 import { useSocket } from '../hooks/useSocket';
 import { ChatTypes } from '../types/chat.types';
 import { ChatContext, IMessage } from './chat/ChatContext';
-import { ListUsers, NewMessage } from './chat/chatReducer';
+import { ListChannels, ListUsers, NewMessage } from './chat/chatReducer';
 
 
 export interface ISocketContext {
@@ -51,6 +51,18 @@ export const SocketProvider: React.FC<{ children: JSX.Element }> = ({ children }
                     type: ChatTypes.listUsers,
                     payload: users,
                 } as ListUsers,
+            );
+        });
+    }, [socket, dispatch]);
+
+    // listen  connected users
+    useEffect(() => {
+        socket?.on('user-channels', (channels: IChannel[]) => {
+            dispatch(
+                {
+                    type: ChatTypes.listChannels,
+                    payload: channels,
+                } as ListChannels,
             );
         });
     }, [socket, dispatch]);
