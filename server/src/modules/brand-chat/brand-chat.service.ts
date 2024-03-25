@@ -28,6 +28,10 @@ export class BrandChatService {
       return { error: 'Your user has been banned' };
     }
 
+    if (!user.brandStatus) {
+      return { error: 'User has been disabled on the brand' };
+    }
+
     return {
       ...(await this.authService.login(user)),
       conversation_id: conversation.id,
