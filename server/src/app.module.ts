@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 import { MessageModule } from './modules/message/message.module';
 import { UserModule } from './modules/user/user.module';
 import { ChatModule } from './modules/chat/chat.module';
-import { ChannelsModule } from './modules/channels/channelsModule';
+import { ChannelsModule } from './modules/channels/channels.module';
 
 @Module({
   imports: [

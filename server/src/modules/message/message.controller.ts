@@ -1,5 +1,5 @@
-import { UserDocument } from './../user/entities/user.entity';
-import { JwtAuthGuard } from './../auth/guards/jwt.guard';
+import { UserDocument } from '../user/entities/user.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import {
   Controller,
   Get,
@@ -37,6 +37,13 @@ export class MessageController {
         { from: targetUser, to: user.id },
         { from: user.id, to: targetUser },
       ],
+    });
+  }
+
+  @Get('channel/:channelId')
+  findMessagesByChannel(@Param('channelId') channelId: string) {
+    return this.messageService.findAll({
+      channel: channelId,
     });
   }
 

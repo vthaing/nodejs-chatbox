@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ChannelsService } from './channels.service';
-import { ChannelsController } from './channelsController';
+import { ChannelsController } from './channels.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   Channel,
