@@ -3,5 +3,5 @@ export class UpdateUserStatusDto {
   @ApiProperty({ required: true })
   userId: string;
   @ApiProperty({ required: true })
-  status: boolean;
+  enabled: boolean;
 }

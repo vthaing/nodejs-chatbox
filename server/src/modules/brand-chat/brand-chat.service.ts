@@ -6,6 +6,8 @@ import { UserService } from '../user/user.service';
 import { ConversationService } from '../conversation/conversation.service';
 import { BrandService } from '../brand/brand.service';
 import { AuthService } from '../auth/auth.service';
+import { UpdateUserStatusDto } from './dto/update-user-status.dto';
+import { UserAuthInterface } from '../auth/UserAuthInterface';
 
 @Injectable()
 export class BrandChatService {
@@ -69,5 +71,20 @@ export class BrandChatService {
       conversation: conversation,
       user: user,
     };
+  }
+
+  async updateBrandUserStatus(
+    updateUserStatusDto: UpdateUserStatusDto,
+    brand: UserAuthInterface,
+  ) {
+    const user = await this.userService.findOne({
+      externalId: updateUserStatusDto.userId,
+      brandId: brand.id,
+    });
+    if (!user) {
+      throw new NotFoundException("The given user doesn't exist");
+    }
+    user.brandStatus = updateUserStatusDto.enabled;
+    return !!user.save();
   }
 }

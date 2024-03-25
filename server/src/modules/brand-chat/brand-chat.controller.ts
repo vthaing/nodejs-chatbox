@@ -35,7 +35,9 @@ export class BrandChatController {
     @Body() updateUserStatusDto: UpdateUserStatusDto,
     @Req() req,
   ) {
-    console.log(updateUserStatusDto);
-    console.log(req.user);
+    return this.brandChatService.updateBrandUserStatus(
+      updateUserStatusDto,
+      req.user,
+    );
   }
 }

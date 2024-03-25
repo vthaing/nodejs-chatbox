@@ -66,9 +66,7 @@ export class AuthService {
     return null;
   }
 
-  async validateByUserId(
-    id: string,
-  ): Promise<UserAuthInterface | null> {
+  async validateByUserId(id: string): Promise<UserAuthInterface | null> {
     const user = await this.userService.findById(id);
     if (user && !user.isBanned) {
       const { online, displayName, id } = user;

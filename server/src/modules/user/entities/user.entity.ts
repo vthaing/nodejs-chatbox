@@ -35,6 +35,8 @@ export class User {
   brandId?: string;
   @Prop({ required: false, type: mongoose.Schema.Types.String })
   externalId: string;
+  @Prop({ required: false, type: mongoose.Schema.Types.Boolean })
+  brandStatus?: boolean;
 
   @Prop({ required: false, type: mongoose.Schema.Types.String })
   displayName?: string;
