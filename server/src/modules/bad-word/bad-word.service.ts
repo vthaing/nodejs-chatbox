@@ -14,6 +14,7 @@ export class BadWordService {
 
   create(createBadWordDto: CreateBadWordDto) {
     const createdBadWord = new this.badWordModel(createBadWordDto);
+    createdBadWord.term = createdBadWord.term.toLowerCase();
     return createdBadWord.save();
   }
 
@@ -35,6 +36,7 @@ export class BadWordService {
     id: string,
     updateBadWordDto: UpdateBadWordDto,
   ): Promise<BadWordDocument> {
+    updateBadWordDto.term = updateBadWordDto.term.toLowerCase();
     return this.badWordModel
       .findByIdAndUpdate(id, updateBadWordDto, {
         upsert: false,
@@ -45,5 +47,15 @@ export class BadWordService {
 
   remove(id: string): Promise<BadWordDocument> {
     return this.badWordModel.findByIdAndDelete(id).exec();
+  }
+
+  findProfane(text: string): Promise<BadWordDocument[]> {
+    return this.badWordModel
+      .find({
+        $expr: {
+          $ne: [{ $indexOfCP: [text.toLowerCase(), '$term'] }, -1],
+        },
+      })
+      .exec();
   }
 }
