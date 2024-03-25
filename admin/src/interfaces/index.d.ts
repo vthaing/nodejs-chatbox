@@ -27,3 +27,11 @@ export interface IChannel {
     memberObjects: [IUser],
     createdAt: string
 }
+
+export interface IBadWord {
+    id: string;
+    term: string;
+    categories: [string];
+    categoriesLabel: [string];
+    createdAt: string
+}

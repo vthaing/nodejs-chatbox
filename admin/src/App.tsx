@@ -18,6 +18,8 @@ import {authProvider} from "./authUtils/authProvider";
 import {axiosInstance} from "./authUtils/axiosInstance";
 import {ChannelEdit, ChannelList, ChannelShow} from "./pages/channel";
 import {ChannelCreate} from "./pages/channel/create";
+import {BadWordCreate} from "./pages/bad-word/create";
+import {BadWordEdit, BadWordList} from "./pages/bad-word";
 
 const App: React.FC = () => {
 
@@ -58,6 +60,13 @@ const App: React.FC = () => {
                     list: ChannelList,
                     edit: ChannelEdit,
                     show: ChannelShow,
+                    canDelete: true
+                },
+                {
+                    name: "bad-words",
+                    create: BadWordCreate,
+                    list: BadWordList,
+                    edit: BadWordEdit,
                     canDelete: true
                 },
             ]}
