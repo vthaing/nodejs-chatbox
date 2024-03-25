@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { IPFILTER_TOKEN } from './ipfilter.constants';
 import { IpFilterGuard } from './ipfilter.guard';
@@ -15,8 +15,9 @@ const ipFilterGuardProvider = {
   useClass: IpFilterGuard,
 };
 
+@Global()
 @Module({
-  providers: [ipFilterServiceProvider, ipFilterGuardProvider, IpFilterGuard],
-  exports: [ipFilterServiceProvider, IpFilterGuard],
+  providers: [ipFilterServiceProvider, ipFilterGuardProvider],
+  exports: [ipFilterServiceProvider],
 })
 export class IpFilter extends ConfigurableModuleClass {}

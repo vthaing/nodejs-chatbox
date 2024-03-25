@@ -20,10 +20,7 @@ export class IpFilterGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): Promise<boolean> | Observable<boolean> | boolean {
-    const request = context.switchToHttp().getRequest();
-    
-    const ipAddress: string = requestIp.getClientIp(request);
-
+    const ipAddress = this.getClientIpAddress(context);
     const whitelist = this.ipFilterService.whitelist;
     const blacklist = this.ipFilterService.blacklist;
 
@@ -53,5 +50,14 @@ export class IpFilterGuard implements CanActivate {
     }
 
     return approved;
+  }
+
+  getClientIpAddress(context: ExecutionContext): string {
+    if (context.getType() === 'ws') {
+      return context.switchToWs().getClient().handshake.address;
+    }
+
+    const request = context.switchToHttp().getRequest();
+    return requestIp.getClientIp(request);
   }
 }

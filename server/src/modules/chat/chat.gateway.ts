@@ -2,7 +2,7 @@ import { MessageService } from '../message/message.service';
 import { UserService } from '../user/user.service';
 import { WsAuthStrategy } from 'src/modules/auth/strategies/ws-auth.strategy';
 import { UserDocument } from '../user/entities/user.entity';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UseGuards } from '@nestjs/common';
 import {
   MessageBody,
   SubscribeMessage,
@@ -15,12 +15,14 @@ import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { MessageFilterService } from '../message/message-filter.service';
 import { MediaItem } from '../media-item/entities/media-item.entity';
+import { IpFilterGuard } from '../ip-filter/ipfilter.guard';
 
 interface SocketWithUserData extends Socket {
   user: Partial<UserDocument>;
 }
 
 @Injectable()
+@UseGuards(IpFilterGuard)
 @WebSocketGateway(3002, { namespace: 'chat' })
 export class ChatGateway {
   @WebSocketServer()
