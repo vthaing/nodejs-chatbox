@@ -47,12 +47,11 @@
 <img src="documents/screens/01_brand_secrect_key.png"  width="600" height="300">
 
 ### Request token
-- Request token sẽ được sử dụng để xác thực request đến từ 1 brand
 - Request token will be used to authenticate the brand request
 - Request token will expire within 5 seconds since the creation time
 - It's a string that is created from these parts:
 
-  - `secretToken`: secret code what is provided from the admin.
+  - `secretToken`: secret code that is provided by the admin.
   - `x-nonce`: a random string that the brand will provide to API via request header `x-nonce`
   - `x-timestamp`: The timestamp at the current moment via request header `x-timestamp`.
   - `x-brand-id`: Unique ID that provided by the admin
@@ -133,13 +132,13 @@ requestString x-brand-id=63b109ab1d33d74995325a91&x-nonce=6bf647c4-f779-4ac8-a33
 requestToken 9c70078a4ffd9d2dc52d9cbd638f77bebd82ea8e
 ```
 
-### Nhúng chat box vào brand website
+### Integrate the chatbox into the website
 
-- Chèn thư viện chat box vào header:
+- Add to the HTML <head>:
 ```html
 <script src="http://localhost:3001/api/client-scripts/chat-box.js"></script>
 ```
-- Bổ sung đoạn HTML code sau vào khu vực muốn hiển thị chat box
+- Embed this HTML code onto the place you want to display the chat box
 ```html
 <div class="chatbox"
      data-brand-id="63b109ab1d33d74995325a91"
@@ -157,16 +156,16 @@ requestToken 9c70078a4ffd9d2dc52d9cbd638f77bebd82ea8e
 ```
 | Name                   | Required | Description                                                                                                                                                  |
 |------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| data-brand-id          | Yes      | ID của Brand                                                                                                                                                 |
-| data-chat-name         | Yes      | Tên của chat box                                                                                                                                             |
-| data-channel-id        | No       | ID của channel. Một channel sẽ có nhiều rooms                                                                                                                |
-| data-channel-name      | No       | Tên của channel                                                                                                                                              |
-| data-room-id           | No       | ID của room                                                                                                                                                  |
-| data-room-name         | No       | Tên của room                                                                                                                                                 |
-| data-user-id           | Yes      | ID của user                                                                                                                                                  |
-| data-user-display-name | Yes      | Tên hiển thị của user trên chat box. Chat box server sẽ sử dụng tên này trong lần đầu sử dụng. Để cập nhật lại thì cần phải gọi API update user brand status |
-| data-timestamp         | Yes      | Timestamp UTC. Là giá trị timestamp thời điểm hiện tại. (UTC 0)                                                                                              |
-| data-x-nonce           | Yes      | Là 1 chuỗi ngẫu nhiên                                                                                                                                        |
+| data-brand-id          | Yes      | ID Brand                                                                                                                                                 |
+| data-chat-name         | Yes      | Name of chat box                                                                                                                                             |
+| data-channel-id        | No       | ID channel. Each channel can have multiple rooms                                                                                                             |
+| data-channel-name      | No       | Name of the channel                                                                                                                                              |
+| data-room-id           | No       | ID Of the room                                                                                                                                                  |
+| data-room-name         | No       | Name of the room                                                                                                                                                 |
+| data-user-id           | Yes      | ID user                                                                                                                                                  |
+| data-user-display-name | Yes      | the display name of the user of the chatbox. The system will use the first time as the display name. To update: you need to call the API |
+| data-timestamp         | Yes      | Timestamp UTC. Timestamp at the current time. (UTC 0)                                                                                              |
+| data-x-nonce           | Yes      | Random string                                                                                                                                        |
 | data-token             | Yes      | Request token                                                                                                                                                |
 
 - Bổ sung đoạn mã sau ở cuối body
@@ -236,7 +235,7 @@ requestToken 9c70078a4ffd9d2dc52d9cbd638f77bebd82ea8e
 
 ### Sample code
 
-Xem code mẫu tại [Nhiều chat box trên 1 page](example/src/app.controller.ts) hoặc [Cập nhật tên user trên chat box](example/src/simple-chat-box.controller.ts)
+See the sample code at [Multiple chatbox at on 1 page](example/src/app.controller.ts) Or [Update the username on the chat box](example/src/simple-chat-box.controller.ts)
 
 ## Frontend App (client-folder)
 
