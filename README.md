@@ -1,17 +1,17 @@
 # Chat app
 
-## Kiến trúc hệ thống
+## System structure
 
-### Mô hình hoạt động
+### Workflows
 <img src="documents/screens/chat_box_system_structure.png">
 
-- Client Chatbox: Là 1 server website cung cấp giao diện chat box cho người dùng cuối. Framework: ReactJS
-- API Server: Là server trung tâm cung cấp tất cả các API cần thiết cho hệ thống. Framework: NestJS
-- Admin UI: Là giao diện dành riêng cho admin/ super admin để quản lý hệ thống. Framework: Refine.dev, ReactJS.
-- Redis Adapter: là redis server để hỗ trợ  socket connections.
-- Mongodb: database lưu trữ dữ liệu.
+- Client Chatbox: This is the service to provide the UI for the client. Framework: ReactJS
+- API Server: Main APIs for the system. Framework: NestJS
+- Admin UI: Admin interface to let the admin/subadmin manage the system. Framework: Refine.dev, ReactJS.
+- Redis Adapter: Redis service for the socket connection
+- Mongodb: Store the chat data.
 
-### Technical requirement:
+### Technical requirements:
 - NodeJS > 16
 - MongoDB version > 4
 - Redis
@@ -20,7 +20,7 @@
 - NestJS
 - Refine.dev
 
-### Các module cần cài đặt trên server
+### Modules need to be installed on the server
 
 - nvm
 - nodejs > 16
@@ -29,39 +29,34 @@
 - redis
 - mongodb > 4
 
-### Các thành phần cần thiết để deploy Chat Box:
+## Integrate the chat box into the brand websites
 
-- Domain + SSL dành cho các services: Client ChatBox, API server, Admin UI server. --> Nên cân nhắc dùng riêng hay là chung domain cho tất cả các services, Sử dụng port để phân biệt từng services
-- Redis + Mongodb: có nên cài trên server chứa source code hay là sử dụng services sẵn có của công ty?
-- HDD: Hệ thống có hỗ trợ chức năng upload images. Hiện tại thì đang lưu trữ trên HDD. Nếu upload nhiều hình ảnh thì nên chuyển qua lưu trữ trên S3
+### Steps to do
 
-## Tích hợp chat box vào Brand website
-
-### Các bước thực hiện:
-
-- [Admin cung cấp secret key cho brand](#brand-secret-key).
-- [Brand sử dụng secret key để tạo request token từ brand server side](#request-token).
-- [Brand client (javascript) sử dụng token đã được khởi tạo từ bước trên để init chat box](#nhúng-chat-box-vào-brand-website).
-- [Khi user status thay đổi (balance, user name, banned status): gọi API đến chat box  để cập nhật status và user name](#sử-dụng-request-token-để-gởi-request-tới-api-chat-box)
+- [Admin provides the secret key to the brand website](#brand-secret-key).
+- [Brand websites uses the secret key to get the request token](#request-token).
+- [Brand client (javascript) uses the access token to init the chat box](#nhúng-chat-box-vào-brand-website).
+- [when the user status changed (balance, user name, banned status): call the API to the chatbox to update status](#sử-dụng-request-token-để-gởi-request-tới-api-chat-box)
 
 
 ### Brand Secret key
 
-- Đây là mã bí mật của brand để tạo request token. Chat box server sẽ dựa vào token này để xác thực chính xác 1 request đến từ brand
+- This is the secret key of the brand to create the request token. The chat box server will use this one to authenticate the request
+- Admin will access the admin UI to provide the secret key for the brand https://{adminURL}/brands/show/63b982a370ee0e49ae4ac8fa
 
-- Admin sẽ truy cập vào admin UI và cung cấp secret key cho brand https://{adminURL}/brands/show/63b982a370ee0e49ae4ac8fa
 <img src="documents/screens/01_brand_secrect_key.png"  width="600" height="300">
 
 ### Request token
 - Request token sẽ được sử dụng để xác thực request đến từ 1 brand
-- Request token sẽ có hiệu lực trong vòng 5 giây kể từ thời điểm được tạo
-- Là 1 chuỗi được tạo từ các thành phần sau:
+- Request token will be used to authenticate the brand request
+- Request token will expire within 5 seconds since the creation time
+- It's a string that is created from these parts:
 
-  - `secretToken`: mã bí mật được admin cung cấp cho brand. Khi bị lộ mã này thì cần báo cho admin biết để được cấp mã mới.
-  - `x-nonce`: là 1 chuỗi ngẫu nhiên brand cung cấp cho website thông qua request header `x-nonce`
-  - `x-timestamp`: là giá trị timestamp thời điểm hiện tại. (UTC 0). Sẽ được gởi tới brand thông qua request header `x-timestamp`.
-  - `x-brand-id`: là id của brand. Sẽ được admin cấp cho. Mã này là duy nhất và không bao giờ đổi được.
-- Sample code để tạo request token
+  - `secretToken`: secret code what is provided from the admin.
+  - `x-nonce`: a random string that the brand will provide to API via request header `x-nonce`
+  - `x-timestamp`: The timestamp at the current moment via request header `x-timestamp`.
+  - `x-brand-id`: Unique ID that provided by the admin
+- Sample to create request token
 ```javascript
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import * as crypto from 'crypto';
@@ -120,7 +115,7 @@ const generateToken = (brandId, secretKey, xNonce, xTimestamp) => {
   console.log('requestToken', requestToken);
 ```
 
-- Sau đây là log khi chạy đoạn code trên với các giá trị tương ứng:
+- The console log when you run the above source code:
 
 ```composer log
 header missing token {
